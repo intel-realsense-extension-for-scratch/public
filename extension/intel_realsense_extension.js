@@ -1441,14 +1441,18 @@
     ScratchExtensions.register('Intel RealSense', descriptor, ext);
 
 
-/*
+
     (function(){
         // loadJavascriptDependency(EXT_BASE_URL + "vendor/underscore-min.js", null);
-        loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js?token=AAkO6p-IaxhFcljL2tDsKE-mfGcy4SjZks5VsLGXwA%3D%3D", dependencyAllCreated);
+       /* loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js?token=AAkO6p-IaxhFcljL2tDsKE-mfGcy4SjZks5VsLGXwA%3D%3D", dependencyAllCreated);
         loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js?token=AAkO6nBO3xzecW9rgQcw6TqoV0K9_ofnks5VsLGswA%3D%3D", dependencyStep2Created);
         loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js?token=AAkO6q6Ql3TogByuyQ9nA0YgSch2wlJeks5VsLG9wA%3D%3D", dependencyStep1Created); 
-        loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js?token=AAkO6koWXJFEM_eZpw_9qaJshu9Ml9DVks5VsLHmwA%3D%3D", dependencyStep2Created);
+        loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js?token=AAkO6koWXJFEM_eZpw_9qaJshu9Ml9DVks5VsLHmwA%3D%3D", dependencyStep2Created);*/
+        loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js", dependencyAllCreated);
+        loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js", dependencyStep2Created);
+        loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js", dependencyStep1Created); 
+        loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js", dependencyStep2Created);
 
     })();
-*/
+
 })({});
