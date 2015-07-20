@@ -1108,7 +1108,7 @@
 
         if (dependencyCounter == 2){
             console.log("loaded realsensebase");
-            loadJavascriptDependency(EXT_BASE_URL + "/intel/realsense.js", dependencyAllCreated);
+            loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js", dependencyAllCreated);
         }
     };
     
@@ -1131,6 +1131,32 @@
     
     
     
+    /*
+    console.log('Load promise');
+    $.getScript(EXT_BASE_URL + 'vendor/promise-1.0.0.min.js')
+    
+    .done(function(script, textStatus) {
+        console.log('Loaded promise');
+        $.getScript(EXT_BASE_URL + 'vendor/autobahn.min.js')
+        .done(function(script, textStatus) {
+            console.log('Loaded autobahn');
+            $.getScript(EXT_BASE_URL + 'intel/realsensebase.js')
+            .done(function(script, textStatus) {
+                console.log('Loaded realsensebase');
+                $.getScript(EXT_BASE_URL + 'intel/realsense.js')
+                .done(function(script, textStatus) {
+                    console.log('Loaded realsense');
+           
+                })
+            })
+        })
+    })
+    .fail(function(jqxhr, settings, exception) {
+        console.log('Error loading dependancies');
+   
+    });
+  */
+
     
 
     //#endregion
@@ -1183,15 +1209,7 @@
 
 
     ext._getStatus = function () {
-        // intel.realsense.SenseManager.detectPlatform(['face3d','blob','hand'], ['front']).then(function (info) {
-        //     realsenseStatusReport = {
-        //         'ready': { status: 2, msg: 'RealSense sensor is ready' },
-        //         'unsupported': { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' },
-        //         'driver': { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' },
-        //         'runtime': { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' }
-        //     }[info.nextStep];
-        // });
-
+        
         // return {status: 0, msg: 'RealSense offline'};
         // return {status: 2, msg: 'RealSense ready'};
         return realsenseStatusReport;
@@ -1200,12 +1218,10 @@
     //#region Scratch blocks events (Face recognition module)
     ext.isBlobExist = function () {
         return rsd.BlobModule.isExist;
-        //  return realSenseData.isBlobExist;
     };
     
     ext.isHandExist = function () {
        return rsd.HandModule.isExist;
-      //  return realSenseData.isExist;
     };
     
     ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {
@@ -1213,16 +1229,7 @@
         //console.log("(getHandJointPosition) *REQUESTED* hand position: " + hand_position + ", hand side: " + hand_side + ", joint name: " + joint_name);
         //end of QA TAG*
         
-        var jointArray = {'Left Hand': leftHandJoints, 'Rigt Hand': rightHandJoints}[hand_side];
-
-        // var jointArray = [];
-        // if (hand_side === "Left Hand"){ 
-        //     jointArray = leftHandJoints;
-        // }  if (hand_side === "Right Hand"){
-        //     jointArray = rightHandJoints;
-        // }
-        
-       
+        var jointArray = {'Left Hand': leftHandJoints, 'Right Hand': rightHandJoints}[hand_side];
         
         var result = {};
         
@@ -1231,7 +1238,7 @@
            for (var i = 0; i < jointArray.length; i++) {
                if (jointArray[i].originalJointIndex === joint_name) {
                     //console.log("joint index: " + i);
-                  result = jointArray[i];
+                    result = jointArray[i];
                     break;
                 }
            }
@@ -1299,6 +1306,8 @@
         return h in gestures && gestures[h].name == g;
     }
     
+    
+    
     //foldedness values: closed 0 - spread 100
     ext.getHandJointFoldedness = function (hand_side, finger_name) {
     
@@ -1307,15 +1316,10 @@
         //console.warn("hand joint ext "+leftHandJointsFoldness[1].jointName +" "+leftHandJointsFoldness[1].foldedness);
         //console.warn("hand side "+hand_side+" "+(hand_side == "Left Hand"));
         
-        if (hand_side == "Left Hand"){
-            jointArray = leftHandJointsFoldness;
-            
-        }  if (hand_side == "Right Hand"){
-            jointArray = rightHandJointsFoldness;
-        }
+        var jointArray = {'Left Hand': leftHandJointsFoldness, 'Right Hand': rightHandJointsFoldness}[hand_side];
         
-       // console.warn("foldness "+ hand_side + " "+jointArray.length);
-            
+        // console.warn("foldness "+ hand_side + " "+jointArray.length);
+        
         for (var f=0; f<jointArray.length; f++){
             //console.warn("foldness "+jointArray[f].jointName+" "+jointArray[f].foldedness);
             if (jointArray[f].jointName == finger_name){
@@ -1341,10 +1345,10 @@
         
         if (joint_name === parseInt(joint_name, 10)) {
         //joint_name is integer variable
-            for (var i = 0; i < faceJointsData.length; i++) {
-                if (faceJointsData[i].originalJointIndex === joint_name) {
+            for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
+                if (rsd.FaceModule.joints[i].originalJointIndex === joint_name) {
                     //console.log("joint index: " + i);
-                    result = faceJointsData[i];
+                    result = rsd.FaceModule.joints[i];
                     break;
                 }
             }
@@ -1353,9 +1357,9 @@
             
         //joint_name is string variable from the menu
             for (var i = 0; i < faceJointsData.length; i++) {
-                if (faceJointsData[i].jointName === joint_name) {
+                if (rsd.FaceModule.joints[i].jointName === joint_name) {
                     //console.log("joint index: " + i);
-                    result = faceJointsData[i];
+                    result = rsd.FaceModule.joints[i];
                     break;
                 }
             }
@@ -1364,15 +1368,15 @@
         //return the right value
         if (head_position === "X Position") {
             // console.warn("face joint original value: "+result.jointPositionX);
-            return ValueMapper(result.jointPositionX, RS_FACE_X_MAX_LEFT, RS_FACE_X_MAX_RIGHT, SCRATCH_X_MAX_LEFT, SCRATCH_X_MAX_RIGHT);
+            return ValueMapper(result.position.X, RS_FACE_X_MAX_LEFT, RS_FACE_X_MAX_RIGHT, SCRATCH_X_MAX_LEFT, SCRATCH_X_MAX_RIGHT);
         
         } else {
             if (head_position === "Y Position") {
                 // console.warn("face joint original value: "+result.jointPositionY);
-                return ValueMapper(result.jointPositionY, RS_FACE_Y_MAX_DOWN, RS_FACE_Y_MAX_UP, SCRATCH_Y_MAX_DOWN, SCRATCH_Y_MAX_UP);
+                return ValueMapper(result.position.Y, RS_FACE_Y_MAX_DOWN, RS_FACE_Y_MAX_UP, SCRATCH_Y_MAX_DOWN, SCRATCH_Y_MAX_UP);
            
             } else {
-                return result.jointPositionZ;
+                return result.position.Z;
         
             }
         }
