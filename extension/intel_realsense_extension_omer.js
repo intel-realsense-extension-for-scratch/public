@@ -325,20 +325,19 @@
                 }
                 
   
-             
                 if (face.expressions !== null && face.expressions.expressions != null) {
                     // console.log('Expressions: ' + JSON.stringify(face.expressions.expressions));
                     
                     //go through all keys in expression object
-                    for (var i=0; i<face.expressions.expressions.length; i++){
+                    for (var fe=0; fe<face.expressions.expressions.length; fe++){
                         
-                        var f_expr = face.expressions.expressions[i];
-                        //console.log('Expressions: ' + JSON.stringify(f_expr)+" "+f_expr +" "+f_expr.intensity);
+                        var f_expr = face.expressions.expressions[fe];
+                        console.log('Expressions: ' + JSON.stringify(f_expr)+" "+f_expr +" "+f_expr.intensity);
 
                         
                         if (f_expr.intensity>20) {
                             //convert the expression to a string the extension would identify
-                            var scratchFaceExpressionName = convertModuleExpressionIndexToScratchName(i);
+                            var scratchFaceExpressionName = convertModuleExpressionIndexToScratchName(fe);
 
                             //add it to array of current frame only
                             facial_expressions_this_frameArr.push(scratchFaceExpressionName);
