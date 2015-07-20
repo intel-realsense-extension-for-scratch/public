@@ -314,6 +314,7 @@
                                 
                                 rsd.FaceModule.joints.push(faceJoint);
                                 
+                                console.log("face: "+faceJoint+" "+faceJoint.position+" "+faceJoint.position.Z);
                                 /*
                                 faceJointsData[jointIndex] = {};
                                 faceJointsData[jointIndex].jointName = jointName;
