@@ -293,7 +293,7 @@
                 if (face.landmarks.points !== 'undefined') {
                     var jointIndex = 0;
                
-                    console.log("onFaceData landmarks.points: "+ face.landmarks.points.length);
+                   // console.log("onFaceData landmarks.points: "+ face.landmarks.points.length);
         
                     for (var i = 0; i < face.landmarks.points.length; i++) {
                         var joint = face.landmarks.points[i];
@@ -922,17 +922,15 @@
                     StartRealSense();
                     
                 } else if (info.nextStep == 'unsupported') {
-                    realsenseStatusReport=  { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
+                    realsenseStatusReport = { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
                 
                 } else if (info.nextStep == 'driver') {
-                    realsenseStatusReport=  { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
+                    realsenseStatusReport = { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
                 
                 } else if (info.nextStep == 'runtime') {
-                   realsenseStatusReport= { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
+                   realsenseStatusReport = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
                 
                 }
-                
-                
                 
             }).catch(function (error) {
                 console.log('CheckPlatform failed: ' + JSON.stringify(error));
@@ -942,6 +940,14 @@
             
         }else{
             realsenseStatusReport = { status: 0, msg: 'platform not ready' };  
+        }
+        
+        
+        
+        if (realsenseStatusReport.status == 0){
+            console.warn("http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
+            
+            alert("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot"); 
         }
     };
     
@@ -1284,7 +1290,7 @@
             "hand_type": ["Left Hand", "Right Hand", "Any Hand"],
             "hand_type_folded": ["Left Hand", "Right Hand"],
             "face_joints": ["Left eye", "Right eye", "Left eye brow", "Right eye brow", 
-                            "Upper lip", "Bottom lip", "Nose", "rChin", "Center"],
+                            "Upper lip", "Bottom lip", "Nose", "Chin", "Center"],
             "hand_joints": ["Index tip", "Index base", "Index c", "Index jointB",
                             "Thumb tip", "Thumb base", "Thumb jointC", "Thumb jointB",
                             "Middle tip", "Middle base", "Middle jointC", "Middle jointB",
@@ -1293,7 +1299,7 @@
                             "Wrist", "Center"],
             "major_joint_name": ["Index", "Thumb", "Middle", "Ring", "Pinky"],
             "facial_expressions": ["Wink left", "Wink right" ,"Brow lifted left" ,"Brow lifted right" ,
-                                   "Brow lowered left", "Brow lowered right", "Mouth open","Tongue out" ,"Smile", "Kiss", 
+                                   "Brow lowered left", "Brow lowered right", "Mouth open","Tongue out" ,                                       "Smile", "Kiss", 
                                    "Look down" ,"Look up", "Look left", "Look right"],
             "hand_gestures": ["Spread fingers", "V sign", "Click", "Full pinch",
                                 "Two fingers pinch open", "Swipe down", "Swipe up", "Swipe left",
@@ -1303,7 +1309,7 @@
             "position_value": ["X Position",  "Y Position",  "Z Position"]
         }
         
-        , url: 'http://www.intel.com/content/www/us/en/architecture-and-technology/realsense-overview.html'
+        , url: 'http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot'
     };
     
     ScratchExtensions.register('Intel RealSense', descriptor, ext);
