@@ -15,6 +15,8 @@
             }
         });
 
+    
+    
     var rs = null;
     var sense; 
     var faceModule, blobModule, handModule;
@@ -1061,7 +1063,7 @@
                     realsenseStatusReport=  { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
                 
                 } else if (info.nextStep == 'runtime') {
-                   realsenseStatusReport=  { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
+                   realsenseStatusReport= { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
                 
                 }
                 
@@ -1091,30 +1093,13 @@
         //validate realsense platform state
         ValidatePlatformState();
         
-        if (rs != null && rs.SenseManager != null)
-        {
-            //TODO automatically make this in the next frame
-            //StartRealSense();
-            
-            //check(0);
-        }
+       
     };
     
-    /*  //didnt work 
-    var check = function(condition){
-        if(condition == 1){
-            // run when condition is met
-            StartRealSense();
-        }
-        else {
-            setTimeout(check(1), 20000); // check again in a second
-        }
-    };
-    */
     
     
-    var EXT_BASE_URL = "http://localhost:8000/rs-scratch/js/"; // dev-local
-    // var EXT_BASE_URL = "https://rawgit.com/shacharoz/rs-scratch/gh-pages/js/"; // dev
+   // var EXT_BASE_URL = "http://localhost:8000/rs-scratch/js/"; // dev-local
+     var EXT_BASE_URL = "https://rawgit.com/intel-realsense-extension-for-scratch/resources/"; // dev
 //    var EXT_BASE_URL = "https://cdn.rawgit.com/shacharoz/rs-scratch/gh-pages/js/"; // production (cached)
     
      var dependencyStep2Created = function () {
