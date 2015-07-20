@@ -189,87 +189,19 @@
     
     // Saving name & positions x/y/z
     //   of every face joint that we track (see Face joints region above) 
-    function FaceJointsData () {
-        return {
-            jointName: '',
-            originalJointIndex: -1,
-            jointPositionX: 0,
-            jointPositionY: 0,
-            jointPositionZ: 0
-        }
-    }
     var faceJointsData = [];
-        // [
-        //     jointName = '',
-        //     originalJointIndex = -1,
-        //     jointPositionX = 0,
-        //     jointPositionY = 0,
-        //     jointPositionZ = 0
-        // ];
-
     
-    // Array of last MAX_NUM_OF_RECOGNIZED_FACE_EXPRESSIONS
-    //  that been recognized by face module 
-    // var faceExpressionArray =
-    //     [
-    //         expression = '',
-    //         timestamp = new Date()
-    //     ];
-
-
     var leftHandJoints =
-        [
-            // originalJointIndex = -1,
-            // jointName = "",
-            // confidence =0,
-                
-            // position = {
-            //     X: 0,
-            //     Y: 0,
-            //     Z: 0
-            // },
-                
-            // rotation = {
-            //     X: 0,
-            //     Y: 0,
-            //     Z: 0,
-            // }
-                
-        ];
+        [  ];
     
     var rightHandJoints =
-        [
-            // originalJointIndex = -1,
-            // jointName = "",
-            // confidence =0,
-                
-            // position = {
-            //     X: 0
-            //     ,Y: 0
-            //     ,Z: 0
-            // },
-                
-            // rotation = {
-            //     X: 0
-            //     ,Y: 0
-            //     ,Z: 0
-            // }
-                
-        ];
+        [];
     
     var leftHandJointsFoldness =
-        [
-            // originalJointIndex = -1,
-            // jointName = "",
-            // foldedness = -1 
-        ];
+        [       ];
     
     var rightHandJointsFoldness =
-        [
-            // originalJointIndex = -1,
-            // jointName = "",
-            // foldedness = -1 
-        ];
+        [     ];
        
     
     var gestures = {};
@@ -930,10 +862,13 @@
     //realsense: start sensor and load modules
     var StartRealSense = function(){
         var rs = intel.realsense;
-
+        
+            console.log("starting "+rs);
+            
         rs.SenseManager.createInstance()
         .then(function (result) {
             sense = result;
+             console.log("starting 2 "+sense);
             return result;
         })
         // .then(function (result) {
@@ -959,11 +894,14 @@
             sense.onStatus = onStatus;
             return result;
         })
-        .then(function (result) {
+       
+   
+  /*
+  .then(function (result) {
             return rs.face.FaceModule.activate(sense); 
         })
         .then(function (result) {
-            console.log(result);
+            console.log("3 "+result);
             faceModule = result;
             return faceModule.createActiveConfiguration();
         })
@@ -981,10 +919,13 @@
             faceModule.onFrameProcessed = onFaceData;
             return rs.hand.HandModule.activate(sense);
         })
+ */      
+        
         .then(function (result) {
             return rs.hand.HandModule.activate(sense);
         })
         .then(function (result) {
+           console.log("3 "+result);
             handModule = result;
             sense.onConnect = onConnect;
             sense.onStatus = onStatus;
@@ -1046,6 +987,8 @@
     // check platform compatibility
     var ValidatePlatformState = function (){
         var rs = intel.realsense;
+          console.log("ValidatePlatformState "+rs);
+          
         if (rs != null && rs.SenseManager != null)
         {
             rs.SenseManager.detectPlatform(['face3d','blob','hand'], ['front']).then(function (info) {
@@ -1099,7 +1042,7 @@
     
     
    // var EXT_BASE_URL = "http://localhost:8000/rs-scratch/js/"; // dev-local
-     var EXT_BASE_URL = "https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/"; // dev
+     var EXT_BASE_URL = 'https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/'; // dev
 //    var EXT_BASE_URL = "https://cdn.rawgit.com/shacharoz/rs-scratch/gh-pages/js/"; // production (cached)
     
      var dependencyStep2Created = function () {
@@ -1108,7 +1051,7 @@
 
         if (dependencyCounter == 2){
             console.log("loaded realsensebase");
-            loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js", dependencyAllCreated);
+            loadJavascriptDependency(EXT_BASE_URL + 'intel/realsense.js', dependencyAllCreated);
         }
     };
     
@@ -1118,16 +1061,17 @@
     
     var dependencyStep1Created = function () {
         dependencyCounter++;
-        //console.log("here "+dependencyStep1Counter);
+        console.log("here " + dependencyStep1Counter);
         if (dependencyCounter == 1){
-            dependencyCounter=0;
+            dependencyCounter = 0;
             
-            loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js", dependencyStep2Created);
-            loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js", dependencyStep2Created);
+            loadJavascriptDependency(EXT_BASE_URL + 'vendor/autobahn.min.js', dependencyStep2Created);
+            loadJavascriptDependency(EXT_BASE_URL + 'intel/realsensebase.js', dependencyStep2Created);
         }
     };
 
-    loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js", dependencyStep1Created);
+    console.log("start dependencyStep1Counter");
+    loadJavascriptDependency(EXT_BASE_URL + 'vendor/promise-1.0.0.min.js', dependencyStep1Created);
     
     
     
