@@ -1071,7 +1071,11 @@
     };
 
     console.log("start dependencyStep1Counter");
-    loadJavascriptDependency(EXT_BASE_URL + 'vendor/promise-1.0.0.min.js', dependencyStep1Created);
+    //loadJavascriptDependency(EXT_BASE_URL + 'vendor/promise-1.0.0.min.js', dependencyStep1Created);
+    
+    ScratchExtensions.loadExternalJS('https://www.promisejs.org/polyfills/promise-6.1.0.js');
+    ScratchExtensions.loadExternalJS('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz');
+    ScratchExtensions.loadExternalJS(EXT_BASE_URL + 'intel/realsense.js');
     
     
     
