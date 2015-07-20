@@ -6,6 +6,15 @@
 "use strict";
 
 (function (ext) {
+    $.ajax({
+            url: 'rs-scratch/static/dialog.html',
+            method: 'GET',
+            // async: false,
+            success: function(data) {
+                $('body').append(data);
+            }
+        });
+
     var rs = null;
     var sense; 
     var faceModule, blobModule, handModule;
@@ -264,6 +273,7 @@
     var gestures = {};
     
     var onConnect = function (sender, connected) {
+        realsenseStatusReport = {status: connected ? 2 : 0, msg: connected ? "Connected" : "Disconnected"};
         if (connected == true) {
             console.log('Connect with device instance: ' + sender.instance);
         }
@@ -272,8 +282,8 @@
     
     
     var onStatus = function (sender, sts) {
+        // console.log([sender, sts]);
         if (sts < 0) {
-            
             console.warn('Error ' + sts + ' on module ' + sender);
             
             if (sts == -301) {
@@ -924,25 +934,29 @@
             sense = result;
             return result;
         })
-/*
+        // .then(function (result) {
+        //     return rs.blob.BlobModule.activate(sense);
+        // })
+        // .then(function (result) {
+        //     blobModule = result;
+        //     return blobModule.createActiveConfiguration();
+        // })
+        // .then(function (result) {
+        //     blobConfiguration = result;
+        //     blobConfiguration.maxBlobs = rs.blob.MAX_NUMBER_OF_BLOBS; 
+        //     return blobConfiguration.applyChanges();
+        // })
+        // .then(function (result) {
+        //     sense.onConnect = onConnect;
+        //     sense.onStatus = onStatus;
+        //     blobModule.onFrameProcessed = onBlobData;
+        // })
+
         .then(function (result) {
-             return rs.blob.BlobModule.activate(sense);
-         })
-         .then(function (result) {
-             blobModule = result;
-             return blobModule.createActiveConfiguration();
-         })
-         .then(function (result) {
-             blobConfiguration = result;
-             blobConfiguration.maxBlobs = rs.blob.MAX_NUMBER_OF_BLOBS; 
-             return blobConfiguration.applyChanges();
-         })
-         .then(function (result) {
-             sense.onConnect = onConnect;
-             sense.onStatus = onStatus;
-             blobModule.onFrameProcessed = onBlobData;
-         })
- */
+            sense.onConnect = onConnect;
+            sense.onStatus = onStatus;
+            return result;
+        })
         .then(function (result) {
             return rs.face.FaceModule.activate(sense); 
         })
@@ -954,39 +968,24 @@
         .then(function (result) {
             faceConfiguration = result;
             faceConfiguration.detection.isEnabled = true;
-            faceConfiguration.detection.maxTrackedFaces = 1;
+            faceConfiguration.landmarks.isEnabled = true;
+            faceConfiguration.pose.isEnabled = true;
+            faceConfiguration.expressions.properties.isEnabled = true;
             faceConfiguration.trackingMode = 1;      
             return faceConfiguration.applyChanges();
         })
         .then(function (result) {
-             
-            if (sense.captureManager.device.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_F200) {
-                // if current device is F200
-                faceConfiguration.landmarks.isEnabled = true;
-                faceConfiguration.landmarks.maxTrackedFaces = 1;
-                faceConfiguration.pose.isEnabled = true;
-                faceConfiguration.expressions.properties.isEnabled = true;
-            }
-            
-            // Apply Face Configuration changes
-            return faceConfiguration.applyChanges();
-        
-        })
-        .then(function (result) {
-          
+            sense.onStatus = onStatus;
             faceModule.onFrameProcessed = onFaceData;
-            
-  /*           
             return rs.hand.HandModule.activate(sense);
-   
         })
         .then(function (result) {
             return rs.hand.HandModule.activate(sense);
-     
         })
         .then(function (result) {
             handModule = result;
-            //sense.onStatus = onStatus;
+            sense.onConnect = onConnect;
+            sense.onStatus = onStatus;
             handModule.onFrameProcessed = onHandData;
             return handModule.createActiveConfiguration();
         })
@@ -999,25 +998,22 @@
         .then(function (result) {
             return handConfiguration.release();                 
         })
- 
         .then(function (result) {
- */
-            
-            sense.onStatus = onStatus;
-            sense.onConnect = onConnect;
-            
             return sense.init();
         })
         .then(function (result) {
-            imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_COLOR);
+            imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_DEPTH);
             return sense.streamFrames();
         })
         .then(function (result) {
             console.log('Streaming ' + imageSize.width + 'x' + imageSize.height);
         })
         .catch(function (error) {
-            throw new Error(error);
-            // console.log('Init failed: ' + JSON.stringify(error)+" "+error);     
+            // throw new Error(error);
+            var meth = error.request.method;
+            var sts = _.invert(intel.realsense.Status)[error.status];
+            console.log([[meth, sts].join(' '), error]);     
+            
         });
     
     
@@ -1027,13 +1023,8 @@
     
     //#region Load JS dependencies
     var loadJavascriptDependency = function (url, callback) {
-        
-        //loadExternalJS is exposed from the Scratch API
         ScratchExtensions.loadExternalJS(url);
 
-        
-        
-        /*Old code
         // var head = document.getElementsByTagName('head')[0];
         // var script = document.createElement('script');
         // script.type = 'text/javascript';
@@ -1043,39 +1034,35 @@
         // script.onload = callback;
         
         // head.appendChild(script);
-        */
     };
 
     
     //returns result object that is suitable for scratch status report
-    var realsenseStatusReport = {};
+    var realsenseStatusReport = {status: 2, msg: ''};
     
     
     // check platform compatibility
     var ValidatePlatformState = function (){
-        
+        var rs = intel.realsense;
         if (rs != null && rs.SenseManager != null)
         {
             rs.SenseManager.detectPlatform(['face3d','blob','hand'], ['front']).then(function (info) {
                 
                 if (info.nextStep == 'ready') {
                     realsenseStatusReport = { status: 2, msg: 'RealSense sensor is ready' };
-                    
+                  
                     //we are now able to start realsense sensor automatically!
                     StartRealSense();
                     
                 } else if (info.nextStep == 'unsupported') {
-                    realsenseStatusReport = { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
-                    alert('Intel® RealSense™ 3D F200 camera is not available or browser not supported');
-                    
+                    realsenseStatusReport=  { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
+                
                 } else if (info.nextStep == 'driver') {
-                    realsenseStatusReport = { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
-                    alert('Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware');
-                    
+                    realsenseStatusReport=  { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
+                
                 } else if (info.nextStep == 'runtime') {
-                   realsenseStatusReport= { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
-                    alert('Please download and install Intel(R) RealSense(TM) SDK Runtime');
-                    
+                   realsenseStatusReport=  { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
+                
                 }
                 
                 
@@ -1084,17 +1071,11 @@
                 console.log('CheckPlatform failed: ' + JSON.stringify(error));
                 
                 realsenseStatusReport = { status: 0, msg: 'platform error' };
-                alert('platform error');
-                
             });
             
         }else{
-            realsenseStatusReport = { status: 0, msg: 'platform not ready' }; 
-            alert('platform not ready');
-                
+            realsenseStatusReport = { status: 0, msg: 'platform not ready' };  
         }
-        
-        
     };
     
     
@@ -1110,6 +1091,13 @@
         //validate realsense platform state
         ValidatePlatformState();
         
+        if (rs != null && rs.SenseManager != null)
+        {
+            //TODO automatically make this in the next frame
+            //StartRealSense();
+            
+            //check(0);
+        }
     };
     
     /*  //didnt work 
@@ -1125,13 +1113,9 @@
     */
     
     
-   // var EXT_BASE_URL = "http://localhost:8000/rs-scratch/js/"; // dev-local
-     
-     
-     var EXT_BASE_URL = "https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/"; // dev
-//     var EXT_BASE_URL = "https://rawgit.com/shacharoz/intel-realsense-web/master/"; // dev
+    var EXT_BASE_URL = "http://localhost:8000/rs-scratch/js/"; // dev-local
+    // var EXT_BASE_URL = "https://rawgit.com/shacharoz/rs-scratch/gh-pages/js/"; // dev
 //    var EXT_BASE_URL = "https://cdn.rawgit.com/shacharoz/rs-scratch/gh-pages/js/"; // production (cached)
-    
     
      var dependencyStep2Created = function () {
         dependencyCounter++;
@@ -1139,8 +1123,7 @@
 
         if (dependencyCounter == 2){
             console.log("loaded realsensebase");
-            //loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js?token=AAkO6p-IaxhFcljL2tDsKE-mfGcy4SjZks5VsLGXwA%3D%3D", dependencyAllCreated);
-            loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js", dependencyAllCreated);
+            loadJavascriptDependency(EXT_BASE_URL + "/intel/realsense.js?token=AAkO6st-5CeXRRHv6ReesWa6kudHYqIPks5Vq-1HwA%3D%3D", dependencyAllCreated);
         }
     };
     
@@ -1154,15 +1137,14 @@
         if (dependencyCounter == 1){
             dependencyCounter=0;
             
-            loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js", dependencyStep2Created);
-          //  loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js?token=AAkO6nBO3xzecW9rgQcw6TqoV0K9_ofnks5VsLGswA%3D%3D", dependencyStep2Created);
-           // loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js?token=AAkO6koWXJFEM_eZpw_9qaJshu9Ml9DVks5VsLHmwA%3D%3D", dependencyStep2Created);
+            loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js?token=AAkO6n7Bgz9jENNvE_2ZWFd4sB3eOwqBks5Vq-12wA%3D%3D", dependencyStep2Created);
+            loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js?token=AAkO6jqy7hXgGmSx3MVHWbc1XWDm_dnsks5Vq5-5wA%3D%3D", dependencyStep2Created);
         }
     };
 
     
-    loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js", dependencyStep1Created); 
-   //loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js?token=AAkO6q6Ql3TogByuyQ9nA0YgSch2wlJeks5VsLG9wA%3D%3D", dependencyStep1Created); 
+//    loadJavascriptDependency(EXT_BASE_URL + "vendor/jquery-1.11.0.min.js", dependencyStep1Created); //?token=AAkO6id9e-EO_gybx_goWLspKoypIjglks5Vq-4jwA%3D%3D
+    loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js", dependencyStep1Created); //?token=AAkO6pV8G4-mJFAMBIQbdSLq0Df-VM4Uks5Vq-4LwA%3D%3D
     
     
     
@@ -1207,7 +1189,7 @@
     
     
     
-     //var ext = this;
+    // var ext = this;
 
     
     //doesnt work. added an event to the window.beforeupload in order for this to really restart the sensor
@@ -1216,9 +1198,20 @@
         onClearSensor();
     };
 
+
     ext._getStatus = function () {
-        //return  realsenseStatusReport;
-        return { status: 2, msg: '' };
+        // intel.realsense.SenseManager.detectPlatform(['face3d','blob','hand'], ['front']).then(function (info) {
+        //     realsenseStatusReport = {
+        //         'ready': { status: 2, msg: 'RealSense sensor is ready' },
+        //         'unsupported': { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' },
+        //         'driver': { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' },
+        //         'runtime': { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' }
+        //     }[info.nextStep];
+        // });
+
+        // return {status: 0, msg: 'RealSense offline'};
+        // return {status: 2, msg: 'RealSense ready'};
+        return realsenseStatusReport;
     };
    
     //#region Scratch blocks events (Face recognition module)
@@ -1237,15 +1230,14 @@
         //console.log("(getHandJointPosition) *REQUESTED* hand position: " + hand_position + ", hand side: " + hand_side + ", joint name: " + joint_name);
         //end of QA TAG*
         
-        var jointArray = [];
-        
-        if (hand_side === "Left Hand"){ 
-            jointArray = leftHandJoints;
-            
-        }  if (hand_side === "Right Hand"){
-            jointArray = rightHandJoints;
-       
-        }
+        var jointArray = {'Left Hand': leftHandJoints, 'Rigt Hand': rightHandJoints}[hand_side];
+
+        // var jointArray = [];
+        // if (hand_side === "Left Hand"){ 
+        //     jointArray = leftHandJoints;
+        // }  if (hand_side === "Right Hand"){
+        //     jointArray = rightHandJoints;
+        // }
         
        
         
@@ -1289,8 +1281,19 @@
                 }
             }
         }
-    }; 
+    };
     
+    ext.whenHandGesture = function(hand_type, gesture_name) {        var g = gesture_name.toLowerCase().replace(' ', '_');
+        var h = {
+            "Left Hand": intel.realsense.hand.BodySideType.BODY_SIDE_LEFT,
+            "Right Hand": intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT,
+            "Any Hand": intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN,
+        }[hand_type];
+        if(h in gestures && gestures[h].name == g) {
+            return true;
+        }
+        return false;
+    }
 
     ext.getHandGesture = function(hand_type, gesture_name) {
         if(Object.keys(gestures).length === 0)
@@ -1409,38 +1412,55 @@
         
     };
     
+    ext.getRecognizedSpeech = function() {
+        return "";
+    };
     
-    ext.startRS = function () {
-       StartRealSense();
+    ext.whenRecognizedSpeech = function(speech, callback) {
+        window.setTimeout(function(){
+            callback();
+        }, 1000);
+        return false;
+    };
+
+    ext.startRS = function (callback) {
+       StartRealSense();            
+        // window.setTimeout(function(){
+            callback();
+        // }, 1000);
     };
     
     
     var descriptor = {
         blocks: [
-             ['', 'start realsense', 'startRS'] 
-        
+             ['w', 'start realsense', 'startRS'], 
+             ['h', 'RealSense Started', 'startRS']
         ,['-']
             ,['b', 'Face visible?', 'isFaceExist', '']
             ,['r', '%m.position_value of %d.face_joints', 'getFaceJointPosition', 'X Position', 'Left eye']
             ,['b', 'Face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
          
-    //    ,['-']
-    //        ,['b', 'Blob visible?', 'isBlobExist', '']
+        ,['-']
+            ,['b', 'Blob visible?', 'isBlobExist', '']
         
         ,['-']
             ,['b', '%m.hand_type visible?', 'isHandExist', 'Left Hand']
             ,['r', '%m.position_value of %m.hand_type %d.hand_joints', 'getHandJointPosition', 'X Position', 'Left Hand', 'Index tip']
-            ,['b', '%m.hand_type gesture %m.hand_gestures?', 'getHandGesture', 'Left Hand', 'Thumb Up']
             ,['r', '%m.hand_type_folded %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Left Hand', 'Index']
-
+            ,['b', '%m.hand_type gesture is %m.hand_gestures', 'getHandGesture', 'Left Hand', 'Thumb Up']
+            ,['h', 'When %m.hand_type gesture is %m.hand_gestures', 'whenHandGesture', 'Left Hand', 'Thumb Up']
+        ,['-']
+            ,['r', 'Recognized Speech', 'getRecognizedSpeech']
+            ,['h', 'When %s Recognized', 'whenRecognizedSpeech', '']
+            ,['w', 'Wait and recognize %s', 'whenRecognizedSpeech', '']
            ]
          
         , menus: {
             "hand_type": ["Left Hand", "Right Hand", "Any Hand"],
             "hand_type_folded": ["Left Hand", "Right Hand"],
             "face_joints": ["Left eye", "Right eye", "Left eye brow", "Right eye brow", 
-                            "Upper lip", "Bottom lip", "Nose", "Chin", "Center"],
-            "hand_joints": ["Index tip", "Index base", "Index jointC", "Index jointB",
+                            "Upper lip", "Bottom lip", "Nose", "rChin", "Center"],
+            "hand_joints": ["Index tip", "Index base", "Index c", "Index jointB",
                             "Thumb tip", "Thumb base", "Thumb jointC", "Thumb jointB",
                             "Middle tip", "Middle base", "Middle jointC", "Middle jointB",
                             "Ring tip", "Ring base", "Ring jointC", "Ring jointB",
@@ -1463,18 +1483,12 @@
     
     ScratchExtensions.register('Intel RealSense', descriptor, ext);
 
-
-
     (function(){
         // loadJavascriptDependency(EXT_BASE_URL + "vendor/underscore-min.js", null);
-       /* loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js?token=AAkO6p-IaxhFcljL2tDsKE-mfGcy4SjZks5VsLGXwA%3D%3D", dependencyAllCreated);
-        loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js?token=AAkO6nBO3xzecW9rgQcw6TqoV0K9_ofnks5VsLGswA%3D%3D", dependencyStep2Created);
-        loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js?token=AAkO6q6Ql3TogByuyQ9nA0YgSch2wlJeks5VsLG9wA%3D%3D", dependencyStep1Created); 
-        loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js?token=AAkO6koWXJFEM_eZpw_9qaJshu9Ml9DVks5VsLHmwA%3D%3D", dependencyStep2Created);*/
-        loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js", dependencyAllCreated);
-        loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js", dependencyStep2Created);
-        loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js", dependencyStep1Created); 
-        loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js", dependencyStep2Created);
+        loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js", dependencyStep1Created); //?token=AAkO6pV8G4-mJFAMBIQbdSLq0Df-VM4Uks5Vq-4LwA%3D%3D
+        loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js?token=AAkO6n7Bgz9jENNvE_2ZWFd4sB3eOwqBks5Vq-12wA%3D%3D", dependencyStep2Created);
+        loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js?token=AAkO6jqy7hXgGmSx3MVHWbc1XWDm_dnsks5Vq5-5wA%3D%3D", dependencyStep2Created);
+        loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js?token=AAkO6st-5CeXRRHv6ReesWa6kudHYqIPks5Vq-1HwA%3D%3D", dependencyAllCreated);
 
     })();
 
