@@ -863,7 +863,7 @@
     var StartRealSense = function(){
         var rs = intel.realsense;
         
-            console.log("starting "+rs);
+        //console.log("starting "+rs);
             
         rs.SenseManager.createInstance()
         .then(function (result) {
@@ -896,7 +896,7 @@
         })
        
    
-  /*
+  
   .then(function (result) {
             return rs.face.FaceModule.activate(sense); 
         })
@@ -919,13 +919,13 @@
             faceModule.onFrameProcessed = onFaceData;
             return rs.hand.HandModule.activate(sense);
         })
- */      
+      
         
         .then(function (result) {
             return rs.hand.HandModule.activate(sense);
         })
         .then(function (result) {
-           console.log("3 "+result);
+         //  console.log("3 "+result);
             handModule = result;
             sense.onConnect = onConnect;
             sense.onStatus = onStatus;
@@ -957,6 +957,7 @@
             var sts = _.invert(intel.realsense.Status)[error.status];
             console.log([[meth, sts].join(' '), error]);     
             
+            realsenseStatusReport = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB' };
         });
     
     
@@ -1043,45 +1044,10 @@
     
    // var EXT_BASE_URL = "http://localhost:8000/rs-scratch/js/"; // dev-local
      var EXT_BASE_URL = 'https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/'; // dev
-//    var EXT_BASE_URL = "https://cdn.rawgit.com/shacharoz/rs-scratch/gh-pages/js/"; // production (cached)
     
-    
-    
-    /*
-     var dependencyStep2Created = function () {
-        dependencyCounter++;
-        //console.log("here "+dependencyStep1Counter);
-
-        if (dependencyCounter == 2){
-            console.log("loaded realsensebase");
-            loadJavascriptDependency(EXT_BASE_URL + 'intel/realsense.js', dependencyAllCreated);
-        }
-    };
-    
-    
-    
-    var dependencyCounter=0;
-    
-    var dependencyStep1Created = function () {
-        dependencyCounter++;
-        console.log("here " + dependencyStep1Counter);
-        if (dependencyCounter == 1){
-            dependencyCounter = 0;
-            
-            loadJavascriptDependency(EXT_BASE_URL + 'vendor/autobahn.min.js', dependencyStep2Created);
-            loadJavascriptDependency(EXT_BASE_URL + 'intel/realsensebase.js', dependencyStep2Created);
-        }
-    };
-
-     //loadJavascriptDependency(EXT_BASE_URL + 'vendor/promise-1.0.0.min.js', dependencyStep1Created);
-    */
     
     console.log("Loading dependencies");
    
-    //ScratchExtensions.loadExternalJS('https://www.promisejs.org/polyfills/promise-6.1.0.js');
-            //ScratchExtensions.loadExternalJS('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz');
-    //ScratchExtensions.loadExternalJS(EXT_BASE_URL + 'intel/realsense.js');
-    
     $.getScript('https://www.promisejs.org/polyfills/promise-6.1.0.js')
     .done(function(script, textStatus) {
        
@@ -1103,31 +1069,6 @@
     .fail(function(jqxhr, settings, exception) {
         console.log('Load promise fail');
     });
-    /*
-    console.log('Load promise');
-    $.getScript(EXT_BASE_URL + 'vendor/promise-1.0.0.min.js')
-    
-    .done(function(script, textStatus) {
-        console.log('Loaded promise');
-        $.getScript(EXT_BASE_URL + 'vendor/autobahn.min.js')
-        .done(function(script, textStatus) {
-            console.log('Loaded autobahn');
-            $.getScript(EXT_BASE_URL + 'intel/realsensebase.js')
-            .done(function(script, textStatus) {
-                console.log('Loaded realsensebase');
-                $.getScript(EXT_BASE_URL + 'intel/realsense.js')
-                .done(function(script, textStatus) {
-                    console.log('Loaded realsense');
-           
-                })
-            })
-        })
-    })
-    .fail(function(jqxhr, settings, exception) {
-        console.log('Error loading dependancies');
-   
-    });
-  */
 
     
 
@@ -1385,7 +1326,7 @@
     ext.startRS = function (callback) {
        StartRealSense();            
         // window.setTimeout(function(){
-            callback();
+           // callback();
         // }, 1000);
     };
     
