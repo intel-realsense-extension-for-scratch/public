@@ -7,7 +7,7 @@
 
 (function (ext) {
     $.ajax({
-            url: 'dialog.html',
+            url: 'https://rawgit.com/intel-realsense-extension-for-scratch/public/gh-pages/extension/dialog.html',
             method: 'GET',
             // async: false,
             success: function(data) {
