@@ -1078,16 +1078,30 @@
     
     console.log("Loading dependencies");
    
-    ScratchExtensions.loadExternalJS('https://www.promisejs.org/polyfills/promise-6.1.0.js');
-    ScratchExtensions.loadExternalJS('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz');
+    //ScratchExtensions.loadExternalJS('https://www.promisejs.org/polyfills/promise-6.1.0.js');
+            //ScratchExtensions.loadExternalJS('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz');
     //ScratchExtensions.loadExternalJS(EXT_BASE_URL + 'intel/realsense.js');
     
-    $.getScript(EXT_BASE_URL + 'intel/realsense.js')
+    $.getScript('https://www.promisejs.org/polyfills/promise-6.1.0.js')
     .done(function(script, textStatus) {
-        dependencyAllCreated();
+       
+        $.getScript('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz')
+        .done(function(script, textStatus) {
+
+            $.getScript(EXT_BASE_URL + 'intel/realsense.js')
+            .done(function(script, textStatus) {
+                dependencyAllCreated();
+            })
+            .fail(function(jqxhr, settings, exception) {
+                console.log('Load realsense fail');
+            });
+        })
+        .fail(function(jqxhr, settings, exception) {
+            console.log('Load autobahn fail');
+        });
     })
     .fail(function(jqxhr, settings, exception) {
-        console.log('Load fail');
+        console.log('Load promise fail');
     });
     /*
     console.log('Load promise');
