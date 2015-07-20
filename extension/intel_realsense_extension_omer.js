@@ -897,7 +897,7 @@
         
    
   
-  .then(function (result) {
+        .then(function (result) {
             return rs.face.FaceModule.activate(sense); 
         })
         .then(function (result) {
@@ -912,7 +912,7 @@
             faceConfiguration.trackingMode = 1;      
             return faceConfiguration.applyChanges();
         })
-        .then(function (result) {
+    /*    .then(function (result) {
             if (sense.captureManager.device.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_F200) {
                 // if current device is F200
                 faceConfiguration.landmarks.isEnabled = true;
@@ -923,7 +923,8 @@
             // Apply Face Configuration changes
             return faceConfiguration.applyChanges();
         })
-         .then(function (result) {
+      */
+        .then(function (result) {
             faceModule.onFrameProcessed = onFaceData;
             return result;
         })
@@ -963,7 +964,6 @@
             console.log('Streaming ' + imageSize.width + 'x' + imageSize.height);
         })
         .catch(function (error) {
-            // throw new Error(error);
             var meth = error.request.method;
             var sts = _.invert(intel.realsense.Status)[error.status];
             console.log([[meth, sts].join(' '), error]);     
