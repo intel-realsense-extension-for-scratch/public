@@ -27,12 +27,12 @@ function ValidatePlatform() {
             $("#platform-dcm-missing").show(200);
             
          
-        } /*else if (info.nextStep == 'runtime') {
+        } else if (info.nextStep == 'runtime') {
             console.warn('please download and install runtime exe');
             $("#platform-detection").hide();
             $("#platform-runtime-missing").show(200);
            
-        }*/
+        }
 
     }).catch(function (error) {
          console.warn('other unknown failure. '+ JSON.stringify(error));
