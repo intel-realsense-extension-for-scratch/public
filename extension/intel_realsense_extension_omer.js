@@ -263,7 +263,8 @@
                 (joint_index === CHIN_INDEX) ? "Chin" :
                 (joint_index === UPPER_LIP_INDEX) ? "Upper lip" :
                 (joint_index === BOTTOM_LIP_INDEX) ? "Bottom lip" :
-                (joint_index === NOSE_INDEX) ? "Nose" : "error";  
+                (joint_index === NOSE_INDEX) ? "Nose" : 
+                "error";  
     };
     
   
@@ -271,19 +272,16 @@
         console.log("onFaceData: ");
         
         //reset the face expression data every frame 
-        //facial_expressions_this_frameArr=[];
         rsd.FaceModule.expressions_this_frame=[];
         
         
         if (faceData.faces == null || faceData.faces.length == 0) {
             rsd.FaceModule.isExist=false;
-           // realSenseData.isExist = false;
             return;
         }
         
         
         //for face exist block
-       // realSenseData.isExist = (faceData.faces.length > 0);
         rsd.FaceModule.isExist = (faceData.faces.length > 0);
            
         
@@ -320,15 +318,8 @@
                                 rsd.FaceModule.joints.push(faceJoint);
                                 
                                 console.log("face: "+faceJoint+" "+faceJoint.position+" "+faceJoint.position.Z);
-                                /*
-                                faceJointsData[jointIndex] = {};
-                                faceJointsData[jointIndex].jointName = jointName;
-                                faceJointsData[jointIndex].originalJointIndex = i;
-                                faceJointsData[jointIndex].jointPositionX = joint.image.x;
-                                faceJointsData[jointIndex].jointPositionY = joint.image.y;
-                                faceJointsData[jointIndex].jointPositionZ = joint.world.z;
-                                //jointIndex++;
-                                */
+                                console.log("face: "+rsd.FaceModule.joints[rsd.FaceModule.joints.length]+" " +rsd.FaceModule.joints[rsd.FaceModule.joints.length].position.Z);
+                                
                             }
                         }
                     } 
@@ -1357,27 +1348,28 @@
     
     var descriptor = {
         blocks: [
-             ['w', 'start realsense', 'startRS'], 
-             ['h', 'RealSense Started', 'startRS']
-        ,['-']
-            ,['b', 'Face visible?', 'isFaceExist', '']
+      //       ['w', 'start realsense', 'startRS'], 
+      //       ['h', 'RealSense Started', 'startRS']
+      //  ,['-']
+            ['b', 'Face visible?', 'isFaceExist', '']
             ,['r', '%m.position_value of %d.face_joints', 'getFaceJointPosition', 'X Position', 'Left eye']
             ,['b', 'Face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
          
-        ,['-']
-            ,['b', 'Blob visible?', 'isBlobExist', '']
+     //   ,['-']
+    //        ,['b', 'Blob visible?', 'isBlobExist', '']
         
         ,['-']
             ,['b', '%m.hand_type visible?', 'isHandExist', 'Left Hand']
             ,['r', '%m.position_value of %m.hand_type %d.hand_joints', 'getHandJointPosition', 'X Position', 'Left Hand', 'Index tip']
+            ,['b', '%m.hand_type gesture %m.hand_gestures?', 'getHandGesture', 'Left Hand', 'Thumb Up']
             ,['r', '%m.hand_type_folded %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Left Hand', 'Index']
-            ,['b', '%m.hand_type gesture is %m.hand_gestures', 'getHandGesture', 'Left Hand', 'Thumb Up']
-            ,['h', 'When %m.hand_type gesture is %m.hand_gestures', 'whenHandGesture', 'Left Hand', 'Thumb Up']
-        ,['-']
+          //  ,['h', 'When %m.hand_type gesture is %m.hand_gestures', 'whenHandGesture', 'Left Hand', 'Thumb Up']
+      /*  ,['-']
             ,['r', 'Recognized Speech', 'getRecognizedSpeech']
             ,['h', 'When %s Recognized', 'whenRecognizedSpeech', '']
             ,['w', 'Wait and recognize %s', 'whenRecognizedSpeech', '']
-           ]
+      */
+        ]
          
         , menus: {
             "hand_type": ["Left Hand", "Right Hand", "Any Hand"],
