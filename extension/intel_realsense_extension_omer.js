@@ -909,7 +909,13 @@
             faceConfiguration = result;
             faceConfiguration.detection.isEnabled = true;
             faceConfiguration.detection.maxTrackedFaces = 1;
-            faceConfiguration.trackingMode = 1;      
+            faceConfiguration.trackingMode = 1;  
+            
+            faceConfiguration.landmarks.isEnabled = true;
+            faceConfiguration.landmarks.maxTrackedFaces = 1;
+            faceConfiguration.pose.isEnabled = true;
+            faceConfiguration.expressions.properties.isEnabled = true;
+
             return faceConfiguration.applyChanges();
         })
     /*    .then(function (result) {
