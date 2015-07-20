@@ -270,11 +270,11 @@
     var onFaceData = function(module, faceData) {
 
         //reset the face expression data every frame 
-        facial_expressions_this_frameArr=[];
+        //facial_expressions_this_frameArr=[];
         rsd.FaceModule.expressions_this_frame=[];
         
         
-        if (faceData.faces == null) {
+        if (faceData.faces == null || faceData.faces.length == 0) {
             rsd.FaceModule.isExist=false;
            // realSenseData.isExist = false;
             return;
@@ -295,7 +295,7 @@
                 var face = faceData.faces[f];     
                 if (face == null) continue; 
 
-                if (face.landmarks != null && face.landmarks.points != null) {
+                if (face.landmarks.points !== 'undefined') {
                     var jointIndex = 0;
                     for (var i = 0; i < face.landmarks.points.length; i++) {
                         var joint = face.landmarks.points[i];
@@ -303,14 +303,26 @@
                             var jointName = getJointNameByIndex(i);
                             if (jointName !== 'error') {
                                 
+                                var faceJoint = {};
+                                faceJoint.jointName = jointName;
+                                faceJoint.originalJointIndex = i;
+                                faceJoint.position = {
+                                     X: joint.image.x
+                                    ,Y: joint.image.y
+                                    ,Z: joint.world.z
+                                }
+                                
+                                rsd.FaceModule.joints.push(faceJoint);
+                                
+                                /*
                                 faceJointsData[jointIndex] = {};
                                 faceJointsData[jointIndex].jointName = jointName;
                                 faceJointsData[jointIndex].originalJointIndex = i;
                                 faceJointsData[jointIndex].jointPositionX = joint.image.x;
                                 faceJointsData[jointIndex].jointPositionY = joint.image.y;
                                 faceJointsData[jointIndex].jointPositionZ = joint.world.z;
-                                
-                                jointIndex++;
+                                //jointIndex++;
+                                */
                             }
                         }
                     } 
@@ -597,7 +609,7 @@
                 var joint = {};
                 joint.originalJointIndex = j;
                 
-                joint.jointName =  convertHandJointIndexToScratchName(j);
+                joint.jointName = convertHandJointIndexToScratchName(j);
                 joint.confidence = joints[j].confidence;
                 
                 joint.position = {
@@ -957,14 +969,15 @@
             var sts = _.invert(intel.realsense.Status)[error.status];
             console.log([[meth, sts].join(' '), error]);     
             
-            realsenseStatusReport = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB' };
+            
+            realsenseStatusReport = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
         });
     
     
     };
     
     
-    
+    /*not used anymore
     //#region Load JS dependencies
     var loadJavascriptDependency = function (url, callback) {
         ScratchExtensions.loadExternalJS(url);
@@ -979,7 +992,7 @@
         
         // head.appendChild(script);
     };
-
+*/
     
     //returns result object that is suitable for scratch status report
     var realsenseStatusReport = {status: 2, msg: ''};
@@ -1123,8 +1136,6 @@
 
     ext._getStatus = function () {
         
-        // return {status: 0, msg: 'RealSense offline'};
-        // return {status: 2, msg: 'RealSense ready'};
         return realsenseStatusReport;
     };
    
@@ -1216,6 +1227,7 @@
             "Right Hand": intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT,
             "Any Hand": intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN,
         }[hand_type];
+        
         return h in gestures && gestures[h].name == g;
     }
     
@@ -1242,6 +1254,8 @@
         
         return -1;
     };
+    
+    
     
     
     ext.isFaceExist = function () {
