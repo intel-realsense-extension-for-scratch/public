@@ -308,13 +308,13 @@
                                      X: joint.image.x
                                     ,Y: joint.image.y
                                     ,Z: joint.world.z
-                                }
+                                };
                                 
                                 faceJointsData.push(faceJoint);
                                 //rsd.FaceModule.joints.push(faceJoint);
                                 
-                                console.log("face: "+faceJoint+" "+faceJoint.position+" "+faceJoint.position.Z);
-                                console.log("face: "+faceJointsData[faceJointsData.length]+" " + faceJointsData[faceJointsData.length].position.Z);
+                                console.log("face1: "+ faceJoint+" "+ faceJoint.position +" "+ faceJoint.position.Z);
+                                console.log("face2: "+faceJointsData.length +" "+ faceJointsData[faceJointsData.length] + " " + faceJointsData[faceJointsData.length].position.Z);
                                 
                             }
                         }
@@ -367,104 +367,8 @@
         }
     };
     
-     // Converter: face module expression => scratch face expression name
-    var convertModuleExpressionNameToScratchName = function (expression_name)
-    {
-        switch(expression_name)
-        {
-            case "browRaiserLeft":
-                return "Brow lifted left";
-                break;
-
-            case "browRaiserRight":
-                return "Brow lifted right";
-                break;
-         
-            case "browLowererLeft":
-                return "Brow lowered left";
-                break;
-        
-            case "browLowererRight":
-                return "Brow lowered right";
-                break;
-         
-            case "kiss":
-                return "Kiss";
-                break;
-         
-            case "smile":
-                return "Smile";
-                break;
-         
-            case "mouthOpen":
-                return "Mouth open";
-                break;
-         
-            case "eyesClosedLeft":
-                return "Wink left";
-                break;
-          
-            case "eyesClosedRight":
-                return "Wink right";
-                break;
-         
-            case "headTurnLeft":
-                return "Look left";
-                break;
-         
-            case "headTurnRight":
-                return "Look right";
-                break;
-         
-            case "headUp":
-                return "Look up";
-                break;
-         
-             case "headDown":
-                return "Look down";
-                break;
-         
-             case "tongueOut":
-                return "Tongue out";
-                break;
-         
-             case "headTiltRight":
-                return "";
-                break;
-         
-             case "headTiltLeft":
-                return "";
-                break;
-         
-             case "eyesTurnLeft":
-                return "";
-                break;
-         
-            case "eyesTurnRight":
-                return "";
-                break;
-         
-             case "eyesUp":
-                return "";
-                break;
-         
-            case "eyesDown":
-                return "";
-                break;
-         
-            case "puffLeft":
-                return "";
-                break;
-         
-            case "puffRight":
-                return "";
-                break;
-         
-            
-        }
-        
-       return "";
-    };
+    
+    
     
     var convertModuleExpressionIndexToScratchName = function (expression_index)
     {
@@ -601,7 +505,6 @@
 
                 var joint = {};
                 joint.originalJointIndex = j;
-                
                 joint.jointName = convertHandJointIndexToScratchName(j);
                 joint.confidence = joints[j].confidence;
                 
@@ -609,13 +512,13 @@
                     X: joints[j].positionImage.x
                     ,Y: joints[j].positionImage.y
                     ,Z: joints[j].positionWorld.z
-                }
+                };
                 
                 joint.rotation = {
                     X: joints[j].localRotation.x
                     ,Y: joints[j].localRotation.y
                     ,Z: joints[j].localRotation.z
-                }
+                };
                 
                 
                 resultJointsArray.push(joint);
@@ -626,10 +529,12 @@
             var resultFoldnessArray = [];
             for (var i = 0; i < ihand.fingerData.length; i++) {
                 //console.log("left fold" + i + ": " + JSON.stringify(hand.fingerData[i].foldedness));
+                
                 var majorJoint = {};
                 majorJoint.originalJointIndex = i;
                 majorJoint.jointName = convertHandJointMajorIndexToScratchName(i);
                 majorJoint.foldedness = ihand.fingerData[i].foldedness;
+                
                 resultFoldnessArray.push(majorJoint);
             }
 
