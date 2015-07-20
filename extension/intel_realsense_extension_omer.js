@@ -1099,7 +1099,7 @@
     
     
    // var EXT_BASE_URL = "http://localhost:8000/rs-scratch/js/"; // dev-local
-     var EXT_BASE_URL = "https://rawgit.com/intel-realsense-extension-for-scratch/resources/"; // dev
+     var EXT_BASE_URL = "https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/"; // dev
 //    var EXT_BASE_URL = "https://cdn.rawgit.com/shacharoz/rs-scratch/gh-pages/js/"; // production (cached)
     
      var dependencyStep2Created = function () {
