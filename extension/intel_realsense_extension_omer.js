@@ -268,7 +268,8 @@
     
   
     var onFaceData = function(module, faceData) {
-
+        console.log("onFaceData: ");
+        
         //reset the face expression data every frame 
         //facial_expressions_this_frameArr=[];
         rsd.FaceModule.expressions_this_frame=[];
@@ -287,6 +288,7 @@
            
         
 
+        console.log("onFaceData: "+ faceData.faces.length);
         
         
         if (faceData.faces.length > 0) {
@@ -297,6 +299,9 @@
 
                 if (face.landmarks.points !== 'undefined') {
                     var jointIndex = 0;
+               
+                    console.log("onFaceData landmarks.points: "+ face.landmarks.points.length);
+        
                     for (var i = 0; i < face.landmarks.points.length; i++) {
                         var joint = face.landmarks.points[i];
                         if (joint != null) {
