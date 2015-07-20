@@ -159,8 +159,8 @@
         return {
             // public
             isExist: true,
-            joints: [],
-            expressions_this_frame : []     
+            joints: [ ],
+            expressions_this_frame : [ ]     
         }
     };
     
@@ -246,7 +246,7 @@
     /*************************************FACE RECOGNITION*****************************************************/
     /**********************************************************************************************************/
 
-   var facial_expressions_this_frameArr=[];
+   var facial_expressions_this_frameArr = [];
     
     // Converter: face joint index => face joint name
     var getJointNameByIndex = function (joint_index)
@@ -344,7 +344,8 @@
                             facial_expressions_this_frameArr.push(scratchFaceExpressionName);
                             rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
                             
-                            //console.log("exp "+facial_expressions_this_frameArr);
+                            console.log("exp1 "+f_expr);
+                            console.log("exp2 "+rsd.FaceModule.expressions_this_frame);
 
 
     /*  
