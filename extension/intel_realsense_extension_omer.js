@@ -878,6 +878,7 @@
             
             
             //if sensor not connected to usb - it gets here
+            //other option: sensor is already running somewhere else on the web
             realsenseStatusReport = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
         });
     
