@@ -1080,12 +1080,15 @@
    
     ScratchExtensions.loadExternalJS('https://www.promisejs.org/polyfills/promise-6.1.0.js');
     ScratchExtensions.loadExternalJS('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz');
-    ScratchExtensions.loadExternalJS(EXT_BASE_URL + 'intel/realsense.js');
+    //ScratchExtensions.loadExternalJS(EXT_BASE_URL + 'intel/realsense.js');
     
-    dependencyAllCreated();
-    
-    
-    
+    $.getScript(EXT_BASE_URL + 'intel/realsense.js')
+    .done(function(script, textStatus) {
+        dependencyAllCreated();
+    })
+    .fail(function(jqxhr, settings, exception) {
+        console.log('Load fail');
+    });
     /*
     console.log('Load promise');
     $.getScript(EXT_BASE_URL + 'vendor/promise-1.0.0.min.js')
