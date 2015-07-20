@@ -1108,7 +1108,7 @@
 
         if (dependencyCounter == 2){
             console.log("loaded realsensebase");
-            loadJavascriptDependency(EXT_BASE_URL + "/intel/realsense.js?token=AAkO6st-5CeXRRHv6ReesWa6kudHYqIPks5Vq-1HwA%3D%3D", dependencyAllCreated);
+            loadJavascriptDependency(EXT_BASE_URL + "/intel/realsense.js", dependencyAllCreated);
         }
     };
     
@@ -1122,14 +1122,12 @@
         if (dependencyCounter == 1){
             dependencyCounter=0;
             
-            loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js?token=AAkO6n7Bgz9jENNvE_2ZWFd4sB3eOwqBks5Vq-12wA%3D%3D", dependencyStep2Created);
-            loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js?token=AAkO6jqy7hXgGmSx3MVHWbc1XWDm_dnsks5Vq5-5wA%3D%3D", dependencyStep2Created);
+            loadJavascriptDependency(EXT_BASE_URL + "vendor/autobahn.min.js", dependencyStep2Created);
+            loadJavascriptDependency(EXT_BASE_URL + "intel/realsensebase.js", dependencyStep2Created);
         }
     };
 
-    
-//    loadJavascriptDependency(EXT_BASE_URL + "vendor/jquery-1.11.0.min.js", dependencyStep1Created); //?token=AAkO6id9e-EO_gybx_goWLspKoypIjglks5Vq-4jwA%3D%3D
-    loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js", dependencyStep1Created); //?token=AAkO6pV8G4-mJFAMBIQbdSLq0Df-VM4Uks5Vq-4LwA%3D%3D
+    loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js", dependencyStep1Created);
     
     
     
@@ -1468,6 +1466,8 @@
     
     ScratchExtensions.register('Intel RealSense', descriptor, ext);
 
+    
+    /*
     (function(){
         // loadJavascriptDependency(EXT_BASE_URL + "vendor/underscore-min.js", null);
         loadJavascriptDependency(EXT_BASE_URL + "vendor/promise-1.0.0.min.js", dependencyStep1Created); //?token=AAkO6pV8G4-mJFAMBIQbdSLq0Df-VM4Uks5Vq-4LwA%3D%3D
@@ -1476,5 +1476,7 @@
         loadJavascriptDependency(EXT_BASE_URL + "intel/realsense.js?token=AAkO6st-5CeXRRHv6ReesWa6kudHYqIPks5Vq-1HwA%3D%3D", dependencyAllCreated);
 
     })();
-
+*/
+    
+    
 })({});
