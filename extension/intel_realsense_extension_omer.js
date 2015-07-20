@@ -904,7 +904,7 @@
 */
     
     //returns result object that is suitable for scratch status report
-    var realsenseStatusReport = {status: 2, msg: ''};
+    var realsenseStatusReport = {status: 1, msg: 'checking system...'};
     
     
     // check platform compatibility
@@ -914,7 +914,9 @@
           
         if (rs != null && rs.SenseManager != null)
         {
-            rs.SenseManager.detectPlatform(['face3d','blob','hand'], ['front']).then(function (info) {
+            rs.SenseManager.detectPlatform(['face3d','blob','hand'], ['front'])
+                
+            .then(function (info) {
                 
                 if (info.nextStep == 'ready') {
                     realsenseStatusReport = { status: 2, msg: 'RealSense sensor is ready' };
@@ -933,26 +935,35 @@
                 
                 }
                 
+                PopAlert();
+                
             }).catch(function (error) {
                 console.log('CheckPlatform failed: ' + JSON.stringify(error));
                 
                 realsenseStatusReport = { status: 0, msg: 'platform error' };
+                
+                PopAlert();
             });
             
         }else{
             realsenseStatusReport = { status: 0, msg: 'platform not ready' };  
+            
+            PopAlert();
         }
         
         
         
-        if (realsenseStatusReport.status == 0){
-            console.warn("http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
+        
+    };
+    
+    var PopAlert = function() {
             
+        if (realsenseStatusReport.status == 0){
+            console.warn("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
+
             alert("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot"); 
         }
     };
-    
-    
     
     var dependencyAllCreated = function () {
     
