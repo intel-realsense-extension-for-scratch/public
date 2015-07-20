@@ -880,15 +880,13 @@
     //realsense: start sensor and load modules
     var StartRealSense = function(){
         var rs = intel.realsense;
-        
-        //console.log("starting "+rs);
-            
+                    
         rs.SenseManager.createInstance()
         .then(function (result) {
             sense = result;
-             console.log("starting 2 "+sense);
             return result;
         })
+        
         // .then(function (result) {
         //     return rs.blob.BlobModule.activate(sense);
         // })
@@ -902,17 +900,10 @@
         //     return blobConfiguration.applyChanges();
         // })
         // .then(function (result) {
-        //     sense.onConnect = onConnect;
-        //     sense.onStatus = onStatus;
         //     blobModule.onFrameProcessed = onBlobData;
         // })
 
-        .then(function (result) {
-            sense.onConnect = onConnect;
-            sense.onStatus = onStatus;
-            return result;
-        })
-       
+        
    
   
   .then(function (result) {
@@ -926,27 +917,33 @@
         .then(function (result) {
             faceConfiguration = result;
             faceConfiguration.detection.isEnabled = true;
-            faceConfiguration.landmarks.isEnabled = true;
-            faceConfiguration.pose.isEnabled = true;
-            faceConfiguration.expressions.properties.isEnabled = true;
+            faceConfiguration.detection.maxTrackedFaces = 1;
             faceConfiguration.trackingMode = 1;      
             return faceConfiguration.applyChanges();
         })
         .then(function (result) {
-            sense.onStatus = onStatus;
+            if (sense.captureManager.device.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_F200) {
+                // if current device is F200
+                faceConfiguration.landmarks.isEnabled = true;
+                faceConfiguration.landmarks.maxTrackedFaces = 1;
+                faceConfiguration.pose.isEnabled = true;
+                faceConfiguration.expressions.properties.isEnabled = true;
+            }
+            // Apply Face Configuration changes
+            return faceConfiguration.applyChanges();
+        })
+         .then(function (result) {
             faceModule.onFrameProcessed = onFaceData;
-            return rs.hand.HandModule.activate(sense);
+            return result;
         })
       
+        
         
         .then(function (result) {
             return rs.hand.HandModule.activate(sense);
         })
         .then(function (result) {
-         //  console.log("3 "+result);
             handModule = result;
-            sense.onConnect = onConnect;
-            sense.onStatus = onStatus;
             handModule.onFrameProcessed = onHandData;
             return handModule.createActiveConfiguration();
         })
@@ -959,7 +956,12 @@
         .then(function (result) {
             return handConfiguration.release();                 
         })
+        
+        
+        
         .then(function (result) {
+            sense.onConnect = onConnect;
+            sense.onStatus = onStatus;
             return sense.init();
         })
         .then(function (result) {
@@ -976,6 +978,8 @@
             console.log([[meth, sts].join(' '), error]);     
             
             
+            
+            //if sensor not connected to usb - it gets here
             realsenseStatusReport = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
         });
     
