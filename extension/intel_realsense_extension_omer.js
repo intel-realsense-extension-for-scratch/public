@@ -987,7 +987,7 @@
     // check platform compatibility
     var ValidatePlatformState = function (){
         var rs = intel.realsense;
-          console.log("ValidatePlatformState "+rs);
+          console.log("ValidatePlatformState");
           
         if (rs != null && rs.SenseManager != null)
         {
@@ -1045,6 +1045,9 @@
      var EXT_BASE_URL = 'https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/'; // dev
 //    var EXT_BASE_URL = "https://cdn.rawgit.com/shacharoz/rs-scratch/gh-pages/js/"; // production (cached)
     
+    
+    
+    /*
      var dependencyStep2Created = function () {
         dependencyCounter++;
         //console.log("here "+dependencyStep1Counter);
@@ -1070,12 +1073,16 @@
         }
     };
 
-    console.log("start dependencyStep1Counter");
-    //loadJavascriptDependency(EXT_BASE_URL + 'vendor/promise-1.0.0.min.js', dependencyStep1Created);
+     //loadJavascriptDependency(EXT_BASE_URL + 'vendor/promise-1.0.0.min.js', dependencyStep1Created);
+    */
     
+    console.log("Loading dependencies");
+   
     ScratchExtensions.loadExternalJS('https://www.promisejs.org/polyfills/promise-6.1.0.js');
     ScratchExtensions.loadExternalJS('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz');
     ScratchExtensions.loadExternalJS(EXT_BASE_URL + 'intel/realsense.js');
+    
+    dependencyAllCreated();
     
     
     
