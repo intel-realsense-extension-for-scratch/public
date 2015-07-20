@@ -7,7 +7,7 @@
 
 (function (ext) {
     $.ajax({
-            url: 'rs-scratch/static/dialog.html',
+            url: 'dialog.html',
             method: 'GET',
             // async: false,
             success: function(data) {
