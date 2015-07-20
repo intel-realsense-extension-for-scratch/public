@@ -189,22 +189,19 @@
     
     // Saving name & positions x/y/z
     //   of every face joint that we track (see Face joints region above) 
-    var faceJointsData = [];
+    var faceJointsData = [ ];
     
-    var leftHandJoints =
-        [  ];
+    var leftHandJoints = [ ];
     
-    var rightHandJoints =
-        [];
+    var rightHandJoints = [ ];
     
-    var leftHandJointsFoldness =
-        [       ];
+    var leftHandJointsFoldness = [ ];
     
-    var rightHandJointsFoldness =
-        [     ];
+    var rightHandJointsFoldness = [ ];
        
-    
     var gestures = {};
+    
+    
     
     var onConnect = function (sender, connected) {
         realsenseStatusReport = {status: connected ? 2 : 0, msg: connected ? "Connected" : "Disconnected"};
@@ -212,8 +209,6 @@
             console.log('Connect with device instance: ' + sender.instance);
         }
     };
-    
-    
     
     var onStatus = function (sender, sts) {
         // console.log([sender, sts]);
@@ -315,10 +310,11 @@
                                     ,Z: joint.world.z
                                 }
                                 
-                                rsd.FaceModule.joints.push(faceJoint);
+                                faceJointsData.push(faceJoint);
+                                //rsd.FaceModule.joints.push(faceJoint);
                                 
                                 console.log("face: "+faceJoint+" "+faceJoint.position+" "+faceJoint.position.Z);
-                                console.log("face: "+rsd.FaceModule.joints[rsd.FaceModule.joints.length]+" " +rsd.FaceModule.joints[rsd.FaceModule.joints.length].position.Z);
+                                console.log("face: "+faceJointsData[faceJointsData.length]+" " + faceJointsData[faceJointsData.length].position.Z);
                                 
                             }
                         }
@@ -1204,6 +1200,8 @@
         }
     };
     
+    
+    
     ext.whenHandGesture = function(hand_type, gesture_name) {        var g = gesture_name.toLowerCase().replace(' ', '_');
         var h = {
             "Left Hand": intel.realsense.hand.BodySideType.BODY_SIDE_LEFT,
@@ -1279,10 +1277,10 @@
         
         if (joint_name === parseInt(joint_name, 10)) {
         //joint_name is integer variable
-            for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
-                if (rsd.FaceModule.joints[i].originalJointIndex === joint_name) {
+            for (var i = 0; i < faceJointsData.length; i++) {
+                if (faceJointsData[i].originalJointIndex === joint_name) {
                     //console.log("joint index: " + i);
-                    result = rsd.FaceModule.joints[i];
+                    result = faceJointsData[i];
                     break;
                 }
             }
@@ -1291,9 +1289,9 @@
             
         //joint_name is string variable from the menu
             for (var i = 0; i < faceJointsData.length; i++) {
-                if (rsd.FaceModule.joints[i].jointName === joint_name) {
+                if (faceJointsData[i].jointName === joint_name) {
                     //console.log("joint index: " + i);
-                    result = rsd.FaceModule.joints[i];
+                    result = faceJointsData[i];
                     break;
                 }
             }
