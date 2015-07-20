@@ -958,7 +958,7 @@
     
     var PopAlert = function() {
             
-        if (realsenseStatusReport.status == 0){
+        if (realsenseStatusReport.status == 0) {
             console.warn("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
 
             alert("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot"); 
@@ -970,19 +970,14 @@
         //console.log("check if all loaded");
         rs = intel.realsense;
         
-        console.log("========================================================" );
-       
         
         //validate realsense platform state
         ValidatePlatformState();
-        
-       
     };
     
     
     
    // var EXT_BASE_URL = "http://localhost:8000/rs-scratch/js/"; // dev-local
-     var EXT_BASE_URL = 'https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/'; // dev
     
     
     console.log("Loading dependencies");
@@ -993,7 +988,7 @@
         $.getScript('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz')
         .done(function(script, textStatus) {
 
-            $.getScript(EXT_BASE_URL + 'intel/realsense.js')
+            $.getScript('https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense.js')
             .done(function(script, textStatus) {
                 dependencyAllCreated();
             })
