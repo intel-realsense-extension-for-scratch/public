@@ -34,10 +34,10 @@
 
 </head>
 
-<body id="page-top" class="index">
+<body id="page-top" class="index bg-dark">
 
 
-    <section id="portfolio" class="bg-light-gray">
+    <section id="portfolio">
         
         <div class="container" id="platform-detection">
             <div class="row">
@@ -66,13 +66,12 @@
                 <div class="col-lg-6 col-lg-offset-2 intel-paragraph">
                     <p>Intel Realsense Web Runtime needs to be installed on this computer.</p>
                     
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox"> I am over 18 years old
-                            <br><a href="#">Learn more</a>
-                        </label>
-                    </div>
-                    <a href="https://github.com/intel-realsense-extension-for-scratch/public/blob/gh-pages/extension/RSSDK_web_drop_test_ww29.7.exe?raw=true" class="page-scroll btn btn-xl disabled" role="button">Ok</a>
+                    <p class="emphasized">Are you over 18 years old?</p>
+                    <input id="age-checkbox" type="checkbox" data-off-title="No" data-on-title="Yes">
+                    <br><a href="#">Learn more</a>
+                    
+                    <br><br><br>
+                    <button id="install-button" type="button" class="btn btn-primary btn-lg" disabled="disabled">Continue</button>
                 </div>
             </div>
         </div>
@@ -93,7 +92,8 @@
                     
                     <br>
                     <p class="emphasized">After the installation complete,</p>
-                    <a href="http://scratchx.org/?url=https://rawgit.com/intel-realsense-extension-for-scratch/public/gh-pages/extension/intel_realsense_extension.js" class="page-scroll btn btn-xl" role="button">Go back to ScratchX</a>
+                    
+                    <a href="http://scratchx.org/?url=http://intel-realsense-extension-for-scratch.github.io/public/extension/intel_realsense_extension.js" class="page-scroll btn btn-xl" role="button">Go back to ScratchX</a>
                
                    
                     <!--
@@ -176,19 +176,17 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="webpage-content/js/bootstrap.min.js"></script>
 
-    <!-- Plugin JavaScript 
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-    <script src="webpage-content/js/classie.js"></script>
-    <script src="webpage-content/js/cbpAnimatedHeader.js"></script>
--->
     <!-- Custom Theme JavaScript -->
     <script src="webpage-content/js/agency.js"></script>
 
+    <!-- lib for checkboxes -->
+    <script src="webpage-content/checkbox/js/bootstrap-checkbox.js" defer></script>
     
     <!-- Realsense platform detection JavaScript -->
     <script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
     <script src="https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz"></script>
     <script src="https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense.js"></script>
+    
     <script src="webpage-content/realsense/js/realsense-detection.js"></script>
 
     

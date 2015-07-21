@@ -1,3 +1,8 @@
+.bg-dark {
+    background-color: black;
+    
+}
+
 .intel-title {
     
     background-color: blue;
@@ -5,6 +10,7 @@
 }
 
 .intel-paragraph {
+    background-color: white;
     text-align: center;
     color: black;
     border: 1px black solid;
@@ -12,5 +18,8 @@
 }
 
 .intel-paragraph p.emphasized {
-    text-emphasis: 200em;
+    font-weight: bold;
 }
+
+
+/* http://stackoverflow.com/questions/21064234/bootstrap-3-3-row-stick-on-top-and-bottom  */

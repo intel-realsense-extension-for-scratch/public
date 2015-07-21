@@ -10,7 +10,6 @@ function ValidatePlatform() {
     // check platform compatibility
     intel.realsense.SenseManager.detectPlatform(['hand', 'face3d', 'voice', 'nuance_en_us_cnc'],['front']).then(function (info) {
      
-        
         if (info.nextStep == 'ready') {
             //good to go
             console.log("realsense good");
@@ -37,7 +36,7 @@ function ValidatePlatform() {
         }
 
     }).catch(function (error) {
-         console.warn('other unknown failure. '+ JSON.stringify(error));
+        console.warn('other unknown failure. '+ JSON.stringify(error));
         $("#platform-detection").hide();
         
     });
@@ -47,5 +46,26 @@ function ValidatePlatform() {
 $(document).ready(function() {
     ValidatePlatform();
  
+    $('#install-button').click(function() {        
+        
+        $("#platform-runtime-missing").hide();
+        $("#platform-runtime-download").show(200);
+        
+        //start download
+        window.location = "https://github.com/intel-realsense-extension-for-scratch/public/blob/gh-pages/extension/RSSDK_web_drop_test_ww29.7.exe?raw=true";
+    });
+    
+    
+    //checkboxes
+    $('#age-checkbox').checkboxpicker();
+    $('#age-checkbox').change(function() {
+        if ($('#age-checkbox').prop('checked') == true){
+            $('#install-button').removeProp('disabled');
+        } else {
+            $('#install-button').prop('disabled', 'disabled');
+        }
+    });
+    
+    
     
 });

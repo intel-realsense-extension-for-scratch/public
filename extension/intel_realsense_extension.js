@@ -201,9 +201,14 @@
     
     
     var onConnect = function (sender, connected) {
-        realsenseStatusReport = {status: connected ? 2 : 0, msg: connected ? "Connected" : "Disconnected"};
+        
         if (connected == true) {
             console.log('Connect with device instance: ' + sender.instance);
+        } else {
+            console.warn('sensor not connected');
+            realsenseStatusReport = {status: 0, msg: 'Realsense sensor not connected'};
+            
+            PopAlert();
         }
     };
     
@@ -214,7 +219,7 @@
             
             if (sts == -301) {
                 //disconnect camera from USB
-                console.log('Disconnecting camera from USB');
+                console.warn('Disconnecting camera from USB');
                 onClearSensor();
             }
         }
@@ -895,10 +900,7 @@
         if (realsenseStatusReport.status == 0) {
             console.warn("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
 
-            showModal("template-realsense", {errorMsg: '<h1>Intel Realsense extension for scratch</h1><p>Intel Realsense Web Runtime needs to be installed on this computer.</p> <a href="http://intel-realsense-extension-for-scratch.github.io/public/realsense-system-check.html">Go to download page</a>  '});
-            /*
-            alert("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot"); 
-            */
+            showModal("template-realsense");
         }
     };
     
