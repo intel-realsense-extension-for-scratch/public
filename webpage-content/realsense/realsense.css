@@ -1,0 +1,16 @@
+.intel-title {
+    
+    background-color: blue;
+    color: white;
+}
+
+.intel-paragraph {
+    text-align: center;
+    color: black;
+    border: 1px black solid;
+    height: 400px;
+}
+
+.intel-paragraph p.emphasized {
+    text-emphasis: 200em;
+}

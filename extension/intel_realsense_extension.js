@@ -15,8 +15,6 @@
             }
         });
 
-    
-    
     var rs = null;
     var sense; 
     var faceModule, blobModule, handModule;
@@ -27,7 +25,6 @@
     $(window).bind("beforeunload", function (e) {
         onClearSensor();
     })
-    
     
     
     
@@ -281,7 +278,7 @@
                 var face = faceData.faces[f];     
                 if (face == null) continue; 
 
-                if (face.landmarks.points !== 'undefined') {
+                if (face.landmarks.points !== undefined) {
                     var jointIndex = 0;
                
                    // console.log("onFaceData landmarks.points: "+ face.landmarks.points.length);
@@ -301,8 +298,8 @@
                                     ,Z: joint.world.z
                                 };
                                 
-                                faceJointsData.push(faceJoint);
-                                //rsd.FaceModule.joints.push(faceJoint);
+                                //faceJointsData.push(faceJoint);
+                                rsd.FaceModule.joints.push(faceJoint);
                                 
                                 console.log("face1: "+ faceJoint+" "+ faceJoint.position +" "+ faceJoint.position.Z);
                                 console.log("face2: "+faceJointsData.length +" "+ faceJointsData[faceJointsData.length] + " " + faceJointsData[faceJointsData.length].position.Z);
@@ -767,7 +764,6 @@
             return rs.face.FaceModule.activate(sense); 
         })
         .then(function (result) {
-            console.log("3 "+result);
             faceModule = result;
             return faceModule.createActiveConfiguration();
         })
@@ -812,8 +808,8 @@
         
         
         .then(function (result) {
-            sense.onConnect = onConnect;
-            sense.onStatus = onStatus;
+            sense.onDeviceConnected = onConnect;
+            sense.onStatusChanged = onStatus;
             return sense.init();
         })
         .then(function (result) {
@@ -899,7 +895,10 @@
         if (realsenseStatusReport.status == 0) {
             console.warn("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
 
+            showModal("template-realsense", {errorMsg: '<h1>Intel Realsense extension for scratch</h1><p>Intel Realsense Web Runtime needs to be installed on this computer.</p> <a href="http://intel-realsense-extension-for-scratch.github.io/public/realsense-system-check.html">Go to download page</a>  '});
+            /*
             alert("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot"); 
+            */
         }
     };
     
@@ -917,7 +916,24 @@
     
     
     console.log("Loading dependencies");
-   
+   /*
+    var LoadDependancy = function (path, callback) {
+        $.getScript(path)
+        .done(function(script, textStatus) {
+            
+        })
+        .fail(function(jqxhr, settings, exception) {
+            console.log('Load fail '+path);
+        });
+    };
+    
+    LoadDependancy('https://www.promisejs.org/polyfills/promise-6.1.0.js', 
+                   function(){
+        LoadDependancy('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz', 
+    
+    });
+    */
+    
     $.getScript('https://www.promisejs.org/polyfills/promise-6.1.0.js')
     .done(function(script, textStatus) {
        
@@ -988,7 +1004,6 @@
 
 
     ext._getStatus = function () {
-        
         return realsenseStatusReport;
     };
    
@@ -1230,7 +1245,7 @@
             "position_value": ["X Position",  "Y Position",  "Z Position"]
         }
         
-        , url: 'http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot'
+        , url: 'http://intel-realsense-extension-for-scratch.github.io/public/realsense-system-check.html'
     };
     
     ScratchExtensions.register('Intel RealSense', descriptor, ext);
