@@ -191,7 +191,7 @@
     /*************************************FACE RECOGNITION*****************************************************/
     /**********************************************************************************************************/
 
-   var facial_expressions_this_frameArr = [];
+    var facial_expressions_this_frameArr = [];
     
     // Converter: face joint index => face joint name
     var getJointNameByIndex = function (joint_index)
@@ -296,7 +296,7 @@
                             var scratchFaceExpressionName = convertModuleExpressionIndexToScratchName(fe);
 
                             //add it to array of current frame only
-                            facial_expressions_this_frameArr.push(scratchFaceExpressionName);
+                            //facial_expressions_this_frameArr.push(scratchFaceExpressionName);
                             rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
                             
                             console.log("exp1 "+f_expr);
@@ -829,10 +829,9 @@
           
         if (rs != null && rs.SenseManager != null)
         {
-            rs.SenseManager.detectPlatform(['face3d','blob','hand'], ['front'])
+            rs.SenseManager.detectPlatform(['face3d','hand','blob'], ['f200'])
                 
             .then(function (info) {
-                
                 
                 console.warn("Error detectPlatform: isCameraReady "+info.isCameraReady+ " isDCMUpdateNeeded:  "+info.isDCMUpdateNeeded+" isRuntimeInstalled: "+info.isRuntimeInstalled);
                 
