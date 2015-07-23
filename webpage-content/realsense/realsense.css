@@ -7,6 +7,7 @@
     color: white;
     font-family: 'Open Sans', sans-serif;
     border: 1px white solid;
+    margin-top: 200px;
 }
 
 .intel-title {
@@ -14,9 +15,9 @@
 }
 
 .intel-paragraph {
-    text-align: center;
-    height: 300px;
-    font-size: 20px;
+    padding: 20px;
+    height: 250px;
+    font-size: 18px;
 }
 
 .intel-paragraph p.emphasized {
@@ -24,9 +25,21 @@
 }
 
 
+.intel-paragraph .bottom-line {
+    margin-top: 30px;
+    
+}
+
+.intel-paragraph .bottom-line .stick-bottom {
+    bottom: 0;
+    margin-bottom: 10px;
+}
+
+
+
 
 .btn {
-   background-color: #00AEEF; 
+    background-color: #00AEEF; 
     font-size: 18px;
 }
 
@@ -35,12 +48,19 @@
 }
 
 .btn-primary .disabled {
-    background-color: #0090DA;
-    color: white;
 }
 
 a {
     color:white;
 }
+
+
+
+
+#age-checkbox {
+    width:20px;
+    height: 20px;
+}
+
 
 /* http://stackoverflow.com/questions/21064234/bootstrap-3-3-row-stick-on-top-and-bottom  */
