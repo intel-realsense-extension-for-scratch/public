@@ -17,6 +17,7 @@
     <!-- Custom CSS
     <link href="webpage-content/css/agency.css" rel="stylesheet">
  -->
+    
     <!-- Custom Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <link href="webpage-content/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -38,117 +39,119 @@
 <body id="page-top" class="index bg-dark">
 
 
-    <section id="portfolio">
+    <section>
         
-        <div class="container" id="platform-detection">
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-2 text-center intel-title">
-                    <h2 class="section-heading">Intel Realsense extension for scratch</h2>
-                </div>
-            </div>
+        <div class="container">
             
             <div class="row">
-                <div class="col-lg-6 col-lg-offset-2 intel-paragraph">
-                    <i class="fa fa-spinner fa-spin fa-4x"></i> 
-                    <p>Initializing...</p>
+                <div class="col-lg-6 col-lg-offset-2 intel-screen">
+               
+                    <div id="platform-detection">
+        
+                        <div class="row text-center intel-title">
+                            <img src="webpage-content/realsense/img/header.png" class="img-responsive" alt="">
+                            <!--h2 class="section-heading">Intel Realsense extension for scratch</h2-->
+                        </div>
+
+                        <div class="row intel-paragraph">
+                            <i class="fa fa-spinner fa-spin fa-4x"></i> 
+                            <p>Initializing...</p>
+                        </div>
+                    </div>
                     
-                    <br><br>
-                     <img src="webpage-content/img/intel%20logo.png" class="img-responsive" alt="">
+                    
+                    
+                    <div id="platform-runtime-missing">
+        
+                        <div class="row text-center intel-title">
+                            <img src="webpage-content/realsense/img/header.png" class="img-responsive" alt="">
+                            <!--h2 class="section-heading">Intel Realsense extension for scratch</h2-->
+                        </div>
+
+                        <div class="row intel-paragraph">
+                            <p>Intel Realsense Web Runtime needs to be installed on this computer.</p>
+                    
+                            <p class="emphasized">Are you over 18 years old?</p>
+                            <input id="age-checkbox" type="checkbox" data-off-title="No" data-on-title="Yes">
+                            <br><a href="#">Learn more</a>
+
+                            <br><br><br>
+                            <button id="install-button" type="button" class="btn btn-primary btn-lg" disabled="disabled">Continue</button>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <div id="platform-runtime-download">
+        
+                        <div class="row text-center intel-title">
+                            <img src="webpage-content/realsense/img/header.png" class="img-responsive" alt="">
+                            <!--h2 class="section-heading">Intel Realsense extension for scratch</h2-->
+                        </div>
+
+                        <div class="row intel-paragraph">
+                            <p>Downloading Intel Realsense Web Runtime.</p>
+                            <p class="emphasized">Click the downloaded file to install.</p>
+
+                            <br>
+                            <p class="emphasized">After the installation complete,</p>
+
+                            <a href="http://scratchx.org/?url=http://intel-realsense-extension-for-scratch.github.io/public/extension/intel_realsense_extension.js" class="page-scroll btn btn-xl" role="button">Go back to ScratchX</a>
+
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    <div id="platform-browser">
+        
+                        <div class="row text-center intel-title">
+                            <img src="webpage-content/realsense/img/header.png" class="img-responsive" alt="">
+                            <!--h2 class="section-heading">Intel Realsense extension for scratch</h2-->
+                        </div>
+
+                        <div class="row intel-paragraph">
+                            <p>Your browser is not supported.</p>
+                            <p class="emphasized">Please install latest version of <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">Chrome</a>, <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a> or <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie" target="_blank">Internet Explorer</a>.</p>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    <div id="platform-ready">
+        
+                        <div class="row text-center intel-title">
+                            <img src="webpage-content/realsense/img/header.png" class="img-responsive" alt="">
+                            <!--h2 class="section-heading">Intel Realsense extension for scratch</h2-->
+                        </div>
+
+                        <div class="row intel-paragraph">
+                            <p>we have found that you are good to go!</p>
+                            <p class="emphasized">Good luck! See our samples for more info :)</p>
+                            <a href="http://scratchx.org/?url=https://rawgit.com/intel-realsense-extension-for-scratch/public/gh-pages/extension/intel_realsense_extension.js" class="page-scroll btn btn-xl" role="button">Back to ScratchX</a>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                 </div>
-            </div>
-        </div>
+            </div>  
+            
              
         
         
-          <div class="container" id="platform-runtime-missing">
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-2 text-center intel-title">
-                    <h2 class="section-heading">Intel Realsense extension for scratch</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-2 intel-paragraph">
-                    <p>Intel Realsense Web Runtime needs to be installed on this computer.</p>
-                    
-                    <p class="emphasized">Are you over 18 years old?</p>
-                    <input id="age-checkbox" type="checkbox" data-off-title="No" data-on-title="Yes">
-                    <br><a href="#">Learn more</a>
-                    
-                    <br><br><br>
-                    <button id="install-button" type="button" class="btn btn-primary btn-lg" disabled="disabled">Continue</button>
-                    
-                    <br><br>
-                    <img src="webpage-content/img/intel%20logo.png" class="img-responsive" alt="">
-                </div>
-            </div>
-        </div>
         
-        
-        
-        <div class="container" id="platform-runtime-download">
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-2 text-center intel-title">
-                    <h2 class="section-heading">Intel Realsense extension for scratch</h2>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-2 intel-paragraph">
-                    <p>Downloading Intel Realsense Web Runtime.</p>
-                    <p class="emphasized">Click the downloaded file to install.</p>
-                    
-                    <br>
-                    <p class="emphasized">After the installation complete,</p>
-                    
-                    <a href="http://scratchx.org/?url=http://intel-realsense-extension-for-scratch.github.io/public/extension/intel_realsense_extension.js" class="page-scroll btn btn-xl" role="button">Go back to ScratchX</a>
-               
-                   
-                    <!--
-                    <a href="https://github.com/intel-realsense-extension-for-scratch/public/blob/gh-pages/extension/intel_rs_dcm_f200_1.3.20.36232.exe" class="page-scroll btn btn-xl">Install Intel realsense depth camera manager</a>
-                    -->
-                    
-                    <br><br>
-                    <img src="webpage-content/img/intel%20logo.png" class="img-responsive" alt="">
-                </div>
-            </div>
-        </div>
-              
-        
-         <div class="container" id="platform-ready">
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-2 text-center intel-title">
-                    <h2 class="section-heading">Intel Realsense extension for scratch</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-2 intel-paragraph">
-                    <p>we have found that you are good to go!</p>
-                    <p class="emphasized">Good luck! See our samples for more info :)</p>
-                    <a href="http://scratchx.org/?url=https://rawgit.com/intel-realsense-extension-for-scratch/public/gh-pages/extension/intel_realsense_extension.js" class="page-scroll btn btn-xl" role="button">Back to ScratchX</a>
-                    
-                    <br><br>
-                    <img src="webpage-content/img/intel%20logo.png" class="img-responsive" alt="">
-                </div>
-            </div>
-        </div>
-        
-        
-         <div class="container" id="platform-browser">
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-2 text-center intel-title">
-                    <h2 class="section-heading">Intel Realsense extension for scratch</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-2 intel-paragraph">
-                    <p>Your browser is not supported.</p>
-                    <p class="emphasized">Please install latest version of <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">Chrome</a>, <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a> or <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie" target="_blank">Internet Explorer</a>.</p>
-                    
-                    <br><br>
-                    <img src="webpage-content/img/intel%20logo.png" class="img-responsive" alt="">
-                </div>
-            </div>
-        </div>
         
     </section>
     

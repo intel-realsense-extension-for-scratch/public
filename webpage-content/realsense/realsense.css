@@ -1,22 +1,22 @@
 .bg-dark {
     background-color: black;
+}
+
+.intel-screen {
+    background-color: #0071C5;
+    color: white;
     font-family: 'Open Sans', sans-serif;
+    border: 10px white solid;
 }
 
 .intel-title {
     
-    background-color: blue;
-    color: white;
-    font-family: 'Open Sans', sans-serif;
 }
 
 .intel-paragraph {
-    background-color: white;
     text-align: center;
-    color: black;
-    border: 1px black solid;
     height: 400px;
-    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
 }
 
 .intel-paragraph p.emphasized {
