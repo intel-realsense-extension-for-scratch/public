@@ -6,7 +6,7 @@
     background-color: #0071C5;
     color: white;
     font-family: 'Open Sans', sans-serif;
-    border: 10px white solid;
+    border: 1px white solid;
 }
 
 .intel-title {
@@ -15,7 +15,7 @@
 
 .intel-paragraph {
     text-align: center;
-    height: 400px;
+    height: 300px;
     font-size: 20px;
 }
 
@@ -25,5 +25,22 @@
 
 
 
+.btn {
+   background-color: #00AEEF; 
+    font-size: 18px;
+}
+
+.btn-primary {
+    
+}
+
+.btn-primary .disabled {
+    background-color: #0090DA;
+    color: white;
+}
+
+a {
+    color:white;
+}
 
 /* http://stackoverflow.com/questions/21064234/bootstrap-3-3-row-stick-on-top-and-bottom  */
