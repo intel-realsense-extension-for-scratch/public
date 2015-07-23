@@ -1,12 +1,13 @@
 .bg-dark {
     background-color: black;
-    font-family: "Source Sans Pro", "Lucida Grande", "Tahoma", "Verdana", "Arial", sans-serif; 
+    font-family: 'Open Sans', sans-serif;
 }
 
 .intel-title {
     
     background-color: blue;
     color: white;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .intel-paragraph {
@@ -15,6 +16,7 @@
     color: black;
     border: 1px black solid;
     height: 400px;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .intel-paragraph p.emphasized {
