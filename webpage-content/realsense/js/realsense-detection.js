@@ -52,7 +52,8 @@ $(document).ready(function() {
         $("#platform-runtime-download").show(200);
         
         //start download
-        window.location = "https://github.com/intel-realsense-extension-for-scratch/public/blob/gh-pages/extension/RSSDK_web_drop_test_ww29.7.exe?raw=true";
+        window.location = "http://registrationcenter-download.intel.com/akdlm/irc_nas/7787/rs_sdk_runtime_webapp_v6.exe";
+            //"https://github.com/intel-realsense-extension-for-scratch/public/blob/gh-pages/extension/RSSDK_web_drop_test_ww29.7.exe?raw=true";
     });
     
     

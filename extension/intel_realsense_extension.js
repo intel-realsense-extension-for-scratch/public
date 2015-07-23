@@ -21,30 +21,17 @@
     var blobConfiguration, handConfiguration, faceConfiguration;
     var imageSize;
     
+    
     //shutdown realsense when refresh window 
     $(window).bind("beforeunload", function (e) {
         onClearSensor();
-    })
+    });
     
     
     
     
-   
-    //#region Face joints
-    const LEFT_EYE_INDEX = 77;
-    const RIGHT_EYE_INDEX = 76;
-    const LEFT_EYEBROW_INDEX = 7;
-    const RIGHT_EYEBROW_INDEX = 2;
-    const CHIN_INDEX = 61;
-    const CENTER_INDEX = 0;         //TODO: fix that index
-    const UPPER_LIP_INDEX = 36;
-    const BOTTOM_LIP_INDEX = 51;
-    const NOSE_INDEX = 29;
-    //#endregion
-    
-    
-    const MAX_NUM_OF_RECOGNIZED_FACE_EXPRESSIONS = 10;//saving last 11 recognized facial expression
-    const MAX_NUM_OF_RECOGNIZED_WORDS = 99;//saving last 100 recognized words
+    const MAX_NUM_OF_RECOGNIZED_FACE_EXPRESSIONS = 10;  //saving last 11 recognized facial expression
+    const MAX_NUM_OF_RECOGNIZED_WORDS = 99;             //saving last 100 recognized words
 
     
     //#region stage mapping
@@ -68,42 +55,6 @@
 
     
     
-    /*
-    //#region variables
-    var JointIndexToScratchName = {
-        
-                "Wrist": intel.realsense.hand.JointType.JOINT_WRIST
-                ,"Center": intel.realsense.hand.JointType.JOINT_CENTER
-        
-
-                , intel.realsense.hand.JointType.JOINT_THUMB_BASE: "Thumb base"
-                , intel.realsense.hand.JointType.JOINT_THUMB_JT1: "Thumb jointC"
-                , intel.realsense.hand.JointType.JOINT_THUMB_JT2: "Thumb jointB"
-                , intel.realsense.hand.JointType.JOINT_THUMB_TIP: "Thumb tip"
-
-                , intel.realsense.hand.JointType.JOINT_INDEX_BASE: "Index base"
-                , intel.realsense.hand.JointType.JOINT_INDEX_JT1: "Index jointC"
-                , intel.realsense.hand.JointType.JOINT_INDEX_JT2: "Index jointB"
-                , intel.realsense.hand.JointType.JOINT_INDEX_TIP: "Index tip"
-
-                , intel.realsense.hand.JointType.JOINT_MIDDLE_BASE: "Middle base"
-                , intel.realsense.hand.JointType.JOINT_MIDDLE_JT1: "Middle jointC"
-                , intel.realsense.hand.JointType.JOINT_MIDDLE_JT2: "Middle jointB"
-                , intel.realsense.hand.JointType.JOINT_MIDDLE_TIP: "Middle tip"
-
-                , intel.realsense.hand.JointType.JOINT_RING_BASE: "Ring base"
-                , intel.realsense.hand.JointType.JOINT_RING_JT1: "Ring jointC"
-                , intel.realsense.hand.JointType.JOINT_RING_JT2: "Ring jointB"
-                , intel.realsense.hand.JointType.JOINT_RING_TIP: "Ring tip"
-
-                , intel.realsense.hand.JointType.JOINT_PINKY_BASE: "Pinky base"
-                , intel.realsense.hand.JointType.JOINT_PINKY_JT1: "Pinky jointC"
-                , intel.realsense.hand.JointType.JOINT_PINKY_JT2: "Pinky jointB"
-                , intel.realsense.hand.JointType.JOINT_PINKY_TIP: "Pinky tip"
-
-            };
-   */ 
-    
       
     var HandModule = function () {
         // private
@@ -111,7 +62,7 @@
         return {
             // public
             isExist: true
-            , joints: []
+            , joints: []  //array doesnt populate!
           
          /*   , JointIndexToScratchName : {
                 intel.realsense.hand.JointType.JOINT_WRIST:  "Wrist"
@@ -156,8 +107,8 @@
         return {
             // public
             isExist: true,
-            joints: [ ],
-            expressions_this_frame : [ ]     
+            joints: [ ],                 //array doesnt populate!
+            expressions_this_frame : [ ] //array doesnt populate!  
         }
     };
     
@@ -217,6 +168,7 @@
         if (sts < 0) {
             console.warn('Error ' + sts + ' on module ' + sender);
             
+            // No error on USB disconnect or reconnect from SDK
             if (sts == -301) {
                 //disconnect camera from USB
                 console.warn('Disconnecting camera from USB');
@@ -244,18 +196,29 @@
     // Converter: face joint index => face joint name
     var getJointNameByIndex = function (joint_index)
     {
-        return  (joint_index === LEFT_EYE_INDEX) ? "Left eye" :
-                (joint_index === RIGHT_EYE_INDEX) ? "Right eye" :
-                (joint_index === LEFT_EYEBROW_INDEX) ? "Left eye brow" :
-                (joint_index === RIGHT_EYEBROW_INDEX) ? "Right eye brow" :
-                (joint_index === CHIN_INDEX) ? "Chin" :
-                (joint_index === UPPER_LIP_INDEX) ? "Upper lip" :
-                (joint_index === BOTTOM_LIP_INDEX) ? "Bottom lip" :
-                (joint_index === NOSE_INDEX) ? "Nose" : 
-                "error";  
+        return  
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER) ? "Left eye" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER) ? "Right eye" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_LEFT_CENTER) ? "Left eye brow" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_RIGHT_CENTER) ? "Right eye brow" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_CHIN) ? "Chin" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_UPPER_LIP_CENTER) ? "Upper lip" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_LOWER_LIP_CENTER) ? "Bottom lip" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_NOSE_TIP) ? "Nose" : 
+            "error";  
     };
     
   
+    var onFaceHandData = function (sender, data) {
+        console.log("onFaceHandData: ");
+        
+        if (sender == faceModule)
+            onFaceData(sender, data);
+        else if (sender == handModule)
+            onHandData(sender, data); 
+    };
+    
+    
     var onFaceData = function(module, faceData) {
         console.log("onFaceData: ");
         
@@ -264,7 +227,7 @@
         
         
         if (faceData.faces == null || faceData.faces.length == 0) {
-            rsd.FaceModule.isExist=false;
+            rsd.FaceModule.isExist = false;
             return;
         }
         
@@ -776,7 +739,7 @@
             faceConfiguration = result;
             faceConfiguration.detection.isEnabled = true;
             faceConfiguration.detection.maxTrackedFaces = 1;
-            faceConfiguration.trackingMode = 1;  
+            faceConfiguration.trackingMode = intel.realsense.face.TrackingModeType.FACE_MODE_COLOR_PLUS_DEPTH;
             
             faceConfiguration.landmarks.isEnabled = true;
             faceConfiguration.landmarks.maxTrackedFaces = 1;
@@ -784,10 +747,6 @@
             faceConfiguration.expressions.properties.isEnabled = true;
 
             return faceConfiguration.applyChanges();
-        })
-        .then(function (result) {
-            faceModule.onFrameProcessed = onFaceData;
-            return result;
         })
       
         
@@ -797,7 +756,6 @@
         })
         .then(function (result) {
             handModule = result;
-            handModule.onFrameProcessed = onHandData;
             return handModule.createActiveConfiguration();
         })
         .then(function (result) {
@@ -812,12 +770,24 @@
         
         
         
+        
         .then(function (result) {
             sense.onDeviceConnected = onConnect;
             sense.onStatusChanged = onStatus;
+            
+            faceModule.onFrameProcessed = onFaceHandData;
+            handModule.onFrameProcessed = onFaceHandData;
+            
             return sense.init();
         })
         .then(function (result) {
+            
+            //only after sense.init() capture manager knows which sensor is plugged in
+            if (sense.captureManager.device.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_F200) {
+                
+            }
+            
+            
             imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_DEPTH);
             return sense.streamFrames();
         })
@@ -837,6 +807,12 @@
         });
     
     
+        
+        
+        
+        //speech module init
+        
+        
     };
     
     
@@ -857,20 +833,27 @@
                 
             .then(function (info) {
                 
+                
+                console.warn("Error detectPlatform: isCameraReady "+info.isCameraReady+ " isDCMUpdateNeeded:  "+info.isDCMUpdateNeeded+" isRuntimeInstalled: "+info.isRuntimeInstalled);
+                
+                
                 if (info.nextStep == 'ready') {
                     realsenseStatusReport = { status: 2, msg: 'RealSense sensor is ready' };
-                  
+                    
                     //we are now able to start realsense sensor automatically!
                     StartRealSense();
                     
                 } else if (info.nextStep == 'unsupported') {
+                    //unsupported called when DCM not installed OR when browser is too old OR .......
                     realsenseStatusReport = { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
                 
                 } else if (info.nextStep == 'driver') {
+                    //driver called when DCM is too old and should be upgraded
                     realsenseStatusReport = { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
                 
                 } else if (info.nextStep == 'runtime') {
-                   realsenseStatusReport = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
+                    //runtime called when runtime needs to be installed
+                    realsenseStatusReport = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
                 
                 }
                 
@@ -898,7 +881,7 @@
     var PopAlert = function() {
             
         if (realsenseStatusReport.status == 0) {
-            console.warn("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
+            //console.warn("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
 
             showModal("template-realsense");
         }
@@ -1069,7 +1052,8 @@
     
     
     
-    ext.whenHandGesture = function(hand_type, gesture_name) {        var g = gesture_name.toLowerCase().replace(' ', '_');
+    ext.whenHandGesture = function(hand_type, gesture_name) {        
+        var g = gesture_name.toLowerCase().replace(' ', '_');
         var h = {
             "Left Hand": intel.realsense.hand.BodySideType.BODY_SIDE_LEFT,
             "Right Hand": intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT,
@@ -1204,10 +1188,6 @@
         return false;
     };
 
-    ext.startRS = function (callback) {
-       StartRealSense();            
-        
-    };
     
     
     var descriptor = {
