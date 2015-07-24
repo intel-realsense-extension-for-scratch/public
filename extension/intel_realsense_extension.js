@@ -445,16 +445,27 @@
     
                                       
     var onHandData = function (module, handData) {
+        
+        //reset all data 
         rsd.HandModule.isRightExist = false;
         rsd.HandModule.isLeftExist = false;
-       
-        //this never happens since the function is not called when no hands available...
-        if (handData == null || handData.numberOfHands == 0) {
-            return;
-        }
         
         gestures = {};
 
+        leftHandJoints=[];
+        rightHandJoints=[];
+        
+        leftHandJointsFoldness=[];
+        rightHandJointsFoldness=[];
+        
+        if (handData.numberOfHands == 0) {
+            return;
+        }
+        
+        
+        
+        //start collecting
+        
         var allHandsData = handData.queryHandData(intel.realsense.hand.AccessOrderType.ACCESS_ORDER_NEAR_TO_FAR);
         for (var h = 0; h < handData.numberOfHands; h++) {
             var ihand = allHandsData[h];
@@ -530,14 +541,21 @@
             //console.log("3hand joint fold "+leftHandJointsFoldness[1].jointName +" "+leftHandJointsFoldness[1].foldedness);
 
             
-            console.log("gestures ");
             console.log("gestures "+handData.firedGestureData.length);
             
+            if (handData.firedGestureData.length>0){
+                console.warn("  handData.firedGestureData  ");
+                console.warn(JSON.stringify(handData.firedGestureData[0]));
+                
+            }
+            
+            
+            
             // Gesture: {"timeStamp":130822251414152420,"handId":1,"state":2,"frameNumber":596,"name":"thumb_up"}
-            for (var g = 0; g < handData.firedGestureData.length; g++) {
+            for (g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gesture= handData.firedGestureData[g];
-            
+                
                 console.log("gestures "+gesture);
                 console.log("gestures "+gesture.state+ " "+gesture.name);
             
