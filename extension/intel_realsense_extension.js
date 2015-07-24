@@ -6,7 +6,10 @@
 "use strict";
 
 (function (ext) {
-    $.ajax({
+    
+        
+    //modal alert window
+        $.ajax({
             url: 'http://intel-realsense-extension-for-scratch.github.io/public/extension/dialog.html',
             method: 'GET',
             // async: false,
@@ -15,17 +18,15 @@
             }
         });
 
+    
+    
+    
+    
     var rs = null;
     var sense; 
     var faceModule, blobModule, handModule;
     var blobConfiguration, handConfiguration, faceConfiguration;
     var imageSize;
-    
-    
-    //shutdown realsense when refresh window 
-    $(window).bind("beforeunload", function (e) {
-        onClearSensor();
-    });
     
     
     
@@ -185,6 +186,12 @@
             });
         }
     };
+    
+    
+    //shutdown realsense when refresh window 
+    $(window).bind("beforeunload", function (e) {
+        onClearSensor();
+    });
     
     
     /**********************************************************************************************************/
