@@ -907,23 +907,6 @@
     
     
     console.log("Loading dependencies");
-   /*
-    var LoadDependancy = function (path, callback) {
-        $.getScript(path)
-        .done(function(script, textStatus) {
-            
-        })
-        .fail(function(jqxhr, settings, exception) {
-            console.log('Load fail '+path);
-        });
-    };
-    
-    LoadDependancy('https://www.promisejs.org/polyfills/promise-6.1.0.js', 
-                   function(){
-        LoadDependancy('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz', 
-    
-    });
-    */
     
     $.getScript('https://www.promisejs.org/polyfills/promise-6.1.0.js')
     .done(function(script, textStatus) {

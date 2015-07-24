@@ -39,27 +39,27 @@
 
 
 
-.btn {
+.intel-paragraph .btn {
     background-color: #00AEEF; 
     font-size: 18px;
     box-shadow: 0px 0px 20px #525252;
 }
 
-.btn-primary {
+.intel-paragraph .btn-primary {
     
 }
 
-.btn-primary .disabled {
+.intel-paragraph .btn-primary .disabled {
 }
 
-a {
+.intel-paragraph a {
     color:white;
 }
 
 
 
 
-#age-checkbox {
+.intel-paragraph #age-checkbox {
     width:20px;
     height: 20px;
 }
