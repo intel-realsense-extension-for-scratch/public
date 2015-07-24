@@ -529,12 +529,18 @@
             
             //console.log("3hand joint fold "+leftHandJointsFoldness[1].jointName +" "+leftHandJointsFoldness[1].foldedness);
 
-            // gestures[ihand.bodySide] = null;
-            // delete gestures[ihand.bodySide];
+            
+            console.log("gestures ");
+            console.log("gestures "+handData.firedGestureData.length);
+            
             // Gesture: {"timeStamp":130822251414152420,"handId":1,"state":2,"frameNumber":596,"name":"thumb_up"}
             for (var g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gesture= handData.firedGestureData[g];
+            
+                console.log("gestures "+gesture);
+                console.log("gestures "+gesture.state+ " "+gesture.name);
+            
                 
                 if (gesture.state==intel.realsense.hand.GestureStateType.GESTURE_STATE_START || 
                     gesture.state==intel.realsense.hand.GestureStateType.GESTURE_STATE_IN_PROGRESS){
@@ -1076,6 +1082,8 @@
     
     ext.getHandGesture = function(hand_type, gesture_name) {
         
+        console.log("hi "+gestures);
+
         if(Object.keys(gestures).length === 0)
             return false;
         
