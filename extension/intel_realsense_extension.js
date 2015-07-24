@@ -60,9 +60,10 @@
     var HandModule = function () {
         // private
         
-        return {
+       return {
             // public
-            isExist: true
+            isRightExist: false
+            , isLeftExist: false
             , joints: []  //array doesnt populate!
           
          /*   , JointIndexToScratchName : {
@@ -444,13 +445,14 @@
     
                                       
     var onHandData = function (module, handData) {
-        rsd.HandModule.isExist = false;
+        rsd.HandModule.isRightExist = false;
+        rsd.HandModule.isLeftExist = false;
+       
         //this never happens since the function is not called when no hands available...
         if (handData == null || handData.numberOfHands == 0) {
             return;
         }
-        rsd.HandModule.isExist = handData.numberOfHands > 0;
-
+        
         gestures = {};
 
         var allHandsData = handData.queryHandData(intel.realsense.hand.AccessOrderType.ACCESS_ORDER_NEAR_TO_FAR);
@@ -514,12 +516,15 @@
                 //left hand
                 leftHandJoints = resultJointsArray;
                 leftHandJointsFoldness = resultFoldnessArray;
-                
+                rsd.HandModule.isLeftExist = true;
+        
             } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
                 //right hand
                 rightHandJoints = resultJointsArray;  
                 rightHandJointsFoldness = resultFoldnessArray;
                 
+                rsd.HandModule.isRightExist = true;
+        
             }
             
             //console.log("3hand joint fold "+leftHandJointsFoldness[1].jointName +" "+leftHandJointsFoldness[1].foldedness);
@@ -986,8 +991,14 @@
         return rsd.BlobModule.isExist;
     };
     
-    ext.isHandExist = function () {
-       return rsd.HandModule.isExist;
+    ext.isHandExist = function (hand_side) {
+        if (hand_side == "Left Hand"){
+            return rsd.HandModule.isLeftExist;
+        }else if (hand_side == "Right Hand"){
+            return rsd.HandModule.isRightExist;
+        } else {
+             return (rsd.HandModule.isRightExist || rsd.HandModule.isLeftExist);
+        }
     };
     
     ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {
