@@ -525,16 +525,24 @@
                 
                 rsd.HandModule.isRightExist = true;
         
-            }
+            }   
             
             //console.log("3hand joint fold "+leftHandJointsFoldness[1].jointName +" "+leftHandJointsFoldness[1].foldedness);
 
             // gestures[ihand.bodySide] = null;
             // delete gestures[ihand.bodySide];
+            // Gesture: {"timeStamp":130822251414152420,"handId":1,"state":2,"frameNumber":596,"name":"thumb_up"}
             for (var g = 0; g < handData.firedGestureData.length; g++) {
-                // console.log('Gesture: ' + JSON.stringify(handData.firedGestureData[g]));
-                gestures[ihand.bodySide] = handData.firedGestureData[g];
-                gestures[intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN] = handData.firedGestureData[g];
+                
+                var gesture= handData.firedGestureData[g];
+                
+                if (gesture.state==intel.realsense.hand.GestureStateType.GESTURE_STATE_START || 
+                    gesture.state==intel.realsense.hand.GestureStateType.GESTURE_STATE_IN_PROGRESS){
+                    
+                    // console.log('Gesture: ' + JSON.stringify(handData.firedGestureData[g]));
+                    gestures[ihand.bodySide] = gesture;
+                    gestures[intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN] = gesture;
+                }
             }            
         }
         
@@ -997,7 +1005,7 @@
         }else if (hand_side == "Right Hand"){
             return rsd.HandModule.isRightExist;
         } else {
-             return (rsd.HandModule.isRightExist || rsd.HandModule.isLeftExist);
+            return (rsd.HandModule.isRightExist || rsd.HandModule.isLeftExist);
         }
     };
     
@@ -1051,7 +1059,7 @@
     };
     
     
-    
+   /*
     ext.whenHandGesture = function(hand_type, gesture_name) {        
         var g = gesture_name.toLowerCase().replace(' ', '_');
         var h = {
@@ -1064,21 +1072,24 @@
         }
         return false;
     }
-
+*/
+    
     ext.getHandGesture = function(hand_type, gesture_name) {
+        
         if(Object.keys(gestures).length === 0)
             return false;
-        // console.log([gestures[0].data.name, gesture_name]);
+        
+        console.log("hi "+[gestures[0].data.name, gestures[0].name, gesture_name]);
 
         // // map display name to SDK's
-       var g = gesture_name.toLowerCase().replace(' ', '_');
+        var g = gesture_name.toLowerCase().replace(' ', '_');
         console.log([hand_type, gesture_name, g]);
         var h = {
             "Left Hand": intel.realsense.hand.BodySideType.BODY_SIDE_LEFT,
             "Right Hand": intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT,
             "Any Hand": intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN,
         }[hand_type];
-        
+
         return h in gestures && gestures[h].name == g;
     }
     
