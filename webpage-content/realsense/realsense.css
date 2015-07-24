@@ -8,6 +8,7 @@
     font-family: 'Open Sans', sans-serif;
     border: 1px white solid;
     margin-top: 200px;
+    box-shadow: 0px 0px 30px #888888;
 }
 
 .intel-title {
@@ -41,6 +42,7 @@
 .btn {
     background-color: #00AEEF; 
     font-size: 18px;
+    box-shadow: 0px 0px 20px #888888;
 }
 
 .btn-primary {
@@ -86,6 +88,8 @@ a {
     font-family: 'Open Sans', sans-serif;
     border: 1px white solid;
     width: 50%;
+    margin: 0 auto;
+    box-shadow: 0px 0px 30px #888888;
 }
 
 .intel-paragraph-modal {
