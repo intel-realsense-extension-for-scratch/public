@@ -844,7 +844,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         .then(function (result) {
             
             //only after sense.init() capture manager knows which sensor is plugged in
-            if (sense.captureManager.device.deviceInfo.model != rs.DeviceModel.DEVICE_MODEL_R200) {
+            if (sense.captureManager.device.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_R200) {
                 realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
                 
                 PopAlert();
