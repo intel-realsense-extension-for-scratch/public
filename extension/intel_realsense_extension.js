@@ -161,6 +161,8 @@
             
             //only after sense.init() and onDeviceConnected we know the sensor
             
+            console.log(' device info: ' + JSON.stringify( sender.instance.deviceInfo));
+            
             if (sender.instance.deviceInfo.model != rs.DeviceModel.DEVICE_MODEL_R200) {
                 realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
                 
