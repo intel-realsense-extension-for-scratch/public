@@ -248,6 +248,8 @@
         //reset the face expression data every frame 
         rsd.FaceModule.expressions_this_frame=[];
         
+        faceJointsData=[];
+        rsd.FaceModule.joints=[];
         
         if (faceData.faces == null || faceData.faces.length == 0) {
             rsd.FaceModule.isExist = false;
