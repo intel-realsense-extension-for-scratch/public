@@ -214,7 +214,7 @@
     /*************************************FACE RECOGNITION*****************************************************/
     /**********************************************************************************************************/
 
-    var facial_expressions_this_frameArr = [];
+    //var facial_expressions_this_frameArr = [];
     
   
     var onFaceHandData = function (sender, data) {
@@ -277,7 +277,6 @@
                                 };
                                 
                                 rsd.FaceModule.joints.push(faceJoint);
-                                
                             }
                         }
                     }
@@ -287,6 +286,7 @@
                 }
                 
   
+//face expression block
                 if (face.expressions !== null && face.expressions.expressions != null) {
                     // console.log('Expressions: ' + JSON.stringify(face.expressions.expressions));
                     
@@ -294,34 +294,35 @@
                     for (var fe=0; fe<face.expressions.expressions.length; fe++){
                         
                         var f_expr = face.expressions.expressions[fe];
-                       // console.log('Expressions: ' + JSON.stringify(f_expr)+" "+f_expr +" "+f_expr.intensity);
+                        // console.log('Expressions: ' + JSON.stringify(f_expr)+" "+f_expr +" "+f_expr.intensity);
 
                         
                         if (f_expr.intensity>20) {
                             //convert the expression to a string the extension would identify
                             var scratchFaceExpressionName = convertModuleExpressionIndexToScratchName(fe);
 
-                            //add it to array of current frame only
-                            //facial_expressions_this_frameArr.push(scratchFaceExpressionName);
-                            rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
-                            
-                           // console.log("exp1 "+f_expr);
-                            //console.log("exp2 "+rsd.FaceModule.expressions_this_frame);
+                            if (scratchFaceExpressionName != "error"){
+                                //add it to array of current frame only
+                                rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
+
+                                // console.log("exp1 "+f_expr);
+                                //console.log("exp2 "+rsd.FaceModule.expressions_this_frame);
 
 
-    /*  
-                            //add expression to array with timestamp
-                            var f_expression = new Object();
-                            f_expression.text = f_expr;
-                            f_expression.timestamp = new Date();
+        /*  
+                                //add expression to array with timestamp
+                                var f_expression = new Object();
+                                f_expression.text = f_expr;
+                                f_expression.timestamp = new Date();
 
-                            faceExpressionArray.push(f_expression);
+                                faceExpressionArray.push(f_expression);
 
-                            //remove first array element if reached max number of face expressions allowed to save
-                            if (faceExpressionArray.length == MAX_NUM_OF_RECOGNIZED_FACE_EXPRESSIONS){
-                                faceExpressionArray.shift();   
+                                //remove first array element if reached max number of face expressions allowed to save
+                                if (faceExpressionArray.length == MAX_NUM_OF_RECOGNIZED_FACE_EXPRESSIONS){
+                                    faceExpressionArray.shift();   
+                                }
+        */
                             }
-    */
                         }
                     }
                 }
@@ -409,94 +410,92 @@
                 return "Brow lifted left";
                 break;
 
-            case 1:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_RIGHT:
                 return "Brow lifted right";
                 break;
          
-            case 2:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_LEFT:
                 return "Brow lowered left";
                 break;
         
-            case 3:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_RIGHT:
                 return "Brow lowered right";
                 break;
          
-            case 4:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE:
                 return "Smile";
                 break;
          
-            case 5:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS:
                 return "Kiss";
                 break;
          
-            case 6:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN:
                 return "Mouth open";
                 break;
          
-            case 7:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT:
                 return "Wink left";
                 break;
           
-            case 8:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT:
                 return "Wink right";
                 break;
          
-            case 9:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_LEFT:
                 return "Look left";
                 break;
          
-            case 10:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_RIGHT:
                 return "Look right";
                 break;
          
-            case 11:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_UP:
                 return "Look up";
                 break;
          
-             case 12:
+             case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_DOWN:
                 return "Look down";
                 break;
          
-            case 13: //EXPRESSION_HEAD_TILT_LEFT
-                return "";
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TILT_LEFT: 
+                return "error";
                 break;
          
-            case 14: //EXPRESSION_HEAD_TILT_RIGHT
-                return "";
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TILT_RIGHT: 
+                return "error";
                 break;
          
-            case 15: //EXPRESSION_EYES_TURN_LEFT
-                return "";
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_TURN_LEFT:
+                return "error";
                 break;
          
-            case 16: //EXPRESSION_EYES_TURN_RIGHT
-                return "";
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_TURN_RIGHT:
+                return "error";
                 break;
          
-            case 17: //EXPRESSION_EYES_UP
-                return "";
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_UP:
+                return "error";
                 break;
          
-            case 18: //EXPRESSION_EYES_DOWN
-                return "";
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_DOWN:
+                return "error";
                 break;
          
-            case 19:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT:
                 return "Tongue out";
                 break;
    
-            case 20: //EXPRESSION_PUFF_RIGHT
-                return "";
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_PUFF_RIGHT:
+                return "error";
                 break;
          
-            case 21: //EXPRESSION_PUFF_LEFT
-                return "";
-                break;
-         
-            
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_PUFF_LEFT:
+                return "error";
+                break; 
         }
         
-       return "";
+       return "error";
     };
     
     /**********************************************************************************************************/
@@ -1286,10 +1285,10 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
     
     ext.isFacialExpressionOccured = function (facial_expression) {
      
-        for (var i = 0; i < rsd.FaceModule.expressions_this_frame.length; i++){
+        for (var fe = 0; fe < rsd.FaceModule.expressions_this_frame.length; fe++){
             //console.log("hhhhh "+facial_expressions_this_frameArr[i]);
             
-            if (rsd.FaceModule.expressions_this_frame[i] == facial_expression){                
+            if (rsd.FaceModule.expressions_this_frame[fe] == facial_expression){                
                 return true;
                 break;
             }
