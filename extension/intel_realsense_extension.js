@@ -552,6 +552,24 @@
             
             
             // Gesture: {"timeStamp":130822251414152420,"handId":1,"state":2,"frameNumber":596,"name":"thumb_up"}
+            
+            /*
+            
+            {"timeStamp":130822268755799980,"handId":6,"state":0,"frameNumber":2066,"name":"full_pinch"}
+intel_realsense_extension.js:547   handData.firedGestureData  
+intel_realsense_extension.js:548 {"timeStamp":130822268765390400,"handId":6,"state":2,"frameNumber":2092,"name":"full_pinch"}
+intel_realsense_extension.js:547   handData.firedGestureData  
+intel_realsense_extension.js:548 {"timeStamp":130822268782358050,"handId":6,"state":0,"frameNumber":2138,"name":"full_pinch"}
+intel_realsense_extension.js:547   handData.firedGestureData  
+intel_realsense_extension.js:548 {"timeStamp":130822268782726910,"handId":6,"state":2,"frameNumber":2139,"name":"full_pinch"}
+intel_realsense_extension.js:547   handData.firedGestureData  
+intel_realsense_extension.js:548 {"timeStamp":130822268828096930,"handId":6,"state":0,"frameNumber":2262,"name":"fist"}
+intel_realsense_extension.js:547   handData.firedGestureData  
+intel_realsense_extension.js:548 {"timeStamp":130822268828465800,"handId":6,"state":0,"frameNumber":2263,"name":"full_pinch"}
+intel_realsense_extension.js:547   handData.firedGestureData  
+intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"state":2,"frameNumber":2316,"name":"fist"}
+
+*/
             for (g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gesture= handData.firedGestureData[g];
@@ -567,10 +585,9 @@
                     gestures[ihand.bodySide] = gesture;
                     gestures[intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN] = gesture;
                 }
-            }            
+            }
         }
         
-      
     };
     
     
@@ -827,8 +844,10 @@
         .then(function (result) {
             
             //only after sense.init() capture manager knows which sensor is plugged in
-            if (sense.captureManager.device.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_F200) {
+            if (sense.captureManager.device.deviceInfo.model != rs.DeviceModel.DEVICE_MODEL_R200) {
+                realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
                 
+                PopAlert();
             }
             
             
