@@ -249,7 +249,7 @@
         rsd.FaceModule.expressions_this_frame=[];
         
         faceJointsData=[];
-        rsd.FaceModule.joints=[];
+        //rsd.FaceModule.joints=[];
         
         if (faceData.faces == null || faceData.faces.length == 0) {
             rsd.FaceModule.isExist = false;
@@ -326,10 +326,10 @@
 
                             //add it to array of current frame only
                             //facial_expressions_this_frameArr.push(scratchFaceExpressionName);
-                            rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
+                            //rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
                             
                             console.log("exp1 "+f_expr);
-                            console.log("exp2 "+rsd.FaceModule.expressions_this_frame);
+                            //console.log("exp2 "+rsd.FaceModule.expressions_this_frame);
 
 
     /*  
