@@ -266,7 +266,7 @@
                         if (joint != null) {
                             var jointName = getJointNameByIndex(i);
                             
-                            if (jointName !== 'error') {
+                            if (jointName !== "error") {
                                 
                                 var faceJoint = {};
                                 faceJoint.jointName = jointName;
@@ -280,7 +280,7 @@
                                 //console.log("face1: "+ faceJoint+" "+ faceJoint.position +" "+ faceJoint.position.Z);
                                 rsd.FaceModule.joints.push(faceJoint);
                                 
-                                // console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
+                                //console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
                                 
                             }
                         }
@@ -288,10 +288,6 @@
                     
                     console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
                     //console.log("face6 rsd.FaceModule.joints[eye] "+rsd.FaceModule.joints[5].position.X+" "+rsd.FaceModule.joints[5].position.Z);
-                    
-                    //QA TAG
-                    //console.log("(onFaceData) face Joints Data: " + JSON.stringify(faceJointsData));
-                    //end of QA TAG
                 }
                 
   
@@ -302,7 +298,7 @@
                     for (var fe=0; fe<face.expressions.expressions.length; fe++){
                         
                         var f_expr = face.expressions.expressions[fe];
-                        console.log('Expressions: ' + JSON.stringify(f_expr)+" "+f_expr +" "+f_expr.intensity);
+                       // console.log('Expressions: ' + JSON.stringify(f_expr)+" "+f_expr +" "+f_expr.intensity);
 
                         
                         if (f_expr.intensity>20) {
@@ -313,7 +309,7 @@
                             //facial_expressions_this_frameArr.push(scratchFaceExpressionName);
                             rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
                             
-                            console.log("exp1 "+f_expr);
+                           // console.log("exp1 "+f_expr);
                             //console.log("exp2 "+rsd.FaceModule.expressions_this_frame);
 
 
@@ -342,6 +338,31 @@
     // Converter: face joint index => face joint name
     var getJointNameByIndex = function (joint_index)
     {
+        if (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER){
+            console.log("hi 1 ");
+        }else if (joint_index == intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER){
+            console.log("hi 2 ");
+            
+        }
+        
+        
+        
+        
+        switch (joint_index){
+         
+                case intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER:
+                    return "Left eye";
+                break;
+                
+                case default:
+                    return "error";
+                break;
+                
+        }
+        
+        return "error";
+        
+        /*
         return  
             (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER) ? "Left eye" :
             (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER) ? "Right eye" :
@@ -352,6 +373,7 @@
             (joint_index === intel.realsense.face.LandmarkType.LANDMARK_LOWER_LIP_CENTER) ? "Bottom lip" :
             (joint_index === intel.realsense.face.LandmarkType.LANDMARK_NOSE_TIP) ? "Nose" : 
             "error";  
+            */
     };
     
     
