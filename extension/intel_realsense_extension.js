@@ -162,8 +162,8 @@
             //only after sense.init() and onDeviceConnected we know the sensor
             //console.log(' device info: ' + JSON.stringify( sender.deviceInfo));
             
-            if (sender.deviceInfo.model != rs.DeviceModel.DEVICE_MODEL_R200 ||
-                sender.deviceInfo.orientation != rs.DeviceOrientation.DEVICE_ORIENTATION_USER_FACING ) {
+            if (sender.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_R200 ||
+                sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING ) {
                 realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
                 
                 PopAlert();
@@ -288,11 +288,16 @@
                                     ,Z: joint.world.z
                                 };
                                 
+                                console.log("face1: "+ faceJoint+" "+ faceJoint.position +" "+ faceJoint.position.Z);
+                                
+                                console.log("face2");
+                                console.log("face2 faceJointsData "+faceJointsData.length);
+                                
+                                
                                 faceJointsData.push(faceJoint);
                                 //rsd.FaceModule.joints.push(faceJoint);
                                 
-                                console.log("face1: "+ faceJoint+" "+ faceJoint.position +" "+ faceJoint.position.Z);
-                                console.log("face2: "+faceJointsData.length +" "+ faceJointsData[faceJointsData.length] + " " + faceJointsData[faceJointsData.length].position.Z);
+                                console.log("face3: "+faceJointsData.length +" "+ faceJointsData[faceJointsData.length] + " " + faceJointsData[faceJointsData.length].position.Z);
                                 
                             }
                         }
