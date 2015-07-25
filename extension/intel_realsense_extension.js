@@ -248,7 +248,7 @@
         //reset the face expression data every frame 
         //rsd.FaceModule.expressions_this_frame=[];
         
-        faceJointsData=[];
+        //faceJointsData=[];
         rsd.FaceModule.joints=[];
         
         if (faceData.faces == null || faceData.faces.length == 0) {
@@ -291,21 +291,17 @@
                                     ,Z: joint.world.z
                                 };
                                 
-                                console.log("face1: "+ faceJoint+" "+ faceJoint.position +" "+ faceJoint.position.Z);
-                                
-                                console.log("face2 faceJointsData before "+faceJointsData.length);
-                                
-                                faceJointsData.push(faceJoint);
+                                //console.log("face1: "+ faceJoint+" "+ faceJoint.position +" "+ faceJoint.position.Z);
                                 rsd.FaceModule.joints.push(faceJoint);
                                 
-                                console.log("face3 faceJointsData after "+faceJointsData.length);
-                                console.log("face4 faceJointsData pos "+faceJointsData[0].position);
-                                
-                                console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
+                                // console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
                                 
                             }
                         }
-                    } 
+                    }
+                    
+                    console.log("face6 rsd.FaceModule.joints[eye] "+rsd.FaceModule.joints[5].position.X+" "+rsd.FaceModule.joints[5].position.Z);
+                    
                     //QA TAG
                     //console.log("(onFaceData) face Joints Data: " + JSON.stringify(faceJointsData));
                     //end of QA TAG
@@ -328,7 +324,7 @@
 
                             //add it to array of current frame only
                             //facial_expressions_this_frameArr.push(scratchFaceExpressionName);
-                            //rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
+                            rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
                             
                             console.log("exp1 "+f_expr);
                             //console.log("exp2 "+rsd.FaceModule.expressions_this_frame);
