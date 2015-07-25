@@ -1200,6 +1200,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
             for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
                 if (rsd.FaceModule.joints[i].originalJointIndex === joint_name) {
                     //console.log("joint index: " + i);
+                    console.warn("joint requested "+rsd.FaceModule.joints[i].originalJointIndex+" "+rsd.FaceModule.joints[i].jointName);
                     result = rsd.FaceModule.joints[i];
                     break;
                 }
@@ -1209,8 +1210,9 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
             
         //joint_name is string variable from the menu
             for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
-                if (rsd.FaceModule.joints[i].jointName === joint_name) {
+                if (rsd.FaceModule.joints[i].jointName == joint_name) {
                     //console.log("joint index: " + i);
+                    console.warn("joint requested "+rsd.FaceModule.joints[i].originalJointIndex+" "+rsd.FaceModule.joints[i].jointName);
                     result = rsd.FaceModule.joints[i];
                     break;
                 }
