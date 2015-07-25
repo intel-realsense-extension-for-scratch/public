@@ -300,7 +300,7 @@
                         }
                     }
                     
-                    console.log("face6 rsd.FaceModule.joints[eye] "+rsd.FaceModule.joints[5].position.X+" "+rsd.FaceModule.joints[5].position.Z);
+                    //console.log("face6 rsd.FaceModule.joints[eye] "+rsd.FaceModule.joints[5].position.X+" "+rsd.FaceModule.joints[5].position.Z);
                     
                     //QA TAG
                     //console.log("(onFaceData) face Joints Data: " + JSON.stringify(faceJointsData));
@@ -1197,10 +1197,10 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         
         if (joint_name === parseInt(joint_name, 10)) {
         //joint_name is integer variable
-            for (var i = 0; i < faceJointsData.length; i++) {
-                if (faceJointsData[i].originalJointIndex === joint_name) {
+            for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
+                if (rsd.FaceModule.joints[i].originalJointIndex === joint_name) {
                     //console.log("joint index: " + i);
-                    result = faceJointsData[i];
+                    result = rsd.FaceModule.joints[i];
                     break;
                 }
             }
@@ -1208,10 +1208,10 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         } else {
             
         //joint_name is string variable from the menu
-            for (var i = 0; i < faceJointsData.length; i++) {
-                if (faceJointsData[i].jointName === joint_name) {
+            for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
+                if (rsd.FaceModule.joints[i].jointName === joint_name) {
                     //console.log("joint index: " + i);
-                    result = faceJointsData[i];
+                    result = rsd.FaceModule.joints[i];
                     break;
                 }
             }
