@@ -1,8 +1,9 @@
 // intel_realsense_extension.js
-// Shachar Oz , Omer Goshen 2015
-// Intel RealSense Extension
-//
+// Shachar Oz , Omer Goshen , Moria Ilan Navi
+// 2015
 // Intel RealSense Extension for Scratch 
+
+
 "use strict";
 
 (function (ext) {
@@ -52,8 +53,6 @@
     const SCRATCH_Y_MAX_DOWN = 180;     //MIRRORED!!!!!
     //#endregion
 
-    //#endregion
-
     
     
       
@@ -64,8 +63,12 @@
             // public
             isRightExist: false
             , isLeftExist: false
-            , joints: []  //array doesnt populate!
-          
+            , leftHandJoints: []  
+            , leftHandJointsFoldness: []  
+            , rightHandJoints: []  
+            , rightHandJointsFoldness: []  
+            , gestures: {}
+           
          /*   , JointIndexToScratchName : {
                 intel.realsense.hand.JointType.JOINT_WRIST:  "Wrist"
                 , intel.realsense.hand.JointType.JOINT_CENTER: "Center"
@@ -109,8 +112,8 @@
         return {
             // public
             isExist: true,
-            joints: [ ],                 //array doesnt populate!
-            expressions_this_frame : [ ] //array doesnt populate!  
+            joints: [],                 
+            expressions_this_frame : [] 
         }
     };
     
@@ -120,7 +123,6 @@
         return {
             // public
             isExist: true
-            
         }
     };
     
@@ -137,17 +139,11 @@
     
     
     
-    // Saving name & positions x/y/z
-    //   of every face joint that we track (see Face joints region above) 
-    var faceJointsData = [ ];
+    //var leftHandJoints = [ ];
+    //var rightHandJoints = [ ];
     
-    var leftHandJoints = [ ];
-    
-    var rightHandJoints = [ ];
-    
-    var leftHandJointsFoldness = [ ];
-    
-    var rightHandJointsFoldness = [ ];
+    //var leftHandJointsFoldness = [ ];
+    //var rightHandJointsFoldness = [ ];
        
     var gestures = { };
     
@@ -160,16 +156,12 @@
             
             
             //only after sense.init() and onDeviceConnected we know the sensor
-            //console.log(' device info: ' + JSON.stringify( sender.deviceInfo));
-            
             if (sender.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_R200 ||
                 sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING ) {
                 realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
                 
                 PopAlert();
             }
-            
-           
             
         } else {
             console.warn('sensor not connected');
@@ -178,6 +170,7 @@
             PopAlert();
         }
     };
+    
     
     var onStatus = function (sender, sts) {
         // console.log([sender, sts]);
@@ -214,12 +207,8 @@
     /*************************************FACE RECOGNITION*****************************************************/
     /**********************************************************************************************************/
 
-    //var facial_expressions_this_frameArr = [];
-    
   
     var onFaceHandData = function (sender, data) {
-       // console.log("onFaceHandData: ");
-        
         if (sender == faceModule)
             onFaceData(sender, data);
         else if (sender == handModule)
@@ -228,7 +217,6 @@
     
     
     var onFaceData = function(module, faceData) {
-        //console.log("onFaceData: ");
         
         //reset the face expression data every frame 
         rsd.FaceModule.expressions_this_frame=[];
@@ -243,14 +231,8 @@
         
 //for face exist block
         rsd.FaceModule.isExist = (faceData.faces.length > 0);
-           
-        
-
-        //console.log("onFaceData: "+ faceData.faces.length);
-        
-        
+         
         if (faceData.faces.length > 0) {
-           
             for (var f = 0; f < faceData.faces.length; f++) {
                 var face = faceData.faces[f];
                 
@@ -258,13 +240,10 @@
                 if (face.landmarks.points !== undefined) {
                     var jointIndex = 0;
                
-                    // console.log("onFaceData landmarks.points: "+ face.landmarks.points.length);
-        
                     for (var i = 0; i < face.landmarks.points.length; i++) {
                         var joint = face.landmarks.points[i];
                         if (joint != null) {
-                            var jointName = getJointNameByIndex(i);
-                            
+                            var jointName = convertFaceJointIndexToScratchName(i);
                             if (jointName !== "error") {
                                 
                                 var faceJoint = {};
@@ -280,9 +259,6 @@
                             }
                         }
                     }
-                    
-                    //console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
-                    //console.log("face6 rsd.FaceModule.joints[eye] "+rsd.FaceModule.joints[5].position.X+" "+rsd.FaceModule.joints[5].position.Z);
                 }
                 
   
@@ -290,24 +266,15 @@
                 if (face.expressions !== null && face.expressions.expressions != null) {
                     // console.log('Expressions: ' + JSON.stringify(face.expressions.expressions));
                     
-                    //go through all keys in expression object
                     for (var fe=0; fe<face.expressions.expressions.length; fe++){
-                        
                         var f_expr = face.expressions.expressions[fe];
-                        // console.log('Expressions: ' + JSON.stringify(f_expr)+" "+f_expr +" "+f_expr.intensity);
-
-                        
                         if (f_expr.intensity>20) {
                             //convert the expression to a string the extension would identify
-                            var scratchFaceExpressionName = convertModuleExpressionIndexToScratchName(fe);
+                            var scratchFaceExpressionName = convertFaceExpressionIndexToScratchName(fe);
 
                             if (scratchFaceExpressionName != "error"){
                                 //add it to array of current frame only
                                 rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
-
-                                // console.log("exp1 "+f_expr);
-                                //console.log("exp2 "+rsd.FaceModule.expressions_this_frame);
-
 
         /*  
                                 //add expression to array with timestamp
@@ -333,7 +300,7 @@
     
     
     // Converter: face joint index => face joint name
-    var getJointNameByIndex = function (joint_index)
+    var convertFaceJointIndexToScratchName = function (joint_index)
     {
         switch (joint_index){
                 
@@ -401,10 +368,10 @@
     
     
     
-    var convertModuleExpressionIndexToScratchName = function (expression_index)
+    var convertFaceExpressionIndexToScratchName = function (expression_index)
     {
      
-        switch(expression_index)
+        switch (expression_index)
         {
             case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT:
                 return "Brow lifted left";
@@ -511,17 +478,25 @@
                                       
     var onHandData = function (module, handData) {
         
-        //reset all data 
+        //reset all data each frame
         rsd.HandModule.isRightExist = false;
         rsd.HandModule.isLeftExist = false;
         
-        gestures = {};
-
+        rsd.HandModule.gestures = {};
+        //gestures = {};
+        
+        rsd.HandModule.leftHandJoints=[];
+        rsd.HandModule.rightHandJoints=[];
+        
+        rsd.HandModule.leftHandJointsFoldness=[];
+        rsd.HandModule.rightHandJointsFoldness=[];
+        /*
         leftHandJoints=[];
         rightHandJoints=[];
         
         leftHandJointsFoldness=[];
         rightHandJointsFoldness=[];
+        */
         
         if (handData.numberOfHands == 0) {
             return;
@@ -586,18 +561,19 @@
             
             
             
-           // console.log(" sdfsdf "+ leftHandJoints.length);
+           // console.log(" sdfsdf "+ rsd.HandModule.leftHandJoints.length);
             
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                 //left hand
-                leftHandJoints = resultJointsArray;
-                leftHandJointsFoldness = resultFoldnessArray;
+                rsd.HandModule.leftHandJoints = resultJointsArray;
+                rsd.HandModule.leftHandJointsFoldness = resultFoldnessArray;
+                
                 rsd.HandModule.isLeftExist = true;
         
             } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
                 //right hand
-                rightHandJoints = resultJointsArray;  
-                rightHandJointsFoldness = resultFoldnessArray;
+                rsd.HandModule.leftHandJoints = resultJointsArray;  
+                rsd.HandModule.rightHandJointsFoldness = resultFoldnessArray;
                 
                 rsd.HandModule.isRightExist = true;
         
@@ -642,7 +618,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
 */
             for (g = 0; g < handData.firedGestureData.length; g++) {
                 
-                var gesture= handData.firedGestureData[g];
+                var gesture = handData.firedGestureData[g];
                 
                 console.log("gestures "+gesture);
                 console.log("gestures "+gesture.state+ " "+gesture.name);
@@ -652,8 +628,8 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
                     gesture.state==intel.realsense.hand.GestureStateType.GESTURE_STATE_IN_PROGRESS){
                     
                     // console.log('Gesture: ' + JSON.stringify(handData.firedGestureData[g]));
-                    gestures[ihand.bodySide] = gesture;
-                    gestures[intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN] = gesture;
+                    rsd.HandModule.gestures[ihand.bodySide] = gesture;
+                    rsd.HandModule.gestures[intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN] = gesture;
                 }
             }
         }
@@ -1124,7 +1100,8 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         //console.log("(getHandJointPosition) *REQUESTED* hand position: " + hand_position + ", hand side: " + hand_side + ", joint name: " + joint_name);
         //end of QA TAG*
         
-        var jointArray = {'Left Hand': leftHandJoints, 'Right Hand': rightHandJoints}[hand_side];
+        var jointArray = {'Left Hand': rsd.HandModule.leftHandJoints, 
+                          'Right Hand': rsd.HandModule.leftHandJoints}[hand_side];
         
         var result = {};
         
@@ -1166,6 +1143,8 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
                 }
             }
         }
+        
+        return -1000;
     };
     
     
@@ -1186,7 +1165,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
     
     ext.getHandGesture = function(hand_type, gesture_name) {
         
-        if(Object.keys(gestures).length === 0)
+        if(Object.keys(rsd.HandModule.gestures).length === 0)
             return false;
         
         // // map display name to SDK's
@@ -1198,7 +1177,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
             "Any Hand": intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN,
         }[hand_type];
 
-        return h in gestures && gestures[h].name == g;
+        return h in rsd.HandModule.gestures && rsd.HandModule.gestures[h].name == g;
     }
     
     
@@ -1211,7 +1190,8 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         //console.warn("hand joint ext "+leftHandJointsFoldness[1].jointName +" "+leftHandJointsFoldness[1].foldedness);
         //console.warn("hand side "+hand_side+" "+(hand_side == "Left Hand"));
         
-        var jointArray = {'Left Hand': leftHandJointsFoldness, 'Right Hand': rightHandJointsFoldness}[hand_side];
+        var jointArray = {'Left Hand': rsd.HandModule.leftHandJointsFoldness, 
+                          'Right Hand': rsd.HandModule.rightHandJointsFoldness}[hand_side];
         
         // console.warn("foldness "+ hand_side + " "+jointArray.length);
         
@@ -1297,6 +1277,9 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         
     };
     
+    
+    
+    /*
     ext.getRecognizedSpeech = function() {
         return "";
     };
@@ -1308,7 +1291,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         return false;
     };
 
-    
+    */
     
     var descriptor = {
         blocks: [
