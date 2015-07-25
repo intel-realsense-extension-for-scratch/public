@@ -126,11 +126,23 @@
         }
     };
     
+    //suitable for scratch status api
+    var ScratchStatus = function () {
+        // private
+        
+        return {
+            // public
+            status: 1
+            , msg: 'checking system...'
+        }
+    };
+    
     var RealSenseData = function() {
         return {
             HandModule: new HandModule(),
             FaceModule: new FaceModule(),            
-            BlobModule: new BlobModule()
+            BlobModule: new BlobModule(),
+            Status: new ScratchStatus()
         }
     };
     
@@ -138,14 +150,6 @@
     
     
     
-    
-    //var leftHandJoints = [ ];
-    //var rightHandJoints = [ ];
-    
-    //var leftHandJointsFoldness = [ ];
-    //var rightHandJointsFoldness = [ ];
-       
-    var gestures = { };
     
     
     
@@ -158,14 +162,18 @@
             //only after sense.init() and onDeviceConnected we know the sensor
             if (sender.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_R200 ||
                 sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING ) {
-                realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
+                
+                rsd.Status = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
+                //realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
                 
                 PopAlert();
             }
             
         } else {
             console.warn('sensor not connected');
-            realsenseStatusReport = {status: 0, msg: 'Realsense sensor not connected'};
+            
+            rsd.Status = {status: 0, msg: 'Realsense sensor not connected'};
+            //realsenseStatusReport = {status: 0, msg: 'Realsense sensor not connected'};
             
             PopAlert();
         }
@@ -298,7 +306,6 @@
     };
     
     
-    
     // Converter: face joint index => face joint name
     var convertFaceJointIndexToScratchName = function (joint_index)
     {
@@ -367,10 +374,8 @@
     };
     
     
-    
     var convertFaceExpressionIndexToScratchName = function (expression_index)
     {
-     
         switch (expression_index)
         {
             case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT:
@@ -474,8 +479,7 @@
     /*************************************HAND RECOGNITION*****************************************************/
     /**********************************************************************************************************/
 
-    
-                                      
+                                 
     var onHandData = function (module, handData) {
         
         //reset all data each frame
@@ -483,45 +487,34 @@
         rsd.HandModule.isLeftExist = false;
         
         rsd.HandModule.gestures = {};
-        //gestures = {};
         
         rsd.HandModule.leftHandJoints=[];
         rsd.HandModule.rightHandJoints=[];
         
         rsd.HandModule.leftHandJointsFoldness=[];
         rsd.HandModule.rightHandJointsFoldness=[];
-        /*
-        leftHandJoints=[];
-        rightHandJoints=[];
-        
-        leftHandJointsFoldness=[];
-        rightHandJointsFoldness=[];
-        */
         
         if (handData.numberOfHands == 0) {
             return;
         }
         
-        
-        
         //start collecting
-        
         var allHandsData = handData.queryHandData(intel.realsense.hand.AccessOrderType.ACCESS_ORDER_NEAR_TO_FAR);
         for (var h = 0; h < handData.numberOfHands; h++) {
             var ihand = allHandsData[h];
-            
-            var resultJointsArray = [];
-            
             var joints = ihand.trackedJoints;
             
-            for (var j = 0; j < joints.length; j++) {
-            //    console.log("hands data check "+ j+" "+joints[j]+ " "+joints[j].positionWorld.z);
+            var tempResultJointsArray = [];
             
-                if (joints[j] == null || joints[j].confidence <= 0) continue;
+            for (var j = 0; j < joints.length; j++) {            
+                
+                var handJointName = convertHandJointIndexToScratchName(j);
+                
+                if (joints[j] == null || joints[j].confidence <= 10 || handJointName == "error") continue;
 
                 var joint = {};
                 joint.originalJointIndex = j;
-                joint.jointName = convertHandJointIndexToScratchName(j);
+                joint.jointName = handJointName;
                 joint.confidence = joints[j].confidence;
                 
                 joint.position = {
@@ -536,53 +529,37 @@
                     ,Z: joints[j].localRotation.z
                 };
                 
-                
-                resultJointsArray.push(joint);
+                tempResultJointsArray.push(joint);
             }
             
             
-//get foldness data
-            var resultFoldnessArray = [];
+//foldness finger block
+            var tempResultFoldnessArray = [];
             for (var i = 0; i < ihand.fingerData.length; i++) {
-                //console.log("left fold" + i + ": " + JSON.stringify(hand.fingerData[i].foldedness));
                 
                 var majorJoint = {};
                 majorJoint.originalJointIndex = i;
                 majorJoint.jointName = convertHandJointMajorIndexToScratchName(i);
                 majorJoint.foldedness = ihand.fingerData[i].foldedness;
                 
-                resultFoldnessArray.push(majorJoint);
+                tempResultFoldnessArray.push(majorJoint);
             }
 
-            // console.log("hand joint fold "+resultFoldnessArray[1].jointName +" "+resultFoldnessArray[1].foldedness);
-            //console.log("hand joint side "+(ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT));
-            //console.log("hand joint index x "+resultJointsArray[5].position.Z);
-            //console.log("hand side "+ihand.bodySide+" "+intel.realsense.hand.BodySideType.BODY_SIDE_LEFT);
-            
-            
-            
-           // console.log(" sdfsdf "+ rsd.HandModule.leftHandJoints.length);
-            
+//joint position block  ;  hand exist block            
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                 //left hand
-                rsd.HandModule.leftHandJoints = resultJointsArray;
-                rsd.HandModule.leftHandJointsFoldness = resultFoldnessArray;
+                rsd.HandModule.leftHandJoints = tempResultJointsArray;
+                rsd.HandModule.leftHandJointsFoldness = tempResultFoldnessArray;
                 
                 rsd.HandModule.isLeftExist = true;
         
             } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
                 //right hand
-                rsd.HandModule.leftHandJoints = resultJointsArray;  
-                rsd.HandModule.rightHandJointsFoldness = resultFoldnessArray;
+                rsd.HandModule.leftHandJoints = tempResultJointsArray;  
+                rsd.HandModule.rightHandJointsFoldness = tempResultFoldnessArray;
                 
                 rsd.HandModule.isRightExist = true;
-        
-            }   
-            
-            //console.log("3hand joint fold "+leftHandJointsFoldness[1].jointName +" "+leftHandJointsFoldness[1].foldedness);
-
-            
-            
+            }
             
             
             
@@ -592,7 +569,6 @@
             if (handData.firedGestureData.length>0){
                 console.warn("  handData.firedGestureData  ");
                 console.warn(JSON.stringify(handData.firedGestureData[0]));
-                
             }
             
             
@@ -600,7 +576,6 @@
             // Gesture: {"timeStamp":130822251414152420,"handId":1,"state":2,"frameNumber":596,"name":"thumb_up"}
             
             /*
-            
             {"timeStamp":130822268755799980,"handId":6,"state":0,"frameNumber":2066,"name":"full_pinch"}
 intel_realsense_extension.js:547   handData.firedGestureData  
 intel_realsense_extension.js:548 {"timeStamp":130822268765390400,"handId":6,"state":2,"frameNumber":2092,"name":"full_pinch"}
@@ -663,11 +638,11 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
                 break;
                 
             default:
-                return "";
+                return "error";
                 break;
         }
         
-        return "";
+        return "error";
     };
     
 
@@ -773,11 +748,11 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
               
 
           default:
-              return "";
+              return "error";
               break;
               
       }
-        return "";
+        return "error";
     };
 
     
@@ -794,7 +769,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         if (blobData == null) return;
          
         //for blob exist block
-        rsd.BlobModule.isExist=(blobData.numberOfBlobs > 0);
+        rsd.BlobModule.isExist = (blobData.numberOfBlobs > 0);
         
     };
     
@@ -906,7 +881,8 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
             
             //if sensor not connected to usb - it gets here
             //other option: sensor is already running somewhere else on the web
-            realsenseStatusReport = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
+            rsd.Status = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
+            //realsenseStatusReport = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
         });
     
     
@@ -915,6 +891,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         
         //speech module init
         
+        //TODO load speech here
         
     };
     
@@ -922,7 +899,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
     
     
     //returns result object that is suitable for scratch status report
-    var realsenseStatusReport = {status: 1, msg: 'checking system...'};
+    //var realsenseStatusReport = {status: 1, msg: 'checking system...'};
     
     
     // check platform compatibility
@@ -940,22 +917,26 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
                 
                 
                 if (info.nextStep == 'ready') {
-                    realsenseStatusReport = { status: 2, msg: 'RealSense sensor is ready' };
+                    rsd.Status = { status: 2, msg: 'RealSense sensor is ready' };
+                    //realsenseStatusReport = { status: 2, msg: 'RealSense sensor is ready' };
                     
                     //we are now able to start realsense sensor automatically!
                     StartRealSense();
                     
                 } else if (info.nextStep == 'unsupported') {
                     //unsupported called when DCM not installed OR when browser is too old OR .......
-                    realsenseStatusReport = { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
+                    rsd.Status = { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
+                   // realsenseStatusReport = { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
                 
                 } else if (info.nextStep == 'driver') {
                     //driver called when DCM is too old and should be upgraded
-                    realsenseStatusReport = { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
+                    rsd.Status = { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
+                  //  realsenseStatusReport = { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
                 
                 } else if (info.nextStep == 'runtime') {
                     //runtime called when runtime needs to be installed
-                    realsenseStatusReport = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
+                    rsd.Status = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
+                   // realsenseStatusReport = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
                 
                 }
                 
@@ -964,13 +945,15 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
             }).catch(function (error) {
                 console.log('CheckPlatform failed: ' + JSON.stringify(error));
                 
-                realsenseStatusReport = { status: 0, msg: 'platform error' };
+                rsd.Status = { status: 0, msg: 'platform error' };
+                //realsenseStatusReport = { status: 0, msg: 'platform error' };
                 
                 PopAlert();
             });
             
         }else{
-            realsenseStatusReport = { status: 0, msg: 'platform not ready' };  
+            rsd.Status = { status: 0, msg: 'platform not ready' };  
+            //realsenseStatusReport = { status: 0, msg: 'platform not ready' };  
             
             PopAlert();
         }
@@ -982,7 +965,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
     
     var PopAlert = function() {
             
-        if (realsenseStatusReport.status == 0) {
+        if (rsd.Status.status == 0) {
             //console.warn("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
 
             showModal("template-realsense");
@@ -1074,7 +1057,8 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
 
 
     ext._getStatus = function () {
-        return realsenseStatusReport;
+        return rsd.Status;
+       // return realsenseStatusReport;
     };
    
     
