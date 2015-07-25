@@ -354,9 +354,10 @@
                     return "Left eye";
                 break;
                 
-                case default:
-                    return "error";
+                case intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER:
+                    return "Right eye";
                 break;
+                
                 
         }
         
