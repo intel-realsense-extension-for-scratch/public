@@ -160,17 +160,16 @@
             
             
             //only after sense.init() and onDeviceConnected we know the sensor
-            
             //console.log(' device info: ' + JSON.stringify( sender.deviceInfo));
             
-            if (sender.deviceInfo.model != rs.DeviceModel.DEVICE_MODEL_R200) {
+            if (sender.deviceInfo.model != rs.DeviceModel.DEVICE_MODEL_R200 ||
+                sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_USER_FACING ) {
                 realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
                 
                 PopAlert();
             }
             
-            
-        //intel.realsense.DeviceOrientation
+           
             
         } else {
             console.warn('sensor not connected');
