@@ -149,7 +149,7 @@
     
     var rightHandJointsFoldness = [ ];
        
-    var gestures = {};
+    var gestures = { };
     
     
     
@@ -163,7 +163,7 @@
             //console.log(' device info: ' + JSON.stringify( sender.deviceInfo));
             
             if (sender.deviceInfo.model != rs.DeviceModel.DEVICE_MODEL_R200 ||
-                sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_USER_FACING ) {
+                sender.deviceInfo.orientation != rs.DeviceOrientation.DEVICE_ORIENTATION_USER_FACING ) {
                 realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
                 
                 PopAlert();
@@ -186,7 +186,6 @@
             
             // No error on USB disconnect or reconnect from SDK
             if (sts == -301) {
-                //disconnect camera from USB
                 console.warn('Disconnecting camera from USB');
                 onClearSensor();
             }
@@ -195,6 +194,8 @@
     
     
     var onClearSensor = function () {
+        console.log("reset realsense sensor");
+        
         if (sense != undefined) {
             sense.release().then(function (result) {
                 sense = undefined;
@@ -232,7 +233,7 @@
     
   
     var onFaceHandData = function (sender, data) {
-        console.log("onFaceHandData: ");
+       // console.log("onFaceHandData: ");
         
         if (sender == faceModule)
             onFaceData(sender, data);
@@ -263,15 +264,14 @@
         
         
         if (faceData.faces.length > 0) {
-            //finding the real face data object inside the array. there's a bug in the sdk and the face is not neccessarily in faces[0]
+           
             for (var f = 0; f < faceData.faces.length; f++) {
-                var face = faceData.faces[f];     
-                if (face == null) continue; 
-
+                var face = faceData.faces[f];
+                
                 if (face.landmarks.points !== undefined) {
                     var jointIndex = 0;
                
-                   // console.log("onFaceData landmarks.points: "+ face.landmarks.points.length);
+                    // console.log("onFaceData landmarks.points: "+ face.landmarks.points.length);
         
                     for (var i = 0; i < face.landmarks.points.length; i++) {
                         var joint = face.landmarks.points[i];
@@ -288,8 +288,8 @@
                                     ,Z: joint.world.z
                                 };
                                 
-                                //faceJointsData.push(faceJoint);
-                                rsd.FaceModule.joints.push(faceJoint);
+                                faceJointsData.push(faceJoint);
+                                //rsd.FaceModule.joints.push(faceJoint);
                                 
                                 console.log("face1: "+ faceJoint+" "+ faceJoint.position +" "+ faceJoint.position.Z);
                                 console.log("face2: "+faceJointsData.length +" "+ faceJointsData[faceJointsData.length] + " " + faceJointsData[faceJointsData.length].position.Z);
@@ -555,7 +555,12 @@
             //console.log("3hand joint fold "+leftHandJointsFoldness[1].jointName +" "+leftHandJointsFoldness[1].foldedness);
 
             
-            console.log("gestures "+handData.firedGestureData.length);
+            
+            
+            
+            
+//hand gestures block
+            console.warn("gestures "+handData.firedGestureData.length);
             
             if (handData.firedGestureData.length>0){
                 console.warn("  handData.firedGestureData  ");
