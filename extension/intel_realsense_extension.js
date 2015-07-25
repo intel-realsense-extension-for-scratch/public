@@ -157,6 +157,16 @@
         
         if (connected == true) {
             console.log('Connect with device instance: ' + sender.instance);
+            
+            //only after sense.init() capture manager knows which sensor is plugged in
+            if (sense.captureManager.device.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_R200 || ) {
+                realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
+                
+                PopAlert();
+            }
+            
+        //intel.realsense.DeviceOrientation
+            
         } else {
             console.warn('sensor not connected');
             realsenseStatusReport = {status: 0, msg: 'Realsense sensor not connected'};
@@ -770,6 +780,8 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
             return result;
         })
         
+        
+        
         // .then(function (result) {
         //     return rs.blob.BlobModule.activate(sense);
         // })
@@ -842,14 +854,6 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
             return sense.init();
         })
         .then(function (result) {
-            
-            //only after sense.init() capture manager knows which sensor is plugged in
-            if (sense.captureManager.device.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_R200) {
-                realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
-                
-                PopAlert();
-            }
-            
             
             imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_DEPTH);
             return sense.streamFrames();
@@ -1037,10 +1041,12 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         return realsenseStatusReport;
     };
    
+    
     //#region Scratch blocks events (Face recognition module)
     ext.isBlobExist = function () {
         return rsd.BlobModule.isExist;
     };
+    
     
     ext.isHandExist = function (hand_side) {
         if (hand_side == "Left Hand"){
@@ -1051,6 +1057,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
             return (rsd.HandModule.isRightExist || rsd.HandModule.isLeftExist);
         }
     };
+    
     
     ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {
         //QA TAG (Hand module)
@@ -1119,13 +1126,9 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
     
     ext.getHandGesture = function(hand_type, gesture_name) {
         
-        console.log("hi "+gestures);
-
         if(Object.keys(gestures).length === 0)
             return false;
         
-        console.log("hi "+[gestures[0].data.name, gestures[0].name, gesture_name]);
-
         // // map display name to SDK's
         var g = gesture_name.toLowerCase().replace(' ', '_');
         console.log([hand_type, gesture_name, g]);
@@ -1169,6 +1172,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
        
         return rsd.FaceModule.isExist;
     };
+    
      
     ext.getFaceJointPosition = function (head_position, joint_name) {
         //QA TAG (Face module)
