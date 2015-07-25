@@ -479,7 +479,7 @@
     /*************************************HAND RECOGNITION*****************************************************/
     /**********************************************************************************************************/
 
-                                 
+    /*RealSense Hands Viewer event being called continuously, once enabling Hands module*/
     var onHandData = function (module, handData) {
         
         //reset all data each frame
@@ -781,7 +781,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
  
     
     
-    //realsense: start sensor and load modules
+    /* Start RealSense- enable 4 modules: hands, face, blob & speech - not yet */
     var StartRealSense = function(){
         var rs = intel.realsense;
                     
