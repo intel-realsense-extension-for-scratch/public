@@ -340,22 +340,46 @@
     {
         if (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER){
             console.log("hi 1 ");
-        }else if (joint_index == intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER){
-            console.log("hi 2 ");
-            
+        }
+        if (joint_index == intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER){
+            console.log("hi 2 "); 
         }
         
         
         
         
         switch (joint_index){
-         
-                case intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER:
-                    return "Left eye";
+                
+            case intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER:
+                return "Left eye";
+                break;
+
+            case intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER:
+                return "Right eye";
+                break;
+
+            case intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_LEFT_CENTER:
+                return "Left eye brow";
+                break;
+
+            case intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_RIGHT_CENTER:
+                return "Right eye brow";
                 break;
                 
-                case intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER:
-                    return "Right eye";
+            case intel.realsense.face.LandmarkType.LANDMARK_CHIN:
+                return "Chin";
+                break;
+                
+            case intel.realsense.face.LandmarkType.LANDMARK_UPPER_LIP_CENTER:
+                return "Upper lip";
+                break;
+                
+            case intel.realsense.face.LandmarkType.LANDMARK_LOWER_LIP_CENTER:
+                return "Bottom lip";
+                break;
+                
+            case intel.realsense.face.LandmarkType.LANDMARK_NOSE_TIP:
+                return "Nose";
                 break;
                 
                 
@@ -363,7 +387,7 @@
         
         return "error";
         
-        /*
+        /* didnt work. return undefined
         return  
             (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER) ? "Left eye" :
             (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER) ? "Right eye" :
