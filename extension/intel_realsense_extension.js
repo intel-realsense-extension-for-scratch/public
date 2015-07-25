@@ -216,21 +216,6 @@
 
     var facial_expressions_this_frameArr = [];
     
-    // Converter: face joint index => face joint name
-    var getJointNameByIndex = function (joint_index)
-    {
-        return  
-            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER) ? "Left eye" :
-            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER) ? "Right eye" :
-            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_LEFT_CENTER) ? "Left eye brow" :
-            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_RIGHT_CENTER) ? "Right eye brow" :
-            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_CHIN) ? "Chin" :
-            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_UPPER_LIP_CENTER) ? "Upper lip" :
-            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_LOWER_LIP_CENTER) ? "Bottom lip" :
-            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_NOSE_TIP) ? "Nose" : 
-            "error";  
-    };
-    
   
     var onFaceHandData = function (sender, data) {
        // console.log("onFaceHandData: ");
@@ -280,6 +265,7 @@
                         var joint = face.landmarks.points[i];
                         if (joint != null) {
                             var jointName = getJointNameByIndex(i);
+                            
                             if (jointName !== 'error') {
                                 
                                 var faceJoint = {};
@@ -300,6 +286,7 @@
                         }
                     }
                     
+                    console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
                     //console.log("face6 rsd.FaceModule.joints[eye] "+rsd.FaceModule.joints[5].position.X+" "+rsd.FaceModule.joints[5].position.Z);
                     
                     //QA TAG
@@ -352,13 +339,29 @@
     
     
     
+    // Converter: face joint index => face joint name
+    var getJointNameByIndex = function (joint_index)
+    {
+        return  
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER) ? "Left eye" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER) ? "Right eye" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_LEFT_CENTER) ? "Left eye brow" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_RIGHT_CENTER) ? "Right eye brow" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_CHIN) ? "Chin" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_UPPER_LIP_CENTER) ? "Upper lip" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_LOWER_LIP_CENTER) ? "Bottom lip" :
+            (joint_index === intel.realsense.face.LandmarkType.LANDMARK_NOSE_TIP) ? "Nose" : 
+            "error";  
+    };
+    
+    
     
     var convertModuleExpressionIndexToScratchName = function (expression_index)
     {
      
         switch(expression_index)
         {
-            case 0:
+            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT:
                 return "Brow lifted left";
                 break;
 
