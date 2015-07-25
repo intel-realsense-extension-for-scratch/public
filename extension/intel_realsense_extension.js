@@ -158,12 +158,20 @@
         if (connected == true) {
             console.log('Connect with device instance: ' + sender.instance);
             
-            //only after sense.init() capture manager knows which sensor is plugged in
-            if (sense.captureManager.device.deviceInfo.model != rs.DeviceModel.DEVICE_MODEL_R200) {
+            
+            //only after sense.init() and onDeviceConnected we know the sensor
+            
+            if (sender.instance.deviceInfo.model != rs.DeviceModel.DEVICE_MODEL_R200) {
                 realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
                 
                 PopAlert();
             }
+            
+            /*if (sense.captureManager.device.deviceInfo.model != rs.DeviceModel.DEVICE_MODEL_R200) {
+                realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
+                
+                PopAlert();
+            }*/
             
         //intel.realsense.DeviceOrientation
             
