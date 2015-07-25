@@ -246,10 +246,10 @@
         console.log("onFaceData: ");
         
         //reset the face expression data every frame 
-        rsd.FaceModule.expressions_this_frame=[];
+        //rsd.FaceModule.expressions_this_frame=[];
         
         faceJointsData=[];
-        //rsd.FaceModule.joints=[];
+        rsd.FaceModule.joints=[];
         
         if (faceData.faces == null || faceData.faces.length == 0) {
             rsd.FaceModule.isExist = false;
@@ -270,6 +270,7 @@
             for (var f = 0; f < faceData.faces.length; f++) {
                 var face = faceData.faces[f];
                 
+    //for face joints block
                 if (face.landmarks.points !== undefined) {
                     var jointIndex = 0;
                
@@ -292,14 +293,15 @@
                                 
                                 console.log("face1: "+ faceJoint+" "+ faceJoint.position +" "+ faceJoint.position.Z);
                                 
-                                console.log("face2");
-                                console.log("face2 faceJointsData "+faceJointsData.length);
-                                
+                                console.log("face2 faceJointsData before "+faceJointsData.length);
                                 
                                 faceJointsData.push(faceJoint);
-                                //rsd.FaceModule.joints.push(faceJoint);
+                                rsd.FaceModule.joints.push(faceJoint);
                                 
-                                console.log("face3: "+faceJointsData.length +" "+ faceJointsData[faceJointsData.length] + " " + faceJointsData[faceJointsData.length].position.Z);
+                                console.log("face3 faceJointsData after "+faceJointsData.length);
+                                console.log("face4 faceJointsData pos "+faceJointsData[0].position);
+                                
+                                console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
                                 
                             }
                         }
