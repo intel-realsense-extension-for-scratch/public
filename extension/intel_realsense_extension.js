@@ -228,12 +228,11 @@
     
     
     var onFaceData = function(module, faceData) {
-        console.log("onFaceData: ");
+        //console.log("onFaceData: ");
         
         //reset the face expression data every frame 
-        //rsd.FaceModule.expressions_this_frame=[];
+        rsd.FaceModule.expressions_this_frame=[];
         
-        //faceJointsData=[];
         rsd.FaceModule.joints=[];
         
         if (faceData.faces == null || faceData.faces.length == 0) {
@@ -242,12 +241,12 @@
         }
         
         
-        //for face exist block
+//for face exist block
         rsd.FaceModule.isExist = (faceData.faces.length > 0);
            
         
 
-        console.log("onFaceData: "+ faceData.faces.length);
+        //console.log("onFaceData: "+ faceData.faces.length);
         
         
         if (faceData.faces.length > 0) {
@@ -255,7 +254,7 @@
             for (var f = 0; f < faceData.faces.length; f++) {
                 var face = faceData.faces[f];
                 
-    //for face joints block
+//for face joints block
                 if (face.landmarks.points !== undefined) {
                     var jointIndex = 0;
                
@@ -277,16 +276,13 @@
                                     ,Z: joint.world.z
                                 };
                                 
-                                //console.log("face1: "+ faceJoint+" "+ faceJoint.position +" "+ faceJoint.position.Z);
                                 rsd.FaceModule.joints.push(faceJoint);
-                                
-                                //console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
                                 
                             }
                         }
                     }
                     
-                    console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
+                    //console.log("face5 rsd.FaceModule.joints after "+rsd.FaceModule.joints.length);
                     //console.log("face6 rsd.FaceModule.joints[eye] "+rsd.FaceModule.joints[5].position.X+" "+rsd.FaceModule.joints[5].position.Z);
                 }
                 
@@ -338,16 +334,6 @@
     // Converter: face joint index => face joint name
     var getJointNameByIndex = function (joint_index)
     {
-        if (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER){
-            console.log("hi 1 ");
-        }
-        if (joint_index == intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER){
-            console.log("hi 2 "); 
-        }
-        
-        
-        
-        
         switch (joint_index){
                 
             case intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER:
@@ -381,13 +367,24 @@
             case intel.realsense.face.LandmarkType.LANDMARK_NOSE_TIP:
                 return "Nose";
                 break;
-                
-                
         }
         
         return "error";
         
-        /* didnt work. return undefined
+        
+        
+        /* 
+        //these 2 work
+        if (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER){
+            console.log("hi 1 ");
+        }
+        if (joint_index == intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER){
+            console.log("hi 2 "); 
+        }
+        
+        
+        //didnt work. return undefined
+        
         return  
             (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER) ? "Left eye" :
             (joint_index === intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER) ? "Right eye" :
@@ -1249,8 +1246,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         //joint_name is integer variable
             for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
                 if (rsd.FaceModule.joints[i].originalJointIndex === joint_name) {
-                    //console.log("joint index: " + i);
-                    console.warn("joint requested "+rsd.FaceModule.joints[i].originalJointIndex+" "+rsd.FaceModule.joints[i].jointName);
+                    //console.warn("joint requested "+rsd.FaceModule.joints[i].originalJointIndex+" "+rsd.FaceModule.joints[i].jointName);
                     result = rsd.FaceModule.joints[i];
                     break;
                 }
@@ -1261,8 +1257,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         //joint_name is string variable from the menu
             for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
                 if (rsd.FaceModule.joints[i].jointName == joint_name) {
-                    //console.log("joint index: " + i);
-                    console.warn("joint requested "+rsd.FaceModule.joints[i].originalJointIndex+" "+rsd.FaceModule.joints[i].jointName);
+                    //console.warn("joint requested "+rsd.FaceModule.joints[i].originalJointIndex+" "+rsd.FaceModule.joints[i].jointName);
                     result = rsd.FaceModule.joints[i];
                     break;
                 }
@@ -1334,7 +1329,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
             "hand_type": ["Left Hand", "Right Hand", "Any Hand"],
             "hand_type_folded": ["Left Hand", "Right Hand"],
             "face_joints": ["Left eye", "Right eye", "Left eye brow", "Right eye brow", 
-                            "Upper lip", "Bottom lip", "Nose", "Chin", "Center"],
+                            "Upper lip", "Bottom lip", "Nose", "Chin"],
             "hand_joints": ["Index tip", "Index base", "Index c", "Index jointB",
                             "Thumb tip", "Thumb base", "Thumb jointC", "Thumb jointB",
                             "Middle tip", "Middle base", "Middle jointC", "Middle jointB",
