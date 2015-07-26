@@ -68,6 +68,8 @@
             , rightHandJoints: []  
             , rightHandJointsFoldness: []  
             , gestures: {}
+            , tempLeftHandGestures: []
+            , tempRightHandGestures: []
            
          /*   , JointIndexToScratchName : {
                 intel.realsense.hand.JointType.JOINT_WRIST:  "Wrist"
@@ -224,6 +226,7 @@
     };
     
     
+    /*RealSense Face Recognition event being called continuously, once enabling Face module*/
     var onFaceData = function(module, faceData) {
         
         //reset the face expression data every frame 
@@ -486,7 +489,7 @@
         rsd.HandModule.isRightExist = false;
         rsd.HandModule.isLeftExist = false;
         
-        rsd.HandModule.gestures = {};
+        //rsd.HandModule.gestures = {};
         
         rsd.HandModule.leftHandJoints=[];
         rsd.HandModule.rightHandJoints=[];
@@ -566,49 +569,77 @@
 //hand gestures block
             console.warn("gestures "+handData.firedGestureData.length);
             
-            if (handData.firedGestureData.length>0){
-                console.warn("  handData.firedGestureData  ");
-                console.warn(JSON.stringify(handData.firedGestureData[0]));
-            }
+            if (handData.firedGestureData.length == 0) return;
+            
+            console.warn("  handData.firedGestureData   ");
             
             
-            
-            // Gesture: {"timeStamp":130822251414152420,"handId":1,"state":2,"frameNumber":596,"name":"thumb_up"}
-            
+           
             /*
-            {"timeStamp":130822268755799980,"handId":6,"state":0,"frameNumber":2066,"name":"full_pinch"}
-intel_realsense_extension.js:547   handData.firedGestureData  
-intel_realsense_extension.js:548 {"timeStamp":130822268765390400,"handId":6,"state":2,"frameNumber":2092,"name":"full_pinch"}
-intel_realsense_extension.js:547   handData.firedGestureData  
-intel_realsense_extension.js:548 {"timeStamp":130822268782358050,"handId":6,"state":0,"frameNumber":2138,"name":"full_pinch"}
-intel_realsense_extension.js:547   handData.firedGestureData  
-intel_realsense_extension.js:548 {"timeStamp":130822268782726910,"handId":6,"state":2,"frameNumber":2139,"name":"full_pinch"}
-intel_realsense_extension.js:547   handData.firedGestureData  
-intel_realsense_extension.js:548 {"timeStamp":130822268828096930,"handId":6,"state":0,"frameNumber":2262,"name":"fist"}
-intel_realsense_extension.js:547   handData.firedGestureData  
-intel_realsense_extension.js:548 {"timeStamp":130822268828465800,"handId":6,"state":0,"frameNumber":2263,"name":"full_pinch"}
-intel_realsense_extension.js:547   handData.firedGestureData  
-intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"state":2,"frameNumber":2316,"name":"fist"}
-
-*/
+            intel_realsense_extension.js:547   handData.firedGestureData  
+            intel_realsense_extension.js:548 {"timeStamp":130822268765390400,"handId":6,"state":2,"frameNumber":2092,"name":"full_pinch"}
+            intel_realsense_extension.js:547   handData.firedGestureData  
+            intel_realsense_extension.js:548 {"timeStamp":130822268782358050,"handId":6,"state":0,"frameNumber":2138,"name":"full_pinch"}
+            intel_realsense_extension.js:547   handData.firedGestureData  
+            intel_realsense_extension.js:548 {"timeStamp":130822268782726910,"handId":6,"state":2,"frameNumber":2139,"name":"full_pinch"}
+            intel_realsense_extension.js:547   handData.firedGestureData  
+            intel_realsense_extension.js:548 {"timeStamp":130822268828096930,"handId":6,"state":0,"frameNumber":2262,"name":"fist"}
+            intel_realsense_extension.js:547   handData.firedGestureData  
+            intel_realsense_extension.js:548 {"timeStamp":130822268828465800,"handId":6,"state":0,"frameNumber":2263,"name":"full_pinch"}
+            intel_realsense_extension.js:547   handData.firedGestureData  
+            intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"state":2,"frameNumber":2316,"name":"fist"}
+            */
             for (g = 0; g < handData.firedGestureData.length; g++) {
                 
-                var gesture = handData.firedGestureData[g];
+                var gestureData = handData.firedGestureData[g];
                 
-                console.log("gestures "+gesture);
-                console.log("gestures "+gesture.state+ " "+gesture.name);
-            
+                console.warn(JSON.stringify(gestureData));
                 
+                //console.log("gestures "+gestureData.state+ " "+gestureData.name);
+                
+                
+                
+                if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
+                    AddGestureObjectToArray(gestureData, rsd.HandModule.tempLeftHandGestures);
+                } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
+                    AddGestureObjectToArray(gestureData, rsd.HandModule.tempRightHandGestures);
+                }
+                
+                
+                // rsd.HandModule.gestures[ihand.bodySide] = gesture;
+                
+                /*
                 if (gesture.state==intel.realsense.hand.GestureStateType.GESTURE_STATE_START || 
                     gesture.state==intel.realsense.hand.GestureStateType.GESTURE_STATE_IN_PROGRESS){
                     
                     // console.log('Gesture: ' + JSON.stringify(handData.firedGestureData[g]));
                     rsd.HandModule.gestures[ihand.bodySide] = gesture;
                     rsd.HandModule.gestures[intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN] = gesture;
-                }
+                }*/
+            }
+            
+            console.log("gestures "+rsd.HandModule.tempRightHandGestures.length+" "+rsd.HandModule.tempLeftHandGestures.length);
+        }
+        
+    };
+    
+  
+    /* add one gesture data object to a selected array (that differentiates between left or right hand) */
+    var AddGestureObjectToArray = function(dataObj, arr) {
+        for (var i = 0; i<arr.length; i++) {
+        
+            if (dataObj.name == arr[i].name) {
+                
+                //update the gesture state
+                arr[i].state = dataObj.state;
+                
+                //break the cycle
+                return;
             }
         }
         
+        //if reach here, means gesture doesnt exist in array, so add it
+        arr.push(dataObj);
     };
     
     
@@ -616,12 +647,12 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
     var convertHandJointMajorIndexToScratchName =function (joint_index)
     {
         switch (joint_index) {
-              
-           case intel.realsense.hand.FingerType.FINGER_THUMB:
+            
+            case intel.realsense.hand.FingerType.FINGER_THUMB:
                 return "Thumb";
                 break;
 
-           case intel.realsense.hand.FingerType.FINGER_INDEX:       
+            case intel.realsense.hand.FingerType.FINGER_INDEX:       
                 return "Index";
                 break;
 
@@ -1084,8 +1115,8 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
         //console.log("(getHandJointPosition) *REQUESTED* hand position: " + hand_position + ", hand side: " + hand_side + ", joint name: " + joint_name);
         //end of QA TAG*
         
-        var jointArray = {'Left Hand': rsd.HandModule.leftHandJoints, 
-                          'Right Hand': rsd.HandModule.leftHandJoints}[hand_side];
+        var jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
+                           'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
         
         var result = {};
         
@@ -1132,7 +1163,7 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
     };
     
     
-   /*
+/*
     ext.whenHandGesture = function(hand_type, gesture_name) {        
         var g = gesture_name.toLowerCase().replace(' ', '_');
         var h = {
@@ -1147,21 +1178,30 @@ intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"sta
     }
 */
     
-    ext.getHandGesture = function(hand_type, gesture_name) {
+    ext.getHandGesture = function(hand_side, gesture_name) {
         
-        if(Object.keys(rsd.HandModule.gestures).length === 0)
-            return false;
+        //get array of requested hand
+        var gesturesArray = { 'Left Hand' : rsd.HandModule.tempLeftHandGestures, 
+                              'Right Hand': rsd.HandModule.tempRightHandGestures}[hand_side];
         
-        // // map display name to SDK's
-        var g = gesture_name.toLowerCase().replace(' ', '_');
-        console.log([hand_type, gesture_name, g]);
-        var h = {
-            "Left Hand": intel.realsense.hand.BodySideType.BODY_SIDE_LEFT,
-            "Right Hand": intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT,
-            "Any Hand": intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN,
-        }[hand_type];
-
-        return h in rsd.HandModule.gestures && rsd.HandModule.gestures[h].name == g;
+        //if no gestures, break now
+        if (gesturesArray.length==0) return false;
+        
+        //map display name to SDK's
+        var g_name = gesture_name.toLowerCase().replace(' ', '_');
+        
+        for (var g = 0; g<gesturesArray.length; g++){
+            if (gesturesArray[g].name == g_name) {
+                
+                //return true if gesture started or in progress
+                return (gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_START || 
+                        gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_IN_PROGRESS);
+                
+            }
+        }
+        
+        //if reach here, no gesture occurs
+        return false;
     }
     
     
