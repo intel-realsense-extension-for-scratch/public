@@ -76,10 +76,11 @@
     font-family: 'Open Sans', sans-serif;
     border: 1px white solid;
     margin: 0 auto;
+    width: 800px;
 }
 
 .intel-paragraph-modal {
-    height: 180px;
+    height: 200px;
     margin: 0 auto;
     width: 600px;
     
@@ -91,7 +92,7 @@
 
 .bottom-line-modal {
     background-color: white;
-    height: 70px;
+    height: 80px;
     text-align: center;
-    padding-top: 25px;
+    padding-top: 30px;
 }
