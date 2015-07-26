@@ -17,7 +17,7 @@
 .intel-paragraph {
     padding: 20px;
     height: 250px;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .intel-paragraph p.emphasized {
@@ -90,8 +90,14 @@
 }
 
 .intel-paragraph-modal {
-    padding: 0 200px;
     height: 200px;
+    margin: 0 auto;
+    width: 600px;
+    
+}
+
+.intel-paragraph-modal h2 {
+    text-align: left;
 }
 
 .intel-paragraph .bottom-line-modal {
