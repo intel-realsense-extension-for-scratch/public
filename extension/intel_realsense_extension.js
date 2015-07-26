@@ -888,8 +888,8 @@
         });
     
     
-        
-        
+        //debug:
+        PopAlert();
         
         //speech module init
         
