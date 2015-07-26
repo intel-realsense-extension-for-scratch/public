@@ -574,7 +574,7 @@
             //console.warn("  handData.firedGestureData   ");
             
             
-           
+            
             /*
             intel_realsense_extension.js:547   handData.firedGestureData  
             intel_realsense_extension.js:548 {"timeStamp":130822268765390400,"handId":6,"state":2,"frameNumber":2092,"name":"full_pinch"}
@@ -589,6 +589,7 @@
             intel_realsense_extension.js:547   handData.firedGestureData  
             intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"state":2,"frameNumber":2316,"name":"fist"}
             */
+            
             for (var g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gestureData = handData.firedGestureData[g];
