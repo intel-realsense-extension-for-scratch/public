@@ -11,7 +11,7 @@
 }
 
 .intel-title {
-    
+    background-color: white;
 }
 
 .intel-paragraph {
@@ -90,7 +90,8 @@
 }
 
 .intel-paragraph-modal {
-    text-align: center;
+    padding: 0 200px;
+    height: 200px;
 }
 
 .intel-paragraph .bottom-line-modal {
