@@ -39,12 +39,10 @@
 .bottom-line-modal .btn {
     background-color: #00AEEF; 
     font-size: 16px;
-    box-shadow: 0px 0px 20px #525252;
+    color:white;
+    border-radius: 6px;
 }
 
-.bottom-line-modal a {
-    color:white;
-}
 
 
 
