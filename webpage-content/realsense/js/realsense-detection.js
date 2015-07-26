@@ -12,31 +12,31 @@ function ValidatePlatform() {
      
         if (info.nextStep == 'ready') {
             //good to go
-            console.log("realsense good");
+           // console.log("realsense good");
             $("#platform-detection").hide();
             $("#platform-ready").show(200);
           
         }
         else if (info.nextStep == 'unsupported') {
-            console.warn('Platform is not supported for Intel(R) RealSense(TM) SDK: either you are missing the required camera, or your OS and browser are not supported ');
+            //console.warn('Platform is not supported for Intel(R) RealSense(TM) SDK: either you are missing the required camera, or your OS and browser are not supported ');
             $("#platform-detection").hide();
             $("#platform-browser").show(200);
             
         } else if (info.nextStep == 'driver') {
-            console.warn('Please upgrade RealSense(TM) Depth Camera Manager (DCM) and firmware before running the application  http://www.intel.com/realsense ');
+           // console.warn('Please upgrade RealSense(TM) Depth Camera Manager (DCM) and firmware before running the application  http://www.intel.com/realsense ');
             $("#platform-detection").hide();
             $("#platform-dcm-missing").show(200);
             
          
         } else if (info.nextStep == 'runtime') {
-            console.warn('please download and install runtime exe');
+            //console.warn('please download and install runtime exe');
             $("#platform-detection").hide();
             $("#platform-runtime-missing").show(200);
            
         }
 
     }).catch(function (error) {
-        console.warn('other unknown failure. '+ JSON.stringify(error));
+       // console.warn('other unknown failure. '+ JSON.stringify(error));
         $("#platform-detection").hide();
         
     });
@@ -53,7 +53,7 @@ $(document).ready(function() {
         
         //start download
         //TODO this is a temp link for testing only
-        window.location = "https://github.com/intel-realsense-extension-for-scratch/public/blob/gh-pages/extension/webapp_offline_do_not_distribute_6.0.21.4168.exe?raw=true";
+        window.location = "file:///\\jfspercbits001.amr.corp.intel.com\RS_Outgoing\erpaulso\Web_Offline_Drop\webapp_offline_do_not_distribute_6.0.21.4168.exe";
             
         //TODO the right link for release !!!
         //window.location = "http://registrationcenter-download.intel.com/akdlm/irc_nas/7787/rs_sdk_runtime_webapp_v6.exe";

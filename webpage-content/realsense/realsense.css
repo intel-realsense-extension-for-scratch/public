@@ -26,25 +26,23 @@
     font-weight: bold;
 }
 
-
-
-
-
 .bottom-line-modal .btn {
     background-color: #00AEEF; 
     font-size: 16px;
     color:white;
     border-radius: 6px;
     padding: 5px 40px;
+    border: 0px;
 }
 
 
-
-
+.intel-paragraph .checkbox {
+    text-align: center;
+}
 
 .intel-paragraph #age-checkbox {
-    width:20px;
-    height: 20px;
+    width:25px;
+    height: 25px;
 }
 
 
