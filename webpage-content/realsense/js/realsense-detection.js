@@ -18,7 +18,7 @@ function ValidatePlatform() {
           
         }
         else if (info.nextStep == 'unsupported') {
-            console.warn(' Platform is not supported for Intel(R) RealSense(TM) SDK: either you are missing the required camera, or your OS and browser are not supported ');
+            console.warn('Platform is not supported for Intel(R) RealSense(TM) SDK: either you are missing the required camera, or your OS and browser are not supported ');
             $("#platform-detection").hide();
             $("#platform-browser").show(200);
             
@@ -52,8 +52,11 @@ $(document).ready(function() {
         $("#platform-runtime-download").show(200);
         
         //start download
-        window.location = "http://registrationcenter-download.intel.com/akdlm/irc_nas/7787/rs_sdk_runtime_webapp_v6.exe";
-            //"https://github.com/intel-realsense-extension-for-scratch/public/blob/gh-pages/extension/RSSDK_web_drop_test_ww29.7.exe?raw=true";
+        //TODO this is a temp link for testing only
+        window.location = "https://github.com/intel-realsense-extension-for-scratch/public/blob/gh-pages/extension/webapp_offline_do_not_distribute_6.0.21.4168.exe?raw=true";
+            
+        //TODO the right link for release !!!
+        //window.location = "http://registrationcenter-download.intel.com/akdlm/irc_nas/7787/rs_sdk_runtime_webapp_v6.exe";
     });
     
     
@@ -66,7 +69,5 @@ $(document).ready(function() {
             $('#install-button').prop('disabled', 'disabled');
         }
     });
-    
-    
     
 });
