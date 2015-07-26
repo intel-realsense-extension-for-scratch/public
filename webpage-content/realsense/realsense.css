@@ -12,6 +12,8 @@
 
 .intel-title {
     background-color: white;
+    height: 100px;
+    padding-top: 10px;
 }
 
 .intel-paragraph {
@@ -79,7 +81,7 @@
 }
 
 .intel-paragraph-modal {
-    height: 200px;
+    height: 180px;
     margin: 0 auto;
     width: 600px;
     
@@ -91,7 +93,7 @@
 
 .bottom-line-modal {
     background-color: white;
-    height: 80px;
+    height: 70px;
     text-align: center;
-    padding-top: 30px;
+    padding-top: 25px;
 }
