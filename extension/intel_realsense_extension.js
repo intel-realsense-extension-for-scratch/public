@@ -888,9 +888,7 @@
         });
     
     
-        //debug:
-        PopAlert();
-        
+         
         //speech module init
         
         //TODO load speech here
@@ -948,6 +946,10 @@
         }
         
         
+        
+        //debug:
+        PopAlert();
+       
         
         
     };

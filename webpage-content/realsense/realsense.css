@@ -1,5 +1,5 @@
 .bg-dark {
-    background-color: black;
+    background-color: black; 
 }
 
 .intel-screen {
@@ -86,7 +86,6 @@
     color: white;
     font-family: 'Open Sans', sans-serif;
     border: 1px white solid;
-    width: 50%;
     margin: 0 auto;
 }
 
