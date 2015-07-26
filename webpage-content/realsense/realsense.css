@@ -100,6 +100,9 @@
     text-align: left;
 }
 
-.intel-paragraph .bottom-line-modal {
-    margin-top: 80px;
+.bottom-line-modal {
+    background-color: white;
+    height: 80px;
+    text-align: center;
+    margin: auto 0;
 }
