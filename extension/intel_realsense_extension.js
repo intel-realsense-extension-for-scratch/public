@@ -567,11 +567,11 @@
             
             
 //hand gestures block
-            console.warn("gestures "+handData.firedGestureData.length);
+            console.log("gestures "+handData.firedGestureData.length);
             
             if (handData.firedGestureData.length == 0) return;
             
-            console.warn("  handData.firedGestureData   ");
+            //console.warn("  handData.firedGestureData   ");
             
             
            
@@ -589,15 +589,13 @@
             intel_realsense_extension.js:547   handData.firedGestureData  
             intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"state":2,"frameNumber":2316,"name":"fist"}
             */
-            for (g = 0; g < handData.firedGestureData.length; g++) {
+            for (var g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gestureData = handData.firedGestureData[g];
                 
                 console.warn(JSON.stringify(gestureData));
                 
                 //console.log("gestures "+gestureData.state+ " "+gestureData.name);
-                
-                
                 
                 if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                     AddGestureObjectToArray(gestureData, rsd.HandModule.tempLeftHandGestures);
