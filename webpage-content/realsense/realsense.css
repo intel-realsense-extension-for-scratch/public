@@ -6,7 +6,6 @@
     background-color: #0071C5;
     color: white;
     font-family: 'Open Sans', sans-serif;
-    border: 1px white solid;
     margin-top: 200px;
 }
 
@@ -17,21 +16,16 @@
 }
 
 .intel-paragraph {
-    padding: 20px;
-    height: 250px;
-    font-size: 16px;
+    padding: 20px 100px;
+    height: 200px;
+    font-size: 18px;
+    line-height: 1.5;
 }
 
 .intel-paragraph p.emphasized {
     font-weight: bold;
 }
 
-/*
-.intel-paragraph .bottom-line {
-    margin-top: 30px;
-    
-}
-*/
 
 
 
@@ -41,6 +35,7 @@
     font-size: 16px;
     color:white;
     border-radius: 6px;
+    padding: 5px 40px;
 }
 
 

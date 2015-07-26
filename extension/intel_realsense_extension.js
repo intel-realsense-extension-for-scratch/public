@@ -946,13 +946,6 @@
         }
         
         
-        
-        //debug:
-        rsd.Status = { status: 0, msg: 'platform not ready' };  
-        PopAlert();
-       
-        
-        
     };
     
     var PopAlert = function() {
