@@ -567,45 +567,20 @@
             
             
 //hand gestures block
-            console.log("gestures "+handData.firedGestureData.length);
-            
             if (handData.firedGestureData.length == 0) return;
-            
-            //console.warn("  handData.firedGestureData   ");
-            
-            
-            
-            /*
-            intel_realsense_extension.js:547   handData.firedGestureData  
-            intel_realsense_extension.js:548 {"timeStamp":130822268765390400,"handId":6,"state":2,"frameNumber":2092,"name":"full_pinch"}
-            intel_realsense_extension.js:547   handData.firedGestureData  
-            intel_realsense_extension.js:548 {"timeStamp":130822268782358050,"handId":6,"state":0,"frameNumber":2138,"name":"full_pinch"}
-            intel_realsense_extension.js:547   handData.firedGestureData  
-            intel_realsense_extension.js:548 {"timeStamp":130822268782726910,"handId":6,"state":2,"frameNumber":2139,"name":"full_pinch"}
-            intel_realsense_extension.js:547   handData.firedGestureData  
-            intel_realsense_extension.js:548 {"timeStamp":130822268828096930,"handId":6,"state":0,"frameNumber":2262,"name":"fist"}
-            intel_realsense_extension.js:547   handData.firedGestureData  
-            intel_realsense_extension.js:548 {"timeStamp":130822268828465800,"handId":6,"state":0,"frameNumber":2263,"name":"full_pinch"}
-            intel_realsense_extension.js:547   handData.firedGestureData  
-            intel_realsense_extension.js:548 {"timeStamp":130822268848015460,"handId":6,"state":2,"frameNumber":2316,"name":"fist"}
-            */
             
             for (var g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gestureData = handData.firedGestureData[g];
                 
-                console.warn(JSON.stringify(gestureData));
-                
-                //console.log("gestures "+gestureData.state+ " "+gestureData.name);
-                
                 if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                     AddGestureObjectToArray(gestureData, rsd.HandModule.tempLeftHandGestures);
+               
                 } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
                     AddGestureObjectToArray(gestureData, rsd.HandModule.tempRightHandGestures);
+                
                 }
                 
-                
-                // rsd.HandModule.gestures[ihand.bodySide] = gesture;
                 
                 /*
                 if (gesture.state==intel.realsense.hand.GestureStateType.GESTURE_STATE_START || 
@@ -616,8 +591,6 @@
                     rsd.HandModule.gestures[intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN] = gesture;
                 }*/
             }
-            
-            console.log("gestures "+rsd.HandModule.tempRightHandGestures.length+" "+rsd.HandModule.tempLeftHandGestures.length);
         }
         
     };
@@ -912,7 +885,6 @@
             //if sensor not connected to usb - it gets here
             //other option: sensor is already running somewhere else on the web
             rsd.Status = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
-            //realsenseStatusReport = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
         });
     
     
@@ -926,12 +898,6 @@
     };
     
     
-    
-    
-    //returns result object that is suitable for scratch status report
-    //var realsenseStatusReport = {status: 1, msg: 'checking system...'};
-    
-    
     // check platform compatibility
     var ValidatePlatformState = function (){
         var rs = intel.realsense;
@@ -943,12 +909,10 @@
                 
             .then(function (info) {
                 
-                console.warn("Error detectPlatform: isCameraReady "+info.isCameraReady+ " isDCMUpdateNeeded:  "+info.isDCMUpdateNeeded+" isRuntimeInstalled: "+info.isRuntimeInstalled);
-                
+                //console.warn("Error detectPlatform: isCameraReady "+info.isCameraReady+ " isDCMUpdateNeeded:  "+info.isDCMUpdateNeeded+" isRuntimeInstalled: "+info.isRuntimeInstalled);
                 
                 if (info.nextStep == 'ready') {
                     rsd.Status = { status: 2, msg: 'RealSense sensor is ready' };
-                    //realsenseStatusReport = { status: 2, msg: 'RealSense sensor is ready' };
                     
                     //we are now able to start realsense sensor automatically!
                     StartRealSense();
@@ -956,17 +920,14 @@
                 } else if (info.nextStep == 'unsupported') {
                     //unsupported called when DCM not installed OR when browser is too old OR .......
                     rsd.Status = { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
-                   // realsenseStatusReport = { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
                 
                 } else if (info.nextStep == 'driver') {
                     //driver called when DCM is too old and should be upgraded
                     rsd.Status = { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
-                  //  realsenseStatusReport = { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
                 
                 } else if (info.nextStep == 'runtime') {
                     //runtime called when runtime needs to be installed
                     rsd.Status = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
-                   // realsenseStatusReport = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
                 
                 }
                 
@@ -976,14 +937,12 @@
                 console.log('CheckPlatform failed: ' + JSON.stringify(error));
                 
                 rsd.Status = { status: 0, msg: 'platform error' };
-                //realsenseStatusReport = { status: 0, msg: 'platform error' };
                 
                 PopAlert();
             });
             
         }else{
             rsd.Status = { status: 0, msg: 'platform not ready' };  
-            //realsenseStatusReport = { status: 0, msg: 'platform not ready' };  
             
             PopAlert();
         }
@@ -1088,7 +1047,6 @@
 
     ext._getStatus = function () {
         return rsd.Status;
-       // return realsenseStatusReport;
     };
    
     
@@ -1318,7 +1276,7 @@
     
     var descriptor = {
         blocks: [
-            ['b', 'Face visible?', 'isFaceExist', '']
+             ['b', 'Face visible?', 'isFaceExist', '']
             ,['r', '%m.position_value of %d.face_joints', 'getFaceJointPosition', 'X Position', 'Left eye']
             ,['b', 'Face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
      
@@ -1343,8 +1301,7 @@
                             "Wrist", "Center"],
             "major_joint_name": ["Index", "Thumb", "Middle", "Ring", "Pinky"],
             "facial_expressions": ["Wink left", "Wink right" ,"Brow lifted left" ,"Brow lifted right" ,
-                                   "Brow lowered left", "Brow lowered right", "Mouth open","Tongue out" ,                                       "Smile", "Kiss", 
-                                   "Look down" ,"Look up", "Look left", "Look right"],
+                                   "Brow lowered left", "Brow lowered right", "Mouth open","Tongue out" ,                                                              "Smile", "Kiss", "Look down" ,"Look up", "Look left", "Look right"],
             "hand_gestures": ["Spread fingers", "V sign", "Click", "Full pinch",
                                 "Two fingers pinch open", "Swipe down", "Swipe up", "Swipe left",
                                 "Swipe right", "Tap", "Fist", "Thumb up", "Thumb down",
