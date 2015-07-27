@@ -1139,7 +1139,7 @@
     ext.getHandGesture = function(hand_side, gesture_name) {
         
         var gesturesArray = [];
-        
+         
         
         //get array of requested hand
         if (hand_side == 'Any Hand'){
