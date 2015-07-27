@@ -1073,8 +1073,19 @@
         //console.log("(getHandJointPosition) *REQUESTED* hand position: " + hand_position + ", hand side: " + hand_side + ", joint name: " + joint_name);
         //end of QA TAG*
         
-        var jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
+        
+        var jointArray = [];
+        
+        //get array of requested hand
+        if (hand_side == 'Any Hand'){
+            jointArray = rsd.HandModule.leftHandJoints;
+            //jointArray.join(rsd.HandModule.rightHandJoints);
+            
+        } else {
+            jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
                            'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
+        }
+        
         
         var result = {};
         
@@ -1139,15 +1150,12 @@
     ext.getHandGesture = function(hand_side, gesture_name) {
         
         var gesturesArray = [];
-         
         
         //get array of requested hand
         if (hand_side == 'Any Hand'){
             gesturesArray = rsd.HandModule.tempLeftHandGestures;
             gesturesArray.join(rsd.HandModule.tempRightHandGestures);
             
-            console.warn(gesturesArray.length);
-        
         } else {
             gesturesArray = { 'Left Hand' : rsd.HandModule.tempLeftHandGestures, 
                              'Right Hand': rsd.HandModule.tempRightHandGestures}[hand_side];
