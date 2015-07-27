@@ -891,9 +891,9 @@
             //other option: sensor is already running somewhere else on the web
             rsd.Status = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
         });
-    
-    
-         
+        
+        
+        
         //speech module init
         
         //TODO load speech here
@@ -1138,12 +1138,24 @@
     
     ext.getHandGesture = function(hand_side, gesture_name) {
         
+        var gesturesArray = [];
+        
+        
         //get array of requested hand
-        var gesturesArray = { 'Left Hand' : rsd.HandModule.tempLeftHandGestures, 
-                              'Right Hand': rsd.HandModule.tempRightHandGestures}[hand_side];
+        if (hand_side == 'Any Hand'){
+            gesturesArray = rsd.HandModule.tempLeftHandGestures;
+            gesturesArray.join(rsd.HandModule.tempRightHandGestures);
+            
+            console.warn(gesturesArray.length);
+        
+        } else {
+            gesturesArray = { 'Left Hand' : rsd.HandModule.tempLeftHandGestures, 
+                             'Right Hand': rsd.HandModule.tempRightHandGestures}[hand_side];
+        }
+        
         
         //if no gestures, break now
-        if (gesturesArray.length==0) return false;
+        if (gesturesArray.length == 0) return false;
         
         //map display name to SDK's
         var g_name = gesture_name.toLowerCase().replace(' ', '_');
@@ -1278,7 +1290,7 @@
     var descriptor = {
         blocks: [
              ['b', 'Face visible?', 'isFaceExist', '']
-            ,['r', '%m.position_value of %d.face_joints', 'getFaceJointPosition', 'X Position', 'Left eye']
+            ,['r', '%m.position_value of %d.face_joints', 'getFaceJointPosition', 'X Position', 'Nose']
             ,['b', 'Face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
      
         ,['-']
