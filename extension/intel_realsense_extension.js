@@ -1302,9 +1302,9 @@
             ,['b', 'Face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
      
         ,['-']
-            ,['b', '%m.hand_type visible?', 'isHandExist', 'Left Hand']
-            ,['r', '%m.position_value of %m.hand_type %d.hand_joints', 'getHandJointPosition', 'X Position', 'Left Hand', 'Index tip']
-            ,['b', '%m.hand_type gesture %m.hand_gestures?', 'getHandGesture', 'Left Hand', 'Thumb Up']
+            ,['b', '%m.hand_type visible?', 'isHandExist', 'Any Hand']
+            ,['r', '%m.position_value of %m.hand_type %d.hand_joints', 'getHandJointPosition', 'X Position', 'Any Hand', 'Index tip']
+            ,['b', '%m.hand_type gesture %m.hand_gestures?', 'getHandGesture', 'Any Hand', 'V sign']
             ,['r', '%m.hand_type_folded %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Left Hand', 'Index']
       
         ]
@@ -1323,7 +1323,7 @@
             "major_joint_name": ["Index", "Thumb", "Middle", "Ring", "Pinky"],
             "facial_expressions": ["Wink left", "Wink right" ,"Brow lifted left" ,"Brow lifted right" ,
                                    "Brow lowered left", "Brow lowered right", "Mouth open","Tongue out" ,                                                              "Smile", "Kiss", "Look down" ,"Look up", "Look left", "Look right"],
-            "hand_gestures": ["Spread fingers", "V sign", "Click", "Full pinch",
+            "hand_gestures": ["Spread fingers", "V sign", "Full pinch",
                                 "Two fingers pinch open", "Swipe down", "Swipe up", "Swipe left",
                                 "Swipe right", "Tap", "Fist", "Thumb up", "Thumb down",
                                 "Wave"],
