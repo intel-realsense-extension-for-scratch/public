@@ -187,6 +187,11 @@
         if (sts < 0) {
             console.warn('Error ' + sts + ' on module ' + sender);
             
+            if (sts == 503){
+                console.warn('Capabilities.Servicer.Realsense.exe must be restarted! shut it down and restart Intel technologyAccess and DCM');   
+            }
+            
+            
             // No error on USB disconnect or reconnect from SDK
             if (sts == -301) {
                 console.warn('Disconnecting camera from USB');
