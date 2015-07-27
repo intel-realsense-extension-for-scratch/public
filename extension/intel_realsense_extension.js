@@ -113,7 +113,7 @@
         
         return {
             // public
-            isExist: true,
+            isExist: false,
             joints: [],                 
             expressions_this_frame : [] 
         }
@@ -124,7 +124,7 @@
         
         return {
             // public
-            isExist: true
+            isExist: false
         }
     };
     
