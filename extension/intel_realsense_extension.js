@@ -272,11 +272,14 @@
                                 };
                                 
                                 rsd.FaceModule.joints.push(faceJoint);
+                                
+                               
                             }
                         }
                     }
                 }
                 
+                console.log(rsd.FaceModule.joints[0].position.X);
   
 //face expression block
                 if (face.expressions !== null && face.expressions.expressions != null) {
@@ -1294,19 +1297,31 @@
     };
 
     */
+    ext.ScratchExtensions = function(rotation_type){
+        
+        return 0;    
+    };
+    
+    ext.getHandRotation = function(rotation_type, hand_side){
+        
+        return 0;
+    };
+ 
     
     var descriptor = {
         blocks: [
              ['b', 'Face visible?', 'isFaceExist', '']
             ,['r', '%m.position_value of %d.face_joints', 'getFaceJointPosition', 'X Position', 'Nose']
             ,['b', 'Face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
-     
+            ,['r', '%m.rotation_value of Head', 'getHeadRotation', 'Rotation X']
+            
         ,['-']
             ,['b', '%m.hand_type visible?', 'isHandExist', 'Any Hand']
             ,['r', '%m.position_value of %m.hand_type %d.hand_joints', 'getHandJointPosition', 'X Position', 'Any Hand', 'Index tip']
             ,['b', '%m.hand_type gesture %m.hand_gestures?', 'getHandGesture', 'Any Hand', 'V sign']
             ,['r', '%m.hand_type_folded %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Left Hand', 'Index']
-      
+            ,['r', '%m.rotation_value of %m.hand_type', 'getHandRotation', 'Rotation X', 'Any Hand']
+			
         ]
          
         , menus: {
@@ -1327,7 +1342,7 @@
                                 "Two fingers pinch open", "Swipe down", "Swipe up", "Swipe left",
                                 "Swipe right", "Tap", "Fist", "Thumb up", "Thumb down",
                                 "Wave"],
-            //"rotation_value": ["Rotation X", "Rotation Y", "Rotation Z"],
+            "rotation_value": ["Rotation X", "Rotation Y", "Rotation Z"],
             "position_value": ["X Position",  "Y Position",  "Z Position"]
         }
         
