@@ -279,7 +279,6 @@
                     }
                 }
                 
-                console.log(rsd.FaceModule.joints[0].position.Z);
   
 //face expression block
                 if (face.expressions !== null && face.expressions.expressions != null) {
