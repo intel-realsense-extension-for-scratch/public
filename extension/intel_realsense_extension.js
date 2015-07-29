@@ -39,7 +39,7 @@
     //#region stage mapping
     const RS_FACE_X_MAX_RIGHT = 0;    //MIRRORED!!!!!
     const RS_FACE_X_MAX_LEFT = 600;    //MIRRORED!!!!!
-    const RS_FACE_Y_MAX_UP = 1000;      //MIRRORED!!!!!
+    const RS_FACE_Y_MAX_UP = 250;      //MIRRORED!!!!!
     const RS_FACE_Y_MAX_DOWN = 0;       //MIRRORED!!!!!
  
     const RS_HAND_X_MAX_RIGHT = -100;
@@ -279,7 +279,7 @@
                     }
                 }
                 
-                console.log(rsd.FaceModule.joints[0].position.Y);
+                console.log(rsd.FaceModule.joints[0].position.Z);
   
 //face expression block
                 if (face.expressions !== null && face.expressions.expressions != null) {
