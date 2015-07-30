@@ -166,16 +166,14 @@
                 sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING ) {
                 
                 rsd.Status = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
-                //realsenseStatusReport = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
                 
                 PopAlert();
             }
             
         } else {
-            console.warn('sensor not connected');
+           // console.warn('sensor not connected');
             
             rsd.Status = {status: 0, msg: 'Realsense sensor not connected'};
-            //realsenseStatusReport = {status: 0, msg: 'Realsense sensor not connected'};
             
             PopAlert();
         }
