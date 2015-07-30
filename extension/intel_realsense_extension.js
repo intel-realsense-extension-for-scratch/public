@@ -115,7 +115,8 @@
             // public
             isExist: false,
             joints: [],                 
-            expressions_this_frame : [] 
+            expressions_this_frame : [],
+            headRotation: {}
         }
     };
     
@@ -232,10 +233,16 @@
     /*RealSense Face Recognition event being called continuously, once enabling Face module*/
     var onFaceData = function(module, faceData) {
         
-        //reset the face expression data every frame 
+        //reset the face data every frame 
         rsd.FaceModule.expressions_this_frame=[];
         
-        rsd.FaceModule.joints=[];
+        rsd.FaceModule.joints = [];
+        
+        rsd.FaceModule.headRotation = {
+                                        X: 0
+                                        ,Y: 0
+                                        ,Z: 0
+                                    };      
         
         if (faceData.faces == null || faceData.faces.length == 0) {
             rsd.FaceModule.isExist = false;
@@ -251,7 +258,7 @@
                 var face = faceData.faces[f];
                 
 //for face joints block
-                if (face.landmarks.points !== undefined) {
+                if (face.landmarks.points != undefined) {
                     var jointIndex = 0;
                
                     for (var i = 0; i < face.landmarks.points.length; i++) {
@@ -270,8 +277,6 @@
                                 };
                                 
                                 rsd.FaceModule.joints.push(faceJoint);
-                                
-                               
                             }
                         }
                     }
@@ -308,6 +313,25 @@
                             }
                         }
                     }
+                }
+                
+                
+                
+//for head rotation block
+                if (face.pose != undefined && face.pose != null) {
+                    console.warn('Pose: ' + JSON.stringify(face.pose));
+                    
+                    /*
+                    console.warn('Pose: ' + face.pose.poseAngles.roll);
+                    
+                    var head_rotation = {
+                                             X: face.pose.poseAngles.yaw
+                                            ,Y: face.pose.poseAngles.pitch
+                                            ,Z: face.pose.poseAngles.roll
+                                        };
+                    
+                    rsd.FaceModule.headRotation = head_rotation;
+                    */
                 }
             }
         }
@@ -887,16 +911,23 @@
             console.warn('Init failed: ' + JSON.stringify(error));
             
             
-            //sensor is already active on another window / app
+            //sensor is already active on another window / app    //GZ said this should work
             if (error.status == -102){
                 console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
                 rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
             }
             
+            //unknown error
+            if (error.status == -3){
+                rsd.Status = { status: 0, msg: ''};
+                PopAlert();
+            }
             
             //if sensor not connected to usb - it gets here
             //other option: sensor is already running somewhere else on the web
             rsd.Status = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
+            
+            
         });
         
         
@@ -1214,6 +1245,53 @@
         return -1;
     };
     
+    //hand rotation
+    ext.getHandRotation = function(rotation_type, hand_side){
+        
+        var jointArray = [];
+        
+        //get array of requested hand
+        if (hand_side == 'Any Hand'){
+            jointArray = rsd.HandModule.leftHandJoints;
+            //jointArray.join(rsd.HandModule.rightHandJoints);
+            
+        } else {
+            jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
+                           'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
+        }
+        
+        
+        var result = {};
+        
+        //joint_name is string variable from the menu
+        for (var i = 0; i < jointArray.length; i++) {
+            if (jointArray[i].jointName === "Wrist") {
+                result = jointArray[i];
+                break;
+            }
+        }
+        
+        
+        
+        if (result.rotation != undefined) {
+            //return the right value
+            if (rotation_type === "Rotation X") {
+                return result.rotation.X;
+               
+            } else {
+                if (rotation_type === "Rotation Y") {
+                    return result.rotation.Y;
+                    
+                } else {
+                   return result.rotation.Z;
+                
+                }
+            }
+        }
+        
+        return 0;
+    };
+    
     
     
     
@@ -1301,15 +1379,20 @@
     };
 
     */
-    ext.ScratchExtensions = function(rotation_type){
+    ext.getHeadRotation = function(rotation_type){
+       
+        if (head_rotation === "Rotation X")
+            return rsd.FaceModule.headRotation.X;
+        else
+            if (head_rotation === "Rotation Y")
+                return rsd.FaceModule.headRotation.Y;
+            else
+                return rsd.FaceModule.headRotation.Z;
         
         return 0;    
     };
     
-    ext.getHandRotation = function(rotation_type, hand_side){
-        
-        return 0;
-    };
+   
  
     
     var descriptor = {
