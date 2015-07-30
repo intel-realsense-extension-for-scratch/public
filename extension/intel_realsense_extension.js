@@ -883,10 +883,17 @@
             console.log('Streaming ' + imageSize.width + 'x' + imageSize.height);
         })
         .catch(function (error) {
-            var meth = error.request.method;
-            var sts = _.invert(intel.realsense.Status)[error.status];
-            console.log([[meth, sts].join(' '), error]);     
+            //var meth = error.request.method;
+            //var sts = _.invert(intel.realsense.Status)[error.status];
+            //console.log([[meth, sts].join(' '), error]);     
+            console.warn('Init failed: ' + JSON.stringify(error));
             
+            
+            //sensor is already active on another window / app
+            if (error.status == -102){
+                console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
+                rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
+            }
             
             
             //if sensor not connected to usb - it gets here
