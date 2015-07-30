@@ -1286,7 +1286,7 @@
             }
         }
         
-        return 0;
+        return -1000;
     };
     
     
@@ -1376,12 +1376,13 @@
     };
 
     */
+    
     ext.getHeadRotation = function(rotation_type){
        
-        if (head_rotation === "Rotation X")
+        if (rotation_type === "Rotation X")
             return rsd.FaceModule.headRotation.X;
         else
-            if (head_rotation === "Rotation Y")
+            if (rotation_type === "Rotation Y")
                 return rsd.FaceModule.headRotation.Y;
             else
                 return rsd.FaceModule.headRotation.Z;
