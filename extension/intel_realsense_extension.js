@@ -99,9 +99,7 @@
                 , intel.realsense.hand.JointType.JOINT_PINKY_JT1: "Pinky jointC"
                 , intel.realsense.hand.JointType.JOINT_PINKY_JT2: "Pinky jointB"
                 , intel.realsense.hand.JointType.JOINT_PINKY_TIP: "Pinky tip"
-
             }
-            
               */
         }
     };
@@ -319,10 +317,13 @@
                 
 //for head rotation block
                 if (face.pose != undefined && face.pose != null) {
-                    console.warn('Pose: ' + JSON.stringify(face.pose));
-                    
                     /*
-                    console.warn('Pose: ' + face.pose.poseAngles.roll);
+                    Pose: {"confidence":1,
+                    "headPosition":{"headCenter":{"x":-231.4698,"y":27.50793,"z":496.4164},"confidence":1},
+                    "poseAngles":{"yaw":-9.80811,"pitch":40.68155,"roll":-25.92934},"poseQuaternion":{"x":-0.2385482,"y":-0.1558126,"z":0.3195189,"w":0.9037283},"rotationMatrix":[0.7472601764402149,-0.5031789452630889,-0.4340658679860284,0.6518542284473986,0.6820048018979353,0.3315954086585106,0.12918317832359433,-0.5307357150523068,0.8376343517347717]}
+                    */
+                    //console.warn('Pose: ' + JSON.stringify(face.pose));
+                    //console.warn('Pose: ' + face.pose.poseAngles.roll);
                     
                     var head_rotation = {
                                              X: face.pose.poseAngles.yaw
@@ -331,7 +332,7 @@
                                         };
                     
                     rsd.FaceModule.headRotation = head_rotation;
-                    */
+                    
                 }
             }
         }
@@ -577,6 +578,11 @@
                 tempResultFoldnessArray.push(majorJoint);
             }
 
+            
+            
+            console.warn("hand side "+ihand.bodySide);
+            
+            
 //joint position block  ;  hand exist block            
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                 //left hand
@@ -609,16 +615,6 @@
                     AddGestureObjectToArray(gestureData, rsd.HandModule.tempRightHandGestures);
                 
                 }
-                
-                
-                /*
-                if (gesture.state==intel.realsense.hand.GestureStateType.GESTURE_STATE_START || 
-                    gesture.state==intel.realsense.hand.GestureStateType.GESTURE_STATE_IN_PROGRESS){
-                    
-                    // console.log('Gesture: ' + JSON.stringify(handData.firedGestureData[g]));
-                    rsd.HandModule.gestures[ihand.bodySide] = gesture;
-                    rsd.HandModule.gestures[intel.realsense.hand.BodySideType.BODY_SIDE_UNKNOWN] = gesture;
-                }*/
             }
         }
         
@@ -824,23 +820,23 @@
         })
         
         
-        
-        // .then(function (result) {
-        //     return rs.blob.BlobModule.activate(sense);
-        // })
-        // .then(function (result) {
-        //     blobModule = result;
-        //     return blobModule.createActiveConfiguration();
-        // })
-        // .then(function (result) {
-        //     blobConfiguration = result;
-        //     blobConfiguration.maxBlobs = rs.blob.MAX_NUMBER_OF_BLOBS; 
-        //     return blobConfiguration.applyChanges();
-        // })
-        // .then(function (result) {
-        //     blobModule.onFrameProcessed = onBlobData;
-        // })
-
+/*        
+         .then(function (result) {
+             return rs.blob.BlobModule.activate(sense);
+         })
+         .then(function (result) {
+             blobModule = result;
+             return blobModule.createActiveConfiguration();
+         })
+         .then(function (result) {
+             blobConfiguration = result;
+             blobConfiguration.maxBlobs = rs.blob.MAX_NUMBER_OF_BLOBS; 
+             return blobConfiguration.applyChanges();
+         })
+         .then(function (result) {
+             blobModule.onFrameProcessed = onBlobData;
+         })
+*/
         
    
   
@@ -865,6 +861,7 @@
             return faceConfiguration.applyChanges();
         })
       
+        
         
         
         .then(function (result) {
@@ -919,7 +916,7 @@
             
             //unknown error
             if (error.status == -3){
-                rsd.Status = { status: 0, msg: ''};
+                rsd.Status = { status: 0, msg: 'Try restarting your computer'};
                 PopAlert();
             }
             
