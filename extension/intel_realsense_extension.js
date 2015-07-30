@@ -1384,14 +1384,14 @@
     ext.getHeadRotation = function(rotation_type){
        
         if (rotation_type === "Rotation X"){
-            return ValueMapper(rsd.FaceModule.headRotation.X, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 100);
+            return ValueMapper(rsd.FaceModule.headRotation.X, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, -100, 100);
            
         } else {
             if (rotation_type === "Rotation Y"){
-                return ValueMapper(rsd.FaceModule.headRotation.Y, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 100);
+                return ValueMapper(rsd.FaceModule.headRotation.Y, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, -100, 100);
            
             } else {
-                return ValueMapper(rsd.FaceModule.headRotation.Z, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 100);
+                return ValueMapper(rsd.FaceModule.headRotation.Z, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, -100, 100);
             
             }
         }
