@@ -41,7 +41,10 @@
     const RS_FACE_X_MAX_LEFT = 600;    //MIRRORED!!!!!
     const RS_FACE_Y_MAX_UP = 250;      //MIRRORED!!!!!
     const RS_FACE_Y_MAX_DOWN = 0;       //MIRRORED!!!!!
- 
+
+    const RS_FACE_ROTATION_MIN = -30;
+    const RS_FACE_ROTATION_MAX = 30;
+    
     const RS_HAND_X_MAX_RIGHT = -100;
     const RS_HAND_X_MAX_LEFT = 700;
     const RS_HAND_Y_MAX_UP = 400;
@@ -51,6 +54,7 @@
     const SCRATCH_X_MAX_LEFT = -240;    //MIRRORED!!!!!
     const SCRATCH_Y_MAX_UP = -180;      //MIRRORED!!!!!
     const SCRATCH_Y_MAX_DOWN = 180;     //MIRRORED!!!!!
+    
     //#endregion
 
     
@@ -1379,14 +1383,18 @@
     
     ext.getHeadRotation = function(rotation_type){
        
-        if (rotation_type === "Rotation X")
-            return rsd.FaceModule.headRotation.X;
-        else
-            if (rotation_type === "Rotation Y")
-                return rsd.FaceModule.headRotation.Y;
-            else
-                return rsd.FaceModule.headRotation.Z;
-        
+        if (rotation_type === "Rotation X"){
+            return ValueMapper(rsd.FaceModule.headRotation.X, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 100);
+           
+        } else {
+            if (rotation_type === "Rotation Y"){
+                return ValueMapper(rsd.FaceModule.headRotation.Y, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 100);
+           
+            } else {
+                return ValueMapper(rsd.FaceModule.headRotation.Z, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 100);
+            
+            }
+        }
         return 0;    
     };
     

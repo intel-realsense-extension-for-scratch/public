@@ -34,7 +34,11 @@ Active SDK modules:
 
         face expressions:
             eye brow lifted,  
-
+        
+        head rotation
+            yaw : X
+            pitch : Y
+            roll: Z
 
 
 
