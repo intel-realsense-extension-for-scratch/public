@@ -193,9 +193,10 @@
             }
             
             
-            // No error on USB disconnect or reconnect from SDK
+            // error on sensor disconnect from USB (sometimes not occurs)
             if (sts == -301) {
-                console.warn('Disconnecting camera from USB');
+                rsd.Status = {status: 1 , msg: 'intel realsense sensor was disconnected from USB. please plug in and refresh page'};
+                
                 onClearSensor();
             }
         }
@@ -584,9 +585,6 @@
 
             
             
-            console.warn("hand side "+ihand.bodySide);
-            
-            
 //joint position block  ;  hand exist block            
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                 //left hand
@@ -616,7 +614,7 @@
                     AddGestureObjectToArray(gestureData, rsd.HandModule.tempLeftHandGestures);
                
                 } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
-                    AddGestureObjectToArray(gestureData, rsd.HandModule.tempRightHandGestures);
+                    AddGestureObjectToArray(gestureData, rsd.HandModule.tempRightHandGesturestempRightHandGestures);
                 
                 }
             }
@@ -912,22 +910,28 @@
             console.warn('Init failed: ' + JSON.stringify(error));
             
             
-            //sensor is already active on another window / app    //GZ said this should work
-            if (error.status == -102){
-                console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
-                rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
+            
+            switch (error.status)
+            {
+                case  -102:
+                    //sensor is already active on another window / app    //GZ said this should work
+                    console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
+                    rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
+                    break;
+            
+                    
+                case -3:
+                    //unknown error
+                    rsd.Status = { status: 0, msg: 'Try restarting your computer'};
+                    PopAlert();
+                    break;
+            
+                default:
+                    //if sensor not connected to usb - it gets here
+                    //other option: sensor is already running somewhere else on the web
+                    rsd.Status = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
+                    break;
             }
-            
-            //unknown error
-            if (error.status == -3){
-                rsd.Status = { status: 0, msg: 'Try restarting your computer'};
-                PopAlert();
-            }
-            
-            //if sensor not connected to usb - it gets here
-            //other option: sensor is already running somewhere else on the web
-            rsd.Status = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
-            
             
         });
         
