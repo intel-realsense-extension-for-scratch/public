@@ -138,7 +138,7 @@
         return {
             // public
             status: 1
-            , msg: 'checking system...'
+            , msg: 'Checking your system...'
         }
     };
     
@@ -168,7 +168,7 @@
             if (sender.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_R200 ||
                 sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING ) {
                 
-                rsd.Status = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor.' };
+                rsd.Status = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor' };
                 
                 PopAlert();
             }
@@ -267,11 +267,11 @@
                     for (var i = 0; i < face.landmarks.points.length; i++) {
                         var joint = face.landmarks.points[i];
                         if (joint != null) {
-                            var jointName = convertFaceJointIndexToScratchName(i);
-                            if (jointName !== "error") {
+                            //var jointName = convertFaceJointIndexToScratchName(i);
+                            //if (jointName !== "error") {
                                 
                                 var faceJoint = {};
-                                faceJoint.jointName = jointName;
+                                //faceJoint.jointName = jointName;
                                 faceJoint.originalJointIndex = i;
                                 faceJoint.position = {
                                      X: joint.image.x
@@ -280,7 +280,7 @@
                                 };
                                 
                                 rsd.FaceModule.joints.push(faceJoint);
-                            }
+                            //}
                         }
                     }
                 }
