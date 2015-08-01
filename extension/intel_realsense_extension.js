@@ -1313,6 +1313,10 @@
          
         var result = {};
         
+        console.warn('(getFaceJointPosition) *REQUESTED*  head position: ' + head_position + ', joint name: ' + joint_name);
+        console.warn('(getFaceJointPosition) ' + (joint_name === parseInt(joint_name, 10)));
+        
+        
         if (joint_name === parseInt(joint_name, 10)) {
         //joint_name is integer variable
             for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
