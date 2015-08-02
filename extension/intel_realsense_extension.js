@@ -1435,14 +1435,13 @@
             ,['b', '%m.hand_type visible?', 'isHandExist', 'Any Hand']
             ,['r', '%m.position_value of %m.hand_type %d.hand_joints', 'getHandJointPosition', 'X Position', 'Any Hand', 'Index tip']
             ,['b', '%m.hand_type gesture %m.hand_gestures?', 'getHandGesture', 'Any Hand', 'V sign']
-            ,['r', '%m.hand_type_folded %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Any Hand', 'Index']
+            ,['r', '%m.hand_type %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Any Hand', 'Index']
            // ,['r', '%m.rotation_value of %m.hand_type', 'getHandRotation', 'Rotation X', 'Any Hand']
 			
         ]
          
         , menus: {
             "hand_type": ["Left Hand", "Right Hand", "Any Hand"],
-            "hand_type_folded": ["Left Hand", "Right Hand"],
             "face_joints": ["Left eye", "Right eye", "Left eye brow", "Right eye brow", 
                             "Upper lip", "Bottom lip", "Nose", "Chin"],
             "hand_joints": ["Index tip", "Index base", "Index c", "Index jointB",
