@@ -1359,9 +1359,9 @@
             var j_name = -1;
             for(var key in landmarkDictionary){
                 
-                console.warn('landmarkDictionary '+key+" "+landmarkDictionary[key]);
-                
-                console.warn('landmarkDictionary '+key+" "+joint_name+" "+(key == joint_name)+ " "+(key === joint_name));
+               // console.warn('landmarkDictionary '+key+" "+landmarkDictionary[key]);
+               // 
+               // console.warn('landmarkDictionary '+key+" "+joint_name+" "+(key == joint_name)+ " "+(key === joint_name));
                 
                 if (key == joint_name){
                     j_name = landmarkDictionary[key];
@@ -1370,9 +1370,11 @@
                 }
             }
             
+            //console.warn('landmark '+j_name+" "+joint_name+" "+(key == joint_name)+ " "+(key === joint_name));
+                
             if (j_name>-1) {
                 for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
-                    if (rsd.FaceModule.joints[i].jointName === j_name) {
+                    if (rsd.FaceModule.joints[i].originalJointIndex === j_name) {
                         //console.warn("joint requested "+rsd.FaceModule.joints[i].originalJointIndex+" "+rsd.FaceModule.joints[i].jointName);
                         result = rsd.FaceModule.joints[i];
                         break;
