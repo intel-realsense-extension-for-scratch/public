@@ -18,6 +18,12 @@ How to install:
 
 
 
+Getting started:
+--------------
+- <a href="https://scratch.mit.edu/about/">What is Scratch?</a>
+- See the most basic use of our Scratch blocks in this <a href="http://scratchx.org/?url=http://intel-realsense-extension-for-scratch.github.io/public/extension/samples/Realsense_Block_Usages.sbx">Simple Sample</a>
+
+
 
 Team:
 --------------
