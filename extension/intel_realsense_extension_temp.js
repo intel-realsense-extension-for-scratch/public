@@ -120,6 +120,8 @@
             joints: [],                 
             expressions_this_frame : [],
             headRotation: {},
+            
+            // Converter: face joint index => face joint name
             landmarkDictionary : {
                     "Left eye": 77
                     , "Right eye": 76
@@ -353,18 +355,7 @@
     
 
 
-    // Converter: face joint index => face joint name
-    var landmarkDictionary = {
-        "Left eye": 77
-        , "Right eye": 76
-        , "Left eye brow" : 7
-        , "Right eye brow" : 2
-        , "Chin" : 61
-        , "Upper lip" : 36
-        , "Bottom lip": 42
-        , "Nose": 29
-        
-    };
+   
 
 
     
