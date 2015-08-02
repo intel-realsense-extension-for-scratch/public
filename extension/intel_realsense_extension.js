@@ -267,11 +267,11 @@
                     for (var i = 0; i < face.landmarks.points.length; i++) {
                         var joint = face.landmarks.points[i];
                         if (joint != null) {
-                            //var jointName = convertFaceJointIndexToScratchName(i);
-                            //if (jointName !== "error") {
+                            var jointName = convertFaceJointIndexToScratchName(i);
+                            if (jointName !== "error") {
                                 
                                 var faceJoint = {};
-                                //faceJoint.jointName = jointName;
+                                faceJoint.jointName = jointName;
                                 faceJoint.originalJointIndex = i;
                                 faceJoint.position = {
                                      X: joint.image.x
@@ -280,7 +280,7 @@
                                 };
                                 
                                 rsd.FaceModule.joints.push(faceJoint);
-                            //}
+                            }
                         }
                     }
                 }
@@ -349,35 +349,35 @@
     {
         switch (joint_index){
                 
-            case intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER:
+            case 77: //intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER:
                 return "Left eye";
                 break;
 
-            case intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER:
+            case 76: // intel.realsense.face.LandmarkType.LANDMARK_EYE_RIGHT_CENTER:
                 return "Right eye";
                 break;
 
-            case intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_LEFT_CENTER:
+            case 7:// intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_LEFT_CENTER:
                 return "Left eye brow";
                 break;
 
-            case intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_RIGHT_CENTER:
+            case 2: //intel.realsense.face.LandmarkType.LANDMARK_EYEBROW_RIGHT_CENTER:
                 return "Right eye brow";
                 break;
                 
-            case intel.realsense.face.LandmarkType.LANDMARK_CHIN:
+            case 61: // intel.realsense.face.LandmarkType.LANDMARK_CHIN:
                 return "Chin";
                 break;
                 
-            case intel.realsense.face.LandmarkType.LANDMARK_UPPER_LIP_CENTER:
+            case 36: //intel.realsense.face.LandmarkType.LANDMARK_UPPER_LIP_CENTER:
                 return "Upper lip";
                 break;
                 
-            case intel.realsense.face.LandmarkType.LANDMARK_LOWER_LIP_CENTER:
+            case 42: //intel.realsense.face.LandmarkType.LANDMARK_LOWER_LIP_CENTER:
                 return "Bottom lip";
                 break;
                 
-            case intel.realsense.face.LandmarkType.LANDMARK_NOSE_TIP:
+            case 29: //intel.realsense.face.LandmarkType.LANDMARK_NOSE_TIP:
                 return "Nose";
                 break;
         }
