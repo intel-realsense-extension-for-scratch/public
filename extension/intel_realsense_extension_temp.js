@@ -1285,7 +1285,7 @@
                 }
             }
             
-            if (j_name==-1) {
+            if (requestedJointIndex == -1) {
                 //couldnt find requested joint 
                 return -1000;
                 
@@ -1297,7 +1297,7 @@
             requestedJointIndex = joint_name;   
         }
         
-        
+        console.warn("joint reques " + requestedJointIndex);
         
         for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
             if (rsd.FaceModule.joints[i].originalJointIndex === requestedJointIndex) {
