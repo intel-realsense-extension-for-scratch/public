@@ -1235,8 +1235,23 @@
         //console.warn("hand joint ext "+leftHandJointsFoldness[1].jointName +" "+leftHandJointsFoldness[1].foldedness);
         //console.warn("hand side "+hand_side+" "+(hand_side == "Left Hand"));
         
-        var jointArray = {'Left Hand': rsd.HandModule.leftHandJointsFoldness, 
-                          'Right Hand': rsd.HandModule.rightHandJointsFoldness}[hand_side];
+        if (hand_side == 'Any Hand'){
+            if (rsd.HandModule.isLeftExist == true){
+                hand_side='Left Hand';
+            
+            } else if (rsd.HandModule.isRightExist == true){
+                hand_side='Right Hand';
+            
+            } else {
+                //no hand available
+                return -1;   
+            
+            }
+        } 
+        
+        jointArray = {'Left Hand': rsd.HandModule.leftHandJointsFoldness, 
+                      'Right Hand': rsd.HandModule.rightHandJointsFoldness}[hand_side];
+          
         
         // console.warn("foldness "+ hand_side + " "+jointArray.length);
         
@@ -1420,8 +1435,8 @@
             ,['b', '%m.hand_type visible?', 'isHandExist', 'Any Hand']
             ,['r', '%m.position_value of %m.hand_type %d.hand_joints', 'getHandJointPosition', 'X Position', 'Any Hand', 'Index tip']
             ,['b', '%m.hand_type gesture %m.hand_gestures?', 'getHandGesture', 'Any Hand', 'V sign']
-            ,['r', '%m.hand_type_folded %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Left Hand', 'Index']
-            ,['r', '%m.rotation_value of %m.hand_type', 'getHandRotation', 'Rotation X', 'Any Hand']
+            ,['r', '%m.hand_type_folded %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Any Hand', 'Index']
+           // ,['r', '%m.rotation_value of %m.hand_type', 'getHandRotation', 'Rotation X', 'Any Hand']
 			
         ]
          

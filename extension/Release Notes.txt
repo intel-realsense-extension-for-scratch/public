@@ -1,12 +1,19 @@
 -------------------------------------------------------
-Intel Realsense Extension for Scratch
+Intel® RealSense™ Extension for Scratch* Beta**
 version 1.0
 
-description: exposing F200 capabilities to Scratchers ...
+*  Scratch is a project of the Lifelong Kindergarten group of the MIT Media Lab
+** Beta version performance and gesture detection quality might be low than average
+
+
+
+description: exposing Intel Realsense F200 Sensor capabilities to Scratchers with simple to use blocks.
+
 
 
 Product Lead and Developer:  Shachar Oz  , Wizard.Oz @ intel.com
 Product Manager:             Yaron Yanai , Yaron.Yanai @ intel.com
+Vision and User Testing:     Avi Salmon and Yotam Salmon
 
 Group:  Perceptual Computing , New Technology Group , Intel Corporation
 
@@ -18,7 +25,7 @@ Release Notes:
 
 Active SDK modules:
     Hand module: 
-        joints positions:
+        track joints positions:
             all 22 joints
 
         gestures:
@@ -33,7 +40,7 @@ Active SDK modules:
             chin, nose, ...
 
         face expressions:
-            eye brow lifted,  
+            eye brow lifted,  ...
         
         head rotation
             yaw : X
@@ -52,9 +59,8 @@ SDK modules to be added:
 
 How to install:
     Make sure you have DCM installed and F200 sensor plugged in
-    Connect to intel network 
-    Download and install this file: \\jfspercbits001.amr.corp.intel.com\RS_Outgoing\erpaulso\Web_Offline_Drop\webapp_offline_do_not_distribute_6.0.21.4168.exe
     Go to ScratchX: http://scratchx.org/?url=http://intel-realsense-extension-for-scratch.github.io/public/extension/intel_realsense_extension.js
+    Follow instructions
 
 
 
