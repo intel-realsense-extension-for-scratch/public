@@ -1361,8 +1361,10 @@
                 
                 console.warn('landmarkDictionary '+key+" "+landmarkDictionary[key]);
                 
+                console.warn('landmarkDictionary '+key+" "+joint_name+" "+(key == joint_name)+ " "+(key === joint_name));
+                
                 if (key == joint_name){
-                    j_name = landmarkDictionary[key];                     
+                    j_name = landmarkDictionary[key];
                     break;
                     
                 }
