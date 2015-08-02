@@ -1354,27 +1354,31 @@
         } else {
             
         //joint_name is string variable from the menu
-            console.warn('(getFaceJointPosition) *REQUESTED*  head position: ' + head_position + ', joint name: ' + joint_name);
-        console.warn('landmarkDictionary '+landmarkDictionary["Left eye"]);
+            //console.warn('(getFaceJointPosition) *REQUESTED*  head position: ' + head_position + ', joint name: ' + joint_name);
         
-            var j_name = "";
+            var j_name = -1;
             for(var key in landmarkDictionary){
+                
                 console.warn('landmarkDictionary '+key+" "+landmarkDictionary[key]);
+                
                 if (key == joint_name){
-                    j_name = landmarkDictionary[key];
-                    
-                     
+                    j_name = landmarkDictionary[key];                     
                     break;
+                    
                 }
             }
             
-            
-            for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
-                if (rsd.FaceModule.joints[i].jointName == j_name) {
-                    //console.warn("joint requested "+rsd.FaceModule.joints[i].originalJointIndex+" "+rsd.FaceModule.joints[i].jointName);
-                    result = rsd.FaceModule.joints[i];
-                    break;
+            if (j_name>-1) {
+                for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
+                    if (rsd.FaceModule.joints[i].jointName === j_name) {
+                        //console.warn("joint requested "+rsd.FaceModule.joints[i].originalJointIndex+" "+rsd.FaceModule.joints[i].jointName);
+                        result = rsd.FaceModule.joints[i];
+                        break;
+                    }
                 }
+                
+            } else {
+                return -1000;
             }
         }
         
