@@ -8,7 +8,10 @@ function ValidatePlatform() {
     
 
     // check platform compatibility
-    intel.realsense.SenseManager.detectPlatform(['hand', 'face3d', 'voice', 'nuance_en_us_cnc'],['front']).then(function (info) {
+   // intel.realsense.SenseManager.detectPlatform(['hand', 'face3d', 'voice', 'nuance_en_us_cnc'],['front'])
+    intel.realsense.SenseManager.detectPlatform(['face3d','hand','blob'], ['f200'])
+   
+    .then(function (info) {
      
         if (info.nextStep == 'ready') {
             // good to go
