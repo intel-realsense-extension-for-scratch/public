@@ -45,11 +45,11 @@ Group:  Perceptual Computing , New Technology Group , Intel Corporation
 
 
 Big thanks to:
-Kreg Hanning, MIT Scratch developer, for supporting us in our journey.
-And all other developers who helped getting here:
+- Kreg Hanning for supporting us in our journey.
+<br>And all other developers who helped getting here:
 - Omer Goshen
 - Moria Ilan-Navi
-- Yossi Avitan
+- Yossi Avital
 - Yinon Oshrat
 
 
