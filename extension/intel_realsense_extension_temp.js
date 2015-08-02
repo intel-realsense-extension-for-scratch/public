@@ -110,6 +110,7 @@
     
   
     
+    
     var FaceModule = function () {
         // private
         
@@ -118,7 +119,18 @@
             isExist: false,
             joints: [],                 
             expressions_this_frame : [],
-            headRotation: {}
+            headRotation: {},
+            landmarkDictionary : {
+                    "Left eye": 77
+                    , "Right eye": 76
+                    , "Left eye brow" : 7
+                    , "Right eye brow" : 2
+                    , "Chin" : 61
+                    , "Upper lip" : 36
+                    , "Bottom lip": 42
+                    , "Nose": 29
+
+                }
         }
     };
     
@@ -339,7 +351,8 @@
         }
     };
     
-    
+
+
     // Converter: face joint index => face joint name
     var landmarkDictionary = {
         "Left eye": 77
@@ -352,7 +365,8 @@
         , "Nose": 29
         
     };
-    
+
+
     
     var convertFaceExpressionIndexToScratchName = function (expression_index)
     {
@@ -1275,11 +1289,10 @@
         if (joint_name !== parseInt(joint_name, 10)) {
         
             //joint_name is string variable from the menu
-            
-            for(var key in landmarkDictionary){
+            for(var key in rsd.FaceModule.landmarkDictionary){
                
                 if (key == joint_name){
-                    requestedJointIndex = landmarkDictionary[key];
+                    requestedJointIndex = rsd.FaceModule.landmarkDictionary[key];
                     break;
                     
                 }
@@ -1296,8 +1309,6 @@
             //joint_name is integer variable
             requestedJointIndex = joint_name;   
         }
-        
-        console.warn("joint reques " + requestedJointIndex);
         
         for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
             if (rsd.FaceModule.joints[i].originalJointIndex === requestedJointIndex) {
