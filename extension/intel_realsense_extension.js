@@ -347,6 +347,7 @@
     // Converter: face joint index => face joint name
     var convertFaceJointIndexToScratchName = function (joint_index)
     {
+        //due to a temporary bug in the SDK i need to use real numbers.
         switch (joint_index){
                 
             case 77: //intel.realsense.face.LandmarkType.LANDMARK_EYE_LEFT_CENTER:
