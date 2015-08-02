@@ -267,11 +267,11 @@
                     for (var i = 0; i < face.landmarks.points.length; i++) {
                         var joint = face.landmarks.points[i];
                         if (joint != null) {
-                            var jointName = convertFaceJointIndexToScratchName(i);
-                            if (jointName !== "error") {
+                            //var jointName = convertFaceJointIndexToScratchName(i);
+                           // if (jointName !== "error") {
                                 
                                 var faceJoint = {};
-                                faceJoint.jointName = jointName;
+                             //   faceJoint.jointName = jointName;
                                 faceJoint.originalJointIndex = i;
                                 faceJoint.position = {
                                      X: joint.image.x
@@ -280,7 +280,7 @@
                                 };
                                 
                                 rsd.FaceModule.joints.push(faceJoint);
-                            }
+                          //  }
                         }
                     }
                 }
@@ -343,12 +343,12 @@
         }
     };
     
-    /*
+    
     var landmarkDictionary = {
         "Left eye": 77
         , "Right eye": 76
-    }
-    */
+    };
+    
     
     // Converter: face joint index => face joint name
     var convertFaceJointIndexToScratchName = function (joint_index)
@@ -1336,7 +1336,9 @@
         var result = {};
         
         //console.warn('(getFaceJointPosition) *REQUESTED*  head position: ' + head_position + ', joint name: ' + joint_name);
-        //  console.warn('(getFaceJointPosition) ' + (joint_name === parseInt(joint_name, 10)));
+        //console.warn('(getFaceJointPosition) ' + (joint_name === parseInt(joint_name, 10)));
+        
+        
         
         
         if (joint_name === parseInt(joint_name, 10)) {
@@ -1352,8 +1354,18 @@
         } else {
             
         //joint_name is string variable from the menu
+            
+            var j_name = "";
+            for(var key in landmarkDictionary){
+                if (key == joint_name){
+                    j_name = landmarkDictionary[key];
+                    break;
+                }
+            }
+            
+            
             for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
-                if (rsd.FaceModule.joints[i].jointName == joint_name) {
+                if (rsd.FaceModule.joints[i].jointName == j_name) {
                     //console.warn("joint requested "+rsd.FaceModule.joints[i].originalJointIndex+" "+rsd.FaceModule.joints[i].jointName);
                     result = rsd.FaceModule.joints[i];
                     break;
