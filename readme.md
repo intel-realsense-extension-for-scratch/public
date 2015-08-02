@@ -23,7 +23,7 @@ What can this do?
 
 How to install:
 --------------
-- Make sure you have an Intel® RealSense™ F200 sensor plugged in
+- Make sure you have an Intel® RealSense™ F200 sensor embedded
 - Go to <a href="http://scratchx.org/?url=http://intel-realsense-extension-for-scratch.github.io/public/extension/intel_realsense_extension.js">ScratchX and load the extension</a> and follow instructions there
 
 
@@ -42,6 +42,15 @@ Team:
 **Vision and User Testing**:     Avi Salmon and Yotam Salmon <br>
 
 Group:  Perceptual Computing , New Technology Group , Intel Corporation
+
+
+Big thanks to:
+Kreg Hanning, MIT Scratch developer, for supporting us in our journey.
+And all other developers who helped getting here:
+- Omer Goshen
+- Moria Ilan-Navi
+- Yossi Avitan
+- Yinon Oshrat
 
 
 
