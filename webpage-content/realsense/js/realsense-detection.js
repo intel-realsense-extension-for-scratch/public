@@ -50,8 +50,8 @@ $(document).ready(function() {
  
     $('#install-button').click(function() {        
         
-        $("#platform-runtime-missing").hide();
-        $("#platform-runtime-download").show(200);
+        $("#platform-runtime-missing").show(0).delay(2000).hide(0);
+        $("#platform-runtime-download").hide(0).delay(2000).show(500);
         
         //start download
         //debug version offline installer
