@@ -3,9 +3,10 @@ Intel® RealSense™ Extension for Scratch* Beta**
 version 1.0
 
 Exposing Intel® RealSense™ F200 Sensor capabilities to Scratchers with simple blocks.
+--------------
 
-*  Scratch is a project of the Lifelong Kindergarten group of the MIT Media Lab
-** Beta version performance and gesture detection quality might be low than average
+*  Scratch is a project of the Lifelong Kindergarten group of the MIT Media Lab <br>
+** Beta version performance and gesture detection quality might be low than average <br>
 
 
 Product Lead and Developer:  Shachar Oz  , Wizard.Oz @ intel.com
