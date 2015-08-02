@@ -1354,11 +1354,16 @@
         } else {
             
         //joint_name is string variable from the menu
-            
+            console.warn('(getFaceJointPosition) *REQUESTED*  head position: ' + head_position + ', joint name: ' + joint_name);
+        console.warn('landmarkDictionary '+landmarkDictionary["Left eye"]);
+        
             var j_name = "";
             for(var key in landmarkDictionary){
+                console.warn('landmarkDictionary '+key+" "+landmarkDictionary[key]);
                 if (key == joint_name){
                     j_name = landmarkDictionary[key];
+                    
+                     
                     break;
                 }
             }
