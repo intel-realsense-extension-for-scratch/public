@@ -54,11 +54,10 @@ $(document).ready(function() {
         $("#platform-runtime-download").show(200);
         
         //start download
-        //TODO this is a temp link for testing only
-        window.location = "file:///\\jfspercbits001.amr.corp.intel.com\RS_Outgoing\erpaulso\Web_Offline_Drop\webapp_offline_do_not_distribute_6.0.21.4168.exe";
+        //debug version offline installer
+        //window.location = "file:///\\jfspercbits001.amr.corp.intel.com\RS_Outgoing\erpaulso\Web_Offline_Drop\webapp_offline_do_not_distribute_6.0.21.4168.exe";
             
-        //TODO the right link for release !!!
-        //window.location = "http://registrationcenter-download.intel.com/akdlm/irc_nas/7787/rs_sdk_runtime_webapp_v6.exe";
+        window.location = "http://registrationcenter-download.intel.com/akdlm/irc_nas/7787/intel_rs_sdk_runtime_webapp_6.0.21.6598.exe";
     });
     
     
