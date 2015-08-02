@@ -11,10 +11,20 @@ version 1.0
 
 
 
+What can this do?
+--------------
+- Track the position of 22 <a target="_blank" href="https://github.com/intel-realsense-extension-for-scratch/public/blob/gh-pages/webpage-content/img/blocks/hand_joints.png">hand joints</a>
+- Track the position of 78 <a target="_blank" href="https://github.com/intel-realsense-extension-for-scratch/public/blob/gh-pages/webpage-content/img/blocks/face_landmarks.png">face landmarks</a>
+- Detect hand gestures, like: thumbs up, tap and swipes
+- Detect facial expressions, like: smiling, tongue out and winks
+- and more...
+
+
+
 How to install:
 --------------
 - Make sure you have an Intel® RealSense™ F200 sensor plugged in
-- Go to <a href="http://scratchx.org/?url=http://intel-realsense-extension-for-scratch.github.io/public/extension/intel_realsense_extension.js">ScratchX and load the extension</a> and follow instructions there.
+- Go to <a href="http://scratchx.org/?url=http://intel-realsense-extension-for-scratch.github.io/public/extension/intel_realsense_extension.js">ScratchX and load the extension</a> and follow instructions there
 
 
 
