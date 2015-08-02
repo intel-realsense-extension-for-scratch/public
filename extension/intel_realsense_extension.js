@@ -343,6 +343,12 @@
         }
     };
     
+    /*
+    var landmarkDictionary = {
+        "Left eye": 77
+        , "Right eye": 76
+    }
+    */
     
     // Converter: face joint index => face joint name
     var convertFaceJointIndexToScratchName = function (joint_index)
@@ -1329,8 +1335,8 @@
          
         var result = {};
         
-        console.warn('(getFaceJointPosition) *REQUESTED*  head position: ' + head_position + ', joint name: ' + joint_name);
-        console.warn('(getFaceJointPosition) ' + (joint_name === parseInt(joint_name, 10)));
+        //console.warn('(getFaceJointPosition) *REQUESTED*  head position: ' + head_position + ', joint name: ' + joint_name);
+        //console.warn('(getFaceJointPosition) ' + (joint_name === parseInt(joint_name, 10)));
         
         
         if (joint_name === parseInt(joint_name, 10)) {
