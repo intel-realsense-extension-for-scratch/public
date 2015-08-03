@@ -37,27 +37,36 @@ function ValidatePlatform() {
             $("#platform-detection-error").hide(0).delay(1000).show(0);
                 
         } else {
-            if (info.isCameraReady==false){
-                console.warn("info.isCameraReady false. no sensor detected on this machine. please install DCM");
-                
-                $("#platform-detection").show(0).delay(1000).hide(0);
-                $("#platform-driver").hide(0).delay(1000).show(0);
-                
-            }
+            if (info.isCameraReady==true && info.isDCMUpdateNeeded==false && info.isRuntimeInstalled==true) {
+                console.log("realsense good");
             
-            if (info.isDCMUpdateNeeded==true){
-                console.warn("info.isDCMUpdateNeeded true. DCM out of date. please update DCM");
-                
                 $("#platform-detection").show(0).delay(1000).hide(0);
-                $("#platform-driver").hide(0).delay(1000).show(0);
-            }
-            
-            if (info.isRuntimeInstalled==false){
-                console.warn("info.isRuntimeInstalled false. please install runtime");
+                $("#platform-ready").hide(0).delay(1000).show(0);
                 
-                $("#platform-detection").show(0).delay(1000).hide(0);
-                $("#platform-runtime-missing").hide(0).delay(1000).show(0); 
-           
+            } else {
+                
+                if (info.isCameraReady==false){
+                    console.warn("info.isCameraReady false. no sensor detected on this machine. please install DCM");
+
+                    $("#platform-detection").show(0).delay(1000).hide(0);
+                    $("#platform-driver").hide(0).delay(1000).show(0);
+
+                }
+
+                if (info.isDCMUpdateNeeded==true){
+                    console.warn("info.isDCMUpdateNeeded true. DCM out of date. please update DCM");
+
+                    $("#platform-detection").show(0).delay(1000).hide(0);
+                    $("#platform-driver").hide(0).delay(1000).show(0);
+                }
+
+                if (info.isRuntimeInstalled==false){
+                    console.warn("info.isRuntimeInstalled false. please install runtime");
+
+                    $("#platform-detection").show(0).delay(1000).hide(0);
+                    $("#platform-runtime-missing").hide(0).delay(1000).show(0); 
+
+                }
             }
         }
         
