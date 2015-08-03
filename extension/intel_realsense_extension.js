@@ -1386,7 +1386,7 @@
              ['b', 'Face visible?', 'isFaceExist', '']
             ,['r', '%m.position_value of %d.face_joints', 'getFaceJointPosition', 'X Position', 'Nose']
             ,['b', 'Face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
-            ,['r', '%m.rotation_value of Head', 'getHeadRotation', 'Yaw']
+            ,['r', '%m.rotation_value rotation of Head', 'getHeadRotation', 'Yaw']
             
         ,['-']
             ,['b', '%m.hand_type visible?', 'isHandExist', 'Any Hand']
