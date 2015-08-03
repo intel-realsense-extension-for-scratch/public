@@ -341,9 +341,9 @@
                     //console.warn('Pose: ' + face.pose.poseAngles.roll);
                     
                     var head_rotation = {
-                                             X: face.pose.poseAngles.yaw
-                                            ,Y: face.pose.poseAngles.pitch
-                                            ,Z: face.pose.poseAngles.roll
+                                             Yaw: face.pose.poseAngles.yaw
+                                            ,Pitch: face.pose.poseAngles.pitch
+                                            ,Roll: face.pose.poseAngles.roll
                                         };
                     
                     rsd.FaceModule.headRotation = head_rotation;
@@ -1363,15 +1363,15 @@
     
     ext.getHeadRotation = function(rotation_type){
        
-        if (rotation_type === "Rotation X"){
-            return ValueMapper(rsd.FaceModule.headRotation.X, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, -100, 100);
+        if (rotation_type === "Yaw"){
+            return ValueMapper(rsd.FaceModule.headRotation.Yaw, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
            
         } else {
-            if (rotation_type === "Rotation Y"){
-                return ValueMapper(rsd.FaceModule.headRotation.Y, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, -100, 100);
+            if (rotation_type === "Pitch"){
+                return ValueMapper(rsd.FaceModule.headRotation.Pitch, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
            
             } else {
-                return ValueMapper(rsd.FaceModule.headRotation.Z, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, -100, 100);
+                return ValueMapper(rsd.FaceModule.headRotation.Roll, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
             
             }
         }
@@ -1386,7 +1386,7 @@
              ['b', 'Face visible?', 'isFaceExist', '']
             ,['r', '%m.position_value of %d.face_joints', 'getFaceJointPosition', 'X Position', 'Nose']
             ,['b', 'Face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
-            ,['r', '%m.rotation_value of Head', 'getHeadRotation', 'Rotation X']
+            ,['r', '%m.rotation_value of Head', 'getHeadRotation', 'Yaw']
             
         ,['-']
             ,['b', '%m.hand_type visible?', 'isHandExist', 'Any Hand']
@@ -1414,7 +1414,7 @@
                                 "Two fingers pinch open", "Swipe down", "Swipe up", "Swipe left",
                                 "Swipe right", "Tap", "Fist", "Thumb up", "Thumb down",
                                 "Wave"],
-            "rotation_value": ["Rotation X", "Rotation Y", "Rotation Z"],
+            "rotation_value": ["Yaw", "Pitch", "Roll"],
             "position_value": ["X Position",  "Y Position",  "Z Position"]
         }
         
