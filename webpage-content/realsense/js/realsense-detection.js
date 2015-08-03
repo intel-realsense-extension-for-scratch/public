@@ -4,6 +4,8 @@ function ValidatePlatform() {
     $("#platform-ready").hide(0);
     $("#platform-runtime-download").hide(0);
     $("#platform-browser").hide(0);
+    $("#platform-driver").hide(0);
+    $("#platform-detection-error").hide(0);
     $("#platform-detection").show(0);
     
 
@@ -27,17 +29,36 @@ function ValidatePlatform() {
         //3. info.isRuntimeInstalled =false- when no runtime installed
         
         
-        if (info.isCheckNeeded==true){
+        if (info.isCheckNeeded==true)
+        {
             console.warn("info.isCheckNeeded true. please restart your pc");
-        }
-        if (info.isCameraReady==false){
-            console.warn("info.isCameraReady false. no sensor detected on this machine. please install DCM");
-        }
-        if (info.isDCMUpdateNeeded==true){
-            console.warn("info.isDCMUpdateNeeded true. DCM out of date. please update DCM");
-        }
-        if (info.isRuntimeInstalled==false){
-            console.warn("info.isRuntimeInstalled false. please install runtime");
+            
+            $("#platform-detection").show(0).delay(1000).hide(0);
+            $("#platform-detection-error").hide(0).delay(1000).show(0);
+                
+        } else {
+            if (info.isCameraReady==false){
+                console.warn("info.isCameraReady false. no sensor detected on this machine. please install DCM");
+                
+                $("#platform-detection").show(0).delay(1000).hide(0);
+                $("#platform-driver").hide(0).delay(1000).show(0);
+                
+            }
+            
+            if (info.isDCMUpdateNeeded==true){
+                console.warn("info.isDCMUpdateNeeded true. DCM out of date. please update DCM");
+                
+                $("#platform-detection").show(0).delay(1000).hide(0);
+                $("#platform-driver").hide(0).delay(1000).show(0);
+            }
+            
+            if (info.isRuntimeInstalled==false){
+                console.warn("info.isRuntimeInstalled false. please install runtime");
+                
+                $("#platform-detection").show(0).delay(1000).hide(0);
+                $("#platform-runtime-missing").hide(0).delay(1000).show(0); 
+           
+            }
         }
         
         /*
@@ -61,7 +82,7 @@ function ValidatePlatform() {
            // console.warn('Please upgrade RealSense(TM) Depth Camera Manager (DCM) and firmware before running the application  http://www.intel.com/realsense ');
             $("#platform-detection").show(0).delay(1000).hide(0);
             $("#platform-dcm-missing").hide(0).delay(1000).show(0); 
-         
+            
         } else if (info.nextStep == 'runtime') {
             //console.warn('please download and install runtime exe');
             $("#platform-detection").show(0).delay(1000).hide(0);
@@ -74,10 +95,13 @@ function ValidatePlatform() {
     }).catch(function (error) {
         // console.warn('other unknown failure. '+ JSON.stringify(error));
         $("#platform-detection").show(0).delay(1000).hide(0);
+        $("#platform-detection-error").hide(0).delay(1000).show(0);
         
         
     });
 }
+
+
 
 
 $(document).ready(function() {
