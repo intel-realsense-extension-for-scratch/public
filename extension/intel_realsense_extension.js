@@ -1242,11 +1242,11 @@
         
         if (result.rotation != undefined) {
             //return the right value
-            if (rotation_type === "Rotation X") {
+            if (rotation_type === "Yaw") {
                 return result.rotation.X;
                
             } else {
-                if (rotation_type === "Rotation Y") {
+                if (rotation_type === "Pitch") {
                     return result.rotation.Y;
                     
                 } else {
@@ -1334,7 +1334,6 @@
     ext.isFacialExpressionOccured = function (facial_expression) {
      
         for (var fe = 0; fe < rsd.FaceModule.expressions_this_frame.length; fe++){
-            //console.log("hhhhh "+facial_expressions_this_frameArr[i]);
             
             if (rsd.FaceModule.expressions_this_frame[fe] == facial_expression){                
                 return true;

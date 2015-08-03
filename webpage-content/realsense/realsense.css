@@ -50,10 +50,12 @@
 
 
 
-
-
-
-
+.intel-paragraph a {
+    color: #FFF700;
+}
+.intel-paragraph a:hover {
+    color: #7C6F23;
+}
 
 
 
