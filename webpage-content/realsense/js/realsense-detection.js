@@ -9,10 +9,21 @@ function ValidatePlatform() {
 
     // check platform compatibility
    // intel.realsense.SenseManager.detectPlatform(['hand', 'face3d', 'voice', 'nuance_en_us_cnc'],['front'])
-    intel.realsense.SenseManager.detectPlatform(['face3d','hand','blob'], ['f200'])
+    intel.realsense.SenseManager.detectPlatform(['face3d', 'hand'], ['f200'])
    
     .then(function (info) {
      
+        console.warn("detect platform result: isCameraReady: "+ info.isCameraReady
+                     +" isDCMUpdateNeeded: "+info.isDCMUpdateNeeded
+                     + " isRuntimeInstalled: "+info.isRuntimeInstalled 
+                     +" isCheckNeeded: "+info.isCheckNeeded); 
+    
+    
+        
+        
+        
+        
+        
         if (info.nextStep == 'ready') {
             // good to go
             // console.log("realsense good");
