@@ -14,14 +14,33 @@ function ValidatePlatform() {
     .then(function (info) {
      
         console.warn("detect platform result: isCameraReady: "+ info.isCameraReady
-                     +" isDCMUpdateNeeded: "+info.isDCMUpdateNeeded
+                     + " isDCMUpdateNeeded: "+info.isDCMUpdateNeeded
                      + " isRuntimeInstalled: "+info.isRuntimeInstalled 
-                     +" isCheckNeeded: "+info.isCheckNeeded); 
-    
-    
+                     + " isCheckNeeded: "+info.isCheckNeeded); 
+        
+        //ready (doesnt sense connection to usb)
+        //isCameraReady: true isDCMUpdateNeeded: false isRuntimeInstalled: true isCheckNeeded: false
+        
+        //0. info.isCheckNeeded = true     - there was an error during the detection
+        //1. info.isCameraReady = false    - when no sensor available / no dcm installed at all (rear or front)
+        //2. info.isDCMUpdateNeeded = true - when installed DCM version is not updated (rear or front)
+        //3. info.isRuntimeInstalled =false- when no runtime installed
         
         
+        if (info.isCheckNeeded==true){
+            console.warn("info.isCheckNeeded true. please restart your pc");
+        }
+        if (info.isCameraReady==false){
+            console.warn("info.isCameraReady false. no sensor detected on this machine. please install DCM");
+        }
+        if (info.isDCMUpdateNeeded==true){
+            console.warn("info.isDCMUpdateNeeded true. DCM out of date. please update DCM");
+        }
+        if (info.isRuntimeInstalled==false){
+            console.warn("info.isRuntimeInstalled false. please install runtime");
+        }
         
+        /*
         
         
         if (info.nextStep == 'ready') {
@@ -49,7 +68,9 @@ function ValidatePlatform() {
             $("#platform-runtime-missing").hide(0).delay(1000).show(0); 
            
         }
-
+*/
+        
+        
     }).catch(function (error) {
         // console.warn('other unknown failure. '+ JSON.stringify(error));
         $("#platform-detection").show(0).delay(1000).hide(0);
