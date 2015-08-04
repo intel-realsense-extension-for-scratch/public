@@ -73,6 +73,7 @@
             , tempLeftHandGestures: []
             , tempRightHandGestures: []
            
+           /*
             , jointDictionary : {
                 "Wrist"                 : intel.realsense.hand.JointType.JOINT_WRIST
                 , "Center"              : intel.realsense.hand.JointType.JOINT_CENTER
@@ -88,7 +89,7 @@
                 , "Index tip"           : intel.realsense.hand.JointType.JOINT_INDEX_TIP
 
                 , "Middle base"         : intel.realsense.hand.JointType.JOINT_MIDDLE_BASE
-                , "Middle jointC"       :intel.realsense.hand.JointType.JOINT_MIDDLE_JT1
+                , "Middle jointC"       : intel.realsense.hand.JointType.JOINT_MIDDLE_JT1
                 , "Middle jointB"       : intel.realsense.hand.JointType.JOINT_MIDDLE_JT2
                 , "Middle tip"          : intel.realsense.hand.JointType.JOINT_MIDDLE_TIP
 
@@ -109,7 +110,7 @@
                 , "Middle"              : intel.realsense.hand.FingerType.FINGER_MIDDLE
                 , "Ring"                : intel.realsense.hand.FingerType.FINGER_RING
                 , "Pinky"               : intel.realsense.hand.FingerType.FINGER_PINKY
-           }
+           }*/
         }
     };
     
