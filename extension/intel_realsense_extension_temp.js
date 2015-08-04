@@ -104,14 +104,15 @@
             }
            
            , majorJointDictionary : {
-               "Index"                 : intel.realsense.hand.JointType.JOINT_WRIST
-                , "Thumb"              : intel.realsense.hand.JointType.JOINT_CENTER
-                , "Middle"              : intel.realsense.hand.JointType.JOINT_CENTER
-                , "Ring"              : intel.realsense.hand.JointType.JOINT_CENTER
-                , "Pinky"              : intel.realsense.hand.JointType.JOINT_CENTER
+                "Index"                 : intel.realsense.hand.FingerType.FINGER_INDEX
+                , "Thumb"               : intel.realsense.hand.FingerType.FINGER_THUMB
+                , "Middle"              : intel.realsense.hand.FingerType.FINGER_MIDDLE
+                , "Ring"                : intel.realsense.hand.FingerType.FINGER_RING
+                , "Pinky"               : intel.realsense.hand.FingerType.FINGER_PINKY
            }
         }
     };
+    
     
   
     
@@ -520,6 +521,7 @@
     };
     
     
+    /*
     // Converter: hand major joint index => scratch joint name
     var convertHandJointMajorIndexToScratchName =function (joint_index)
     {
@@ -554,7 +556,7 @@
     };
     
 
-     
+     */
      /**********************************************************************************************************/
     /*************************************BLOB RECOGNITION*************************************************/
     /**********************************************************************************************************/
