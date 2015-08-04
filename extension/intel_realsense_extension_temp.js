@@ -102,6 +102,14 @@
                 , "Pinky jointB"        : intel.realsense.hand.JointType.JOINT_PINKY_JT2
                 , "Pinky tip"           : intel.realsense.hand.JointType.JOINT_PINKY_TIP
             }
+           
+           , majorJointDictionary : {
+               "Index"                 : intel.realsense.hand.JointType.JOINT_WRIST
+                , "Thumb"              : intel.realsense.hand.JointType.JOINT_CENTER
+                , "Middle"              : intel.realsense.hand.JointType.JOINT_CENTER
+                , "Ring"              : intel.realsense.hand.JointType.JOINT_CENTER
+                , "Pinky"              : intel.realsense.hand.JointType.JOINT_CENTER
+           }
         }
     };
     
@@ -378,103 +386,6 @@
    
 
 
-    /*
-    var convertFaceExpressionIndexToScratchName = function (expression_index)
-    {
-        switch (expression_index)
-        {
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT:
-                return "Brow lifted left";
-                break;
-
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_RIGHT:
-                return "Brow lifted right";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_LEFT:
-                return "Brow lowered left";
-                break;
-        
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_RIGHT:
-                return "Brow lowered right";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE:
-                return "Smile";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS:
-                return "Kiss";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN:
-                return "Mouth open";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT:
-                return "Wink left";
-                break;
-          
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT:
-                return "Wink right";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_LEFT:
-                return "Look left";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_RIGHT:
-                return "Look right";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_UP:
-                return "Look up";
-                break;
-         
-             case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_DOWN:
-                return "Look down";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TILT_LEFT: 
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TILT_RIGHT: 
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_TURN_LEFT:
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_TURN_RIGHT:
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_UP:
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_DOWN:
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT:
-                return "Tongue out";
-                break;
-   
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_PUFF_RIGHT:
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_PUFF_LEFT:
-                return "error";
-                break; 
-        }
-        
-       return "error";
-    };
-    */
     /**********************************************************************************************************/
     /*************************************END FACE RECOGNITION*************************************************/
     /**********************************************************************************************************/
@@ -544,7 +455,7 @@
                 
                 var majorJoint = {};
                 majorJoint.originalJointIndex = i;
-                majorJoint.jointName = convertHandJointMajorIndexToScratchName(i);
+                //majorJoint.jointName = convertHandJointMajorIndexToScratchName(i);
                 majorJoint.foldedness = ihand.fingerData[i].foldedness;
                 
                 tempResultFoldnessArray.push(majorJoint);
@@ -644,115 +555,6 @@
     
 
      
-    /*
-    // Converter: hand joint index => scratch joint name
-    var convertHandJointIndexToScratchName = function (joint_index)
-    {
-        switch (joint_index) {
-          
-           case intel.realsense.hand.JointType.JOINT_WRIST:
-                return "Wrist";
-                break;
-
-           case intel.realsense.hand.JointType.JOINT_CENTER:
-                return "Center";
-                break;
-
-              
-            case intel.realsense.hand.JointType.JOINT_THUMB_BASE:
-                return "Thumb base";
-                break;
-
-           case intel.realsense.hand.JointType.JOINT_THUMB_JT1:
-                return "Thumb jointC";
-                break;
-
-           case intel.realsense.hand.JointType.JOINT_THUMB_JT2:
-                return "Thumb jointB";
-                break;
-
-           case intel.realsense.hand.JointType.JOINT_THUMB_TIP:
-                return "Thumb tip";
-                break;
-
-            
-            case intel.realsense.hand.JointType.JOINT_INDEX_BASE:
-                return "Index base";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_INDEX_JT1:
-                return "Index jointC";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_INDEX_JT2:
-                return "Index jointB";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_INDEX_TIP:
-                return "Index tip";
-                break;
-
-              
-           case intel.realsense.hand.JointType.JOINT_MIDDLE_BASE:
-                return "Middle base";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_MIDDLE_JT1:
-                return "Middle jointC";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_MIDDLE_JT2:
-                return "Middle jointB";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_MIDDLE_TIP:
-                return "Middle tip";
-                break;
-
-
-            case intel.realsense.hand.JointType.JOINT_RING_BASE:
-                return "Ring base";
-                break;
-
-           case intel.realsense.hand.JointType.JOINT_RING_JT1:
-                return "Ring jointC";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_RING_JT2:
-                return "Ring jointB";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_RING_TIP:
-                return "Ring tip";
-                break;
-
- 
-            case intel.realsense.hand.JointType.JOINT_PINKY_BASE:
-                return "Pinky base";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_PINKY_JT1:
-                return "Pinky jointC";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_PINKY_JT2:
-                return "Pinky jointB";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_PINKY_TIP:
-                return "Pinky tip";
-                break;
-              
-
-          default:
-              return "error";
-              break;
-              
-      }
-        return "error";
-    };
-*/
-    
      /**********************************************************************************************************/
     /*************************************BLOB RECOGNITION*************************************************/
     /**********************************************************************************************************/
@@ -993,7 +795,7 @@
         $.getScript('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz')
         .done(function(script, textStatus) {
 
-            $.getScript('https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense.js')
+            $.getScript('https://cdn.rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense.js')
             .done(function(script, textStatus) {
                 dependencyAllCreated();
             })
@@ -1068,13 +870,19 @@
     
     
     ext.isHandExist = function (hand_side) {
-        if (hand_side == "Left Hand"){
+       
+        if (hand_side == 'Left Hand'){
             return rsd.HandModule.isLeftExist;
-        }else if (hand_side == "Right Hand"){
+        
+        }else if (hand_side == 'Right Hand'){
             return rsd.HandModule.isRightExist;
+        
         } else {
             return (rsd.HandModule.isRightExist || rsd.HandModule.isLeftExist);
+        
         }
+        
+        return false;
     };
     
     
@@ -1243,11 +1051,25 @@
                       'Right Hand': rsd.HandModule.rightHandJointsFoldness}[hand_side];
           
         
-        // console.warn("foldness "+ hand_side + " "+jointArray.length);
+        var requestedJointIndex = -1;
+        for(var key in rsd.HandModule.majorJointDictionary){
+               
+            if (key == finger_name){
+                requestedJointIndex = rsd.HandModule.majorJointDictionary[key];
+                break;
+
+            }
+        }
+            
+        if (requestedJointIndex == -1) {
+            //couldnt find requested joint 
+            return -1;
+
+        }
         
         for (var f=0; f<jointArray.length; f++){
             //console.warn("foldness "+jointArray[f].jointName+" "+jointArray[f].foldedness);
-            if (jointArray[f].jointName == finger_name){
+            if (jointArray[f].originalJointIndex == requestedJointIndex){
                 return jointArray[f].foldedness;
             }
         }
@@ -1260,22 +1082,29 @@
         
         var jointArray = [];
         
-        //get array of requested hand
         if (hand_side == 'Any Hand'){
-            jointArray = rsd.HandModule.leftHandJoints;
-            //jointArray.join(rsd.HandModule.rightHandJoints);
+            if (rsd.HandModule.isLeftExist == true){
+                hand_side='Left Hand';
             
-        } else {
-            jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
-                           'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
-        }
+            } else if (rsd.HandModule.isRightExist == true){
+                hand_side='Right Hand';
+            
+            } else {
+                //no hand available
+                return -1;   
+            
+            }
+        } 
+        
+        jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
+                        'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
+       
         
         
         var result = {};
         
-        //joint_name is string variable from the menu
         for (var i = 0; i < jointArray.length; i++) {
-            if (jointArray[i].jointName === "Wrist") {
+            if (jointArray[i].originalJointIndex == rsd.HandModule.jointDictionary.Wrist) {
                 result = jointArray[i];
                 break;
             }
@@ -1285,11 +1114,11 @@
         
         if (result.rotation != undefined) {
             //return the right value
-            if (rotation_type === "Yaw") {
+            if (rotation_type === 'Yaw') {
                 return result.rotation.X;
                
             } else {
-                if (rotation_type === "Pitch") {
+                if (rotation_type === 'Pitch') {
                     return result.rotation.Y;
                     
                 } else {
