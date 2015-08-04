@@ -144,7 +144,7 @@
             , expressionsDictionary : {}
             
             , init: function(){
-                expressionsDictionary = {
+                this.expressionsDictionary = {
                      "Brow lifted right"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_RIGHT
                     , "Brow lifted left"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT
                     , "Brow lowered left"   : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_LEFT
