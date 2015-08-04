@@ -61,7 +61,7 @@
     var HandModule = function () {
         // private
         
-       return {
+        return {
             // public
             isRightExist: false
             , isLeftExist: false
@@ -141,21 +141,26 @@
                 , "Nose"            : 29
             }
             
-            , expressionsDictionary : {
-                 "Brow lifted right"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_RIGHT
-                , "Brow lifted left"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT
-                , "Brow lowered left"   : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_LEFT
-                , "Brow lowered right"  : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_RIGHT
-                , "Smile"               : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE
-                , "Kiss"                : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS
-                , "Mouth open"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN
-                , "Wink left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT
-                , "Wink right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT
-                , "Look left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_LEFT
-                , "Look right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_RIGHT
-                , "Look up"             : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_UP
-                , "Look down"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_DOWN
-                , "Tongue out"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT
+            , expressionsDictionary : {}
+            
+            , init: function(){
+                expressionsDictionary = {
+                     "Brow lifted right"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_RIGHT
+                    , "Brow lifted left"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT
+                    , "Brow lowered left"   : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_LEFT
+                    , "Brow lowered right"  : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_RIGHT
+                    , "Smile"               : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE
+                    , "Kiss"                : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS
+                    , "Mouth open"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN
+                    , "Wink left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT
+                    , "Wink right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT
+                    , "Look left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_LEFT
+                    , "Look right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_RIGHT
+                    , "Look up"             : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_UP
+                    , "Look down"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_DOWN
+                    , "Tongue out"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT
+                };
+
             }
         }
     };
@@ -164,7 +169,7 @@
     
     
     
-      var BlobModule = function () {
+    var BlobModule = function () {
         // private
         
         return {
@@ -785,6 +790,10 @@
         
         //validate realsense platform state
         ValidatePlatformState();
+        
+        
+        //create realsense data object
+        rsd.FaceModule.init();
     };
     
     
