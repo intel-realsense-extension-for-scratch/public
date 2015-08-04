@@ -4,6 +4,19 @@
 // Intel RealSense Extension for Scratch 
 
 
+
+
+/*
+    capabilities service is growing too big (more than 50,000K). maybe we have something that is not releasing.
+    
+    
+
+*/
+
+
+
+
+
 "use strict";
 
 (function (ext) {
@@ -36,11 +49,11 @@
 
     
     //stage mapping
-    const RS_FACE_X_MAX_RIGHT = 0;    //MIRRORED!!!!!
-    const RS_FACE_X_MAX_LEFT = 600;    //MIRRORED!!!!!
-    const RS_FACE_Y_MAX_UP = 250;      //MIRRORED!!!!!
-    const RS_FACE_Y_MAX_DOWN = 0;       //MIRRORED!!!!!
-
+    const RS_FACE_X_MAX_RIGHT = 0;    //MIRRORED
+    const RS_FACE_X_MAX_LEFT = 600;    //MIRRORED
+    const RS_FACE_Y_MAX_UP = 250;      //MIRRORED
+    const RS_FACE_Y_MAX_DOWN = 0;       //MIRRORED
+    
     const RS_FACE_ROTATION_MIN = -30;
     const RS_FACE_ROTATION_MAX = 30;
     
@@ -49,10 +62,10 @@
     const RS_HAND_Y_MAX_UP = 400;
     const RS_HAND_Y_MAX_DOWN = -100;
 
-    const SCRATCH_X_MAX_RIGHT = 240;    //MIRRORED!!!!!
-    const SCRATCH_X_MAX_LEFT = -240;    //MIRRORED!!!!!
-    const SCRATCH_Y_MAX_UP = -180;      //MIRRORED!!!!!
-    const SCRATCH_Y_MAX_DOWN = 180;     //MIRRORED!!!!!
+    const SCRATCH_X_MAX_RIGHT = 240;    //MIRRORED
+    const SCRATCH_X_MAX_LEFT = -240;    //MIRRORED
+    const SCRATCH_Y_MAX_UP = -180;      //MIRRORED
+    const SCRATCH_Y_MAX_DOWN = 180;     //MIRRORED
     
 
     
@@ -73,44 +86,48 @@
             , tempLeftHandGestures: []
             , tempRightHandGestures: []
            
-           /*
-            , jointDictionary : {
-                "Wrist"                 : intel.realsense.hand.JointType.JOINT_WRIST
-                , "Center"              : intel.realsense.hand.JointType.JOINT_CENTER
+            , jointDictionary : {}
+           , majorJointDictionary : {}
+            
+            , init: function(){
+                this.jointDictionary = {
+                   "Wrist"                 : intel.realsense.hand.JointType.JOINT_WRIST
+                    , "Center"              : intel.realsense.hand.JointType.JOINT_CENTER
 
-                , "Thumb base"          : intel.realsense.hand.JointType.JOINT_THUMB_BASE
-                , "Thumb jointC"        : intel.realsense.hand.JointType.JOINT_THUMB_JT1
-                , "Thumb jointB"        : intel.realsense.hand.JointType.JOINT_THUMB_JT2 
-                , "Thumb tip"           : intel.realsense.hand.JointType.JOINT_THUMB_TIP
+                    , "Thumb base"          : intel.realsense.hand.JointType.JOINT_THUMB_BASE
+                    , "Thumb jointC"        : intel.realsense.hand.JointType.JOINT_THUMB_JT1
+                    , "Thumb jointB"        : intel.realsense.hand.JointType.JOINT_THUMB_JT2 
+                    , "Thumb tip"           : intel.realsense.hand.JointType.JOINT_THUMB_TIP
 
-                , "Index base"          : intel.realsense.hand.JointType.JOINT_INDEX_BASE
-                , "Index jointC"        : intel.realsense.hand.JointType.JOINT_INDEX_JT1
-                , "Index jointB"        : intel.realsense.hand.JointType.JOINT_INDEX_JT2
-                , "Index tip"           : intel.realsense.hand.JointType.JOINT_INDEX_TIP
+                    , "Index base"          : intel.realsense.hand.JointType.JOINT_INDEX_BASE
+                    , "Index jointC"        : intel.realsense.hand.JointType.JOINT_INDEX_JT1
+                    , "Index jointB"        : intel.realsense.hand.JointType.JOINT_INDEX_JT2
+                    , "Index tip"           : intel.realsense.hand.JointType.JOINT_INDEX_TIP
 
-                , "Middle base"         : intel.realsense.hand.JointType.JOINT_MIDDLE_BASE
-                , "Middle jointC"       : intel.realsense.hand.JointType.JOINT_MIDDLE_JT1
-                , "Middle jointB"       : intel.realsense.hand.JointType.JOINT_MIDDLE_JT2
-                , "Middle tip"          : intel.realsense.hand.JointType.JOINT_MIDDLE_TIP
+                    , "Middle base"         : intel.realsense.hand.JointType.JOINT_MIDDLE_BASE
+                    , "Middle jointC"       : intel.realsense.hand.JointType.JOINT_MIDDLE_JT1
+                    , "Middle jointB"       : intel.realsense.hand.JointType.JOINT_MIDDLE_JT2
+                    , "Middle tip"          : intel.realsense.hand.JointType.JOINT_MIDDLE_TIP
 
-                , "Ring base"           : intel.realsense.hand.JointType.JOINT_RING_BASE
-                , "Ring jointC"         : intel.realsense.hand.JointType.JOINT_RING_JT1
-                , "Ring jointB"         : intel.realsense.hand.JointType.JOINT_RING_JT2
-                , "Ring tip"            : intel.realsense.hand.JointType.JOINT_RING_TIP
+                    , "Ring base"           : intel.realsense.hand.JointType.JOINT_RING_BASE
+                    , "Ring jointC"         : intel.realsense.hand.JointType.JOINT_RING_JT1
+                    , "Ring jointB"         : intel.realsense.hand.JointType.JOINT_RING_JT2
+                    , "Ring tip"            : intel.realsense.hand.JointType.JOINT_RING_TIP
 
-                , "Pinky base"          : intel.realsense.hand.JointType.JOINT_PINKY_BASE
-                , "Pinky jointC"        : intel.realsense.hand.JointType.JOINT_PINKY_JT1
-                , "Pinky jointB"        : intel.realsense.hand.JointType.JOINT_PINKY_JT2
-                , "Pinky tip"           : intel.realsense.hand.JointType.JOINT_PINKY_TIP
+                    , "Pinky base"          : intel.realsense.hand.JointType.JOINT_PINKY_BASE
+                    , "Pinky jointC"        : intel.realsense.hand.JointType.JOINT_PINKY_JT1
+                    , "Pinky jointB"        : intel.realsense.hand.JointType.JOINT_PINKY_JT2
+                    , "Pinky tip"           : intel.realsense.hand.JointType.JOINT_PINKY_TIP
+                };
+
+                this.majorJointDictionary = {
+                    "Index"                 : intel.realsense.hand.FingerType.FINGER_INDEX
+                    , "Thumb"               : intel.realsense.hand.FingerType.FINGER_THUMB
+                    , "Middle"              : intel.realsense.hand.FingerType.FINGER_MIDDLE
+                    , "Ring"                : intel.realsense.hand.FingerType.FINGER_RING
+                    , "Pinky"               : intel.realsense.hand.FingerType.FINGER_PINKY
+               };
             }
-           
-           , majorJointDictionary : {
-                "Index"                 : intel.realsense.hand.FingerType.FINGER_INDEX
-                , "Thumb"               : intel.realsense.hand.FingerType.FINGER_THUMB
-                , "Middle"              : intel.realsense.hand.FingerType.FINGER_MIDDLE
-                , "Ring"                : intel.realsense.hand.FingerType.FINGER_RING
-                , "Pinky"               : intel.realsense.hand.FingerType.FINGER_PINKY
-           }*/
         }
     };
     
@@ -128,22 +145,11 @@
             , expressionsOccuredLastFrame : []
             , headRotation: {}
             
-            // Converter: face joint index => face joint name
-            // temporary solution. will be updated in the future
-            , landmarkDictionary : {
-                "Left eye"          : 77
-                , "Right eye"       : 76
-                , "Left eye brow"   : 7
-                , "Right eye brow"  : 2
-                , "Chin"            : 61
-                , "Upper lip"       : 36
-                , "Bottom lip"      : 42
-                , "Nose"            : 29
-            }
-            
+            , landmarkDictionary : {}  
             , expressionsDictionary : {}
             
             , init: function(){
+                
                 this.expressionsDictionary = {
                      "Brow lifted right"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_RIGHT
                     , "Brow lifted left"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT
@@ -159,6 +165,19 @@
                     , "Look up"             : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_UP
                     , "Look down"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_DOWN
                     , "Tongue out"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT
+                };
+                
+                // Converter: face joint index => face joint name
+                // temporary solution. will be updated in the future
+                this.landmarkDictionary : {
+                    "Left eye"          : 77
+                    , "Right eye"       : 76
+                    , "Left eye brow"   : 7
+                    , "Right eye brow"  : 2
+                    , "Chin"            : 61
+                    , "Upper lip"       : 36
+                    , "Bottom lip"      : 42
+                    , "Nose"            : 29
                 };
 
             }
@@ -244,8 +263,9 @@
             if (sts == -301) {
                 rsd.Status = {status: 1 , msg: 'intel realsense sensor was disconnected from USB. please plug in and refresh page'};
                 
-                onClearSensor();
             }
+            
+            onClearSensor();
         }
     };
     
@@ -254,7 +274,8 @@
         console.log("reset realsense sensor");
         
         if (sense != undefined) {
-            sense.release().then(function (result) {
+            sense.release()
+            .then(function (result) {
                 sense = undefined;
             });
         }
@@ -409,8 +430,6 @@
         rsd.HandModule.isRightExist = false;
         rsd.HandModule.isLeftExist = false;
         
-        //rsd.HandModule.gestures = {};
-        
         rsd.HandModule.leftHandJoints=[];
         rsd.HandModule.rightHandJoints=[];
         
@@ -526,43 +545,6 @@
         arr.push(dataObj);
     };
     
-    
-    /*
-    // Converter: hand major joint index => scratch joint name
-    var convertHandJointMajorIndexToScratchName =function (joint_index)
-    {
-        switch (joint_index) {
-            
-            case intel.realsense.hand.FingerType.FINGER_THUMB:
-                return "Thumb";
-                break;
-
-            case intel.realsense.hand.FingerType.FINGER_INDEX:       
-                return "Index";
-                break;
-
-            case intel.realsense.hand.FingerType.FINGER_MIDDLE:
-                return "Middle";
-                break;
-
-            case intel.realsense.hand.FingerType.FINGER_RING:
-                return "Ring";
-                break;
-
-            case intel.realsense.hand.FingerType.FINGER_PINKY:
-                return "Pinky";
-                break;
-                
-            default:
-                return "error";
-                break;
-        }
-        
-        return "error";
-    };
-    
-
-     */
      /**********************************************************************************************************/
     /*************************************BLOB RECOGNITION*************************************************/
     /**********************************************************************************************************/
@@ -639,7 +621,11 @@
 
             return faceConfiguration.applyChanges();
         })
-      
+        
+        //check if this works and fixes capabilities bug
+        .then(function (result) {
+            return faceConfiguration.release();
+        })
         
         
         
@@ -656,9 +642,7 @@
             handConfiguration.allGestures = true;
             return handConfiguration.applyChanges();
         })
-        .then(function (result) {
-            return handConfiguration.release();                 
-        })
+        
         
         
         
@@ -672,6 +656,13 @@
             
             return sense.init();
         })
+        
+        //release function of the hand module configurations
+        //Todo: if this fixes the size of the capabilities service - notify Erik!!!
+        .then(function (result) {
+            return handConfiguration.release();    
+        })
+        
         .then(function (result) {
             
             imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_DEPTH);
@@ -700,6 +691,11 @@
                 case -3:
                     //unknown error
                     rsd.Status = { status: 0, msg: 'Try restarting your computer'};
+                    
+                    //happens when the sensor is disconnected
+                    rsd.Status = { status: 1, msg: 'If your sensor is unplugged, plug it in and refresh.'};
+                    
+                    
                     PopAlert();
                     break;
             
@@ -794,6 +790,7 @@
         
         //create realsense data object
         rsd.FaceModule.init();
+        rsd.HandModule.init();
     };
     
     
@@ -1153,9 +1150,7 @@
     
      
     ext.getFaceJointPosition = function (head_position, joint_name) {
-        //QA TAG (Face module)
         //console.log('(getFaceJointPosition) *REQUESTED*  head position: ' + head_position + ', joint name: ' + joint_name);
-        //end of QA TAG
          
         var result = {};
         
@@ -1278,8 +1273,10 @@
         return 0;    
     };
     
-   
- 
+    
+    
+    
+    
     
     var descriptor = {
         blocks: [
