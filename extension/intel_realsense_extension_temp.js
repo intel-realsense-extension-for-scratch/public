@@ -169,7 +169,7 @@
                 
                 // Converter: face joint index => face joint name
                 // temporary solution. will be updated in the future
-                this.landmarkDictionary : {
+                this.landmarkDictionary = {
                     "Left eye"          : 77
                     , "Right eye"       : 76
                     , "Left eye brow"   : 7
