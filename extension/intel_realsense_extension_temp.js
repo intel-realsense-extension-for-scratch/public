@@ -458,9 +458,11 @@
             
             for (var j = 0; j < joints.length; j++) {            
                 
+                console.warn("3 "+JSON.stringify(joints[j]));
+                
                 if (joints[j] == null || joints[j].confidence <= 10 || handJointName == "error") continue;
 
-                console.warn("3 "+joints[j]);
+                
                 
                 var joint = {};
                 joint.originalJointIndex = j;
