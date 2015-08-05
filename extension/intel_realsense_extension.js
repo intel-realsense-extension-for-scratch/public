@@ -4,6 +4,19 @@
 // Intel RealSense Extension for Scratch 
 
 
+
+
+/*
+    capabilities service is growing too big (more than 50,000K). maybe we have something that is not releasing.
+    
+    
+
+*/
+
+
+
+
+
 "use strict";
 
 (function (ext) {
@@ -32,16 +45,15 @@
     
     
     
-    const MAX_NUM_OF_RECOGNIZED_FACE_EXPRESSIONS = 10;  //saving last 11 recognized facial expression
     const MAX_NUM_OF_RECOGNIZED_WORDS = 99;             //saving last 100 recognized words
 
     
-    //#region stage mapping
-    const RS_FACE_X_MAX_RIGHT = 0;    //MIRRORED!!!!!
-    const RS_FACE_X_MAX_LEFT = 600;    //MIRRORED!!!!!
-    const RS_FACE_Y_MAX_UP = 250;      //MIRRORED!!!!!
-    const RS_FACE_Y_MAX_DOWN = 0;       //MIRRORED!!!!!
-
+    //stage mapping
+    const RS_FACE_X_MAX_RIGHT = 0;    //MIRRORED
+    const RS_FACE_X_MAX_LEFT = 600;    //MIRRORED
+    const RS_FACE_Y_MAX_UP = 250;      //MIRRORED
+    const RS_FACE_Y_MAX_DOWN = 0;       //MIRRORED
+    
     const RS_FACE_ROTATION_MIN = -30;
     const RS_FACE_ROTATION_MAX = 30;
     
@@ -50,12 +62,11 @@
     const RS_HAND_Y_MAX_UP = 400;
     const RS_HAND_Y_MAX_DOWN = -100;
 
-    const SCRATCH_X_MAX_RIGHT = 240;    //MIRRORED!!!!!
-    const SCRATCH_X_MAX_LEFT = -240;    //MIRRORED!!!!!
-    const SCRATCH_Y_MAX_UP = -180;      //MIRRORED!!!!!
-    const SCRATCH_Y_MAX_DOWN = 180;     //MIRRORED!!!!!
+    const SCRATCH_X_MAX_RIGHT = 240;    //MIRRORED
+    const SCRATCH_X_MAX_LEFT = -240;    //MIRRORED
+    const SCRATCH_Y_MAX_UP = -180;      //MIRRORED
+    const SCRATCH_Y_MAX_DOWN = 180;     //MIRRORED
     
-    //#endregion
 
     
     
@@ -63,7 +74,7 @@
     var HandModule = function () {
         // private
         
-       return {
+        return {
             // public
             isRightExist: false
             , isLeftExist: false
@@ -75,38 +86,51 @@
             , tempLeftHandGestures: []
             , tempRightHandGestures: []
            
-         /*   , JointIndexToScratchName : {
-                intel.realsense.hand.JointType.JOINT_WRIST:  "Wrist"
-                , intel.realsense.hand.JointType.JOINT_CENTER: "Center"
+            , jointDictionary : {}
+           , majorJointDictionary : {}
+            
+            , init: function(){
+                this.jointDictionary = {
+                   "Wrist"                 : intel.realsense.hand.JointType.JOINT_WRIST
+                    , "Center"              : intel.realsense.hand.JointType.JOINT_CENTER
 
-                , intel.realsense.hand.JointType.JOINT_THUMB_BASE: "Thumb base"
-                , intel.realsense.hand.JointType.JOINT_THUMB_JT1: "Thumb jointC"
-                , intel.realsense.hand.JointType.JOINT_THUMB_JT2: "Thumb jointB"
-                , intel.realsense.hand.JointType.JOINT_THUMB_TIP: "Thumb tip"
+                    , "Thumb base"          : intel.realsense.hand.JointType.JOINT_THUMB_BASE
+                    , "Thumb jointC"        : intel.realsense.hand.JointType.JOINT_THUMB_JT1
+                    , "Thumb jointB"        : intel.realsense.hand.JointType.JOINT_THUMB_JT2 
+                    , "Thumb tip"           : intel.realsense.hand.JointType.JOINT_THUMB_TIP
 
-                , intel.realsense.hand.JointType.JOINT_INDEX_BASE: "Index base"
-                , intel.realsense.hand.JointType.JOINT_INDEX_JT1: "Index jointC"
-                , intel.realsense.hand.JointType.JOINT_INDEX_JT2: "Index jointB"
-                , intel.realsense.hand.JointType.JOINT_INDEX_TIP: "Index tip"
+                    , "Index base"          : intel.realsense.hand.JointType.JOINT_INDEX_BASE
+                    , "Index jointC"        : intel.realsense.hand.JointType.JOINT_INDEX_JT1
+                    , "Index jointB"        : intel.realsense.hand.JointType.JOINT_INDEX_JT2
+                    , "Index tip"           : intel.realsense.hand.JointType.JOINT_INDEX_TIP
 
-                , intel.realsense.hand.JointType.JOINT_MIDDLE_BASE: "Middle base"
-                , intel.realsense.hand.JointType.JOINT_MIDDLE_JT1: "Middle jointC"
-                , intel.realsense.hand.JointType.JOINT_MIDDLE_JT2: "Middle jointB"
-                , intel.realsense.hand.JointType.JOINT_MIDDLE_TIP: "Middle tip"
+                    , "Middle base"         : intel.realsense.hand.JointType.JOINT_MIDDLE_BASE
+                    , "Middle jointC"       : intel.realsense.hand.JointType.JOINT_MIDDLE_JT1
+                    , "Middle jointB"       : intel.realsense.hand.JointType.JOINT_MIDDLE_JT2
+                    , "Middle tip"          : intel.realsense.hand.JointType.JOINT_MIDDLE_TIP
 
-                , intel.realsense.hand.JointType.JOINT_RING_BASE: "Ring base"
-                , intel.realsense.hand.JointType.JOINT_RING_JT1: "Ring jointC"
-                , intel.realsense.hand.JointType.JOINT_RING_JT2: "Ring jointB"
-                , intel.realsense.hand.JointType.JOINT_RING_TIP: "Ring tip"
+                    , "Ring base"           : intel.realsense.hand.JointType.JOINT_RING_BASE
+                    , "Ring jointC"         : intel.realsense.hand.JointType.JOINT_RING_JT1
+                    , "Ring jointB"         : intel.realsense.hand.JointType.JOINT_RING_JT2
+                    , "Ring tip"            : intel.realsense.hand.JointType.JOINT_RING_TIP
 
-                , intel.realsense.hand.JointType.JOINT_PINKY_BASE: "Pinky base"
-                , intel.realsense.hand.JointType.JOINT_PINKY_JT1: "Pinky jointC"
-                , intel.realsense.hand.JointType.JOINT_PINKY_JT2: "Pinky jointB"
-                , intel.realsense.hand.JointType.JOINT_PINKY_TIP: "Pinky tip"
+                    , "Pinky base"          : intel.realsense.hand.JointType.JOINT_PINKY_BASE
+                    , "Pinky jointC"        : intel.realsense.hand.JointType.JOINT_PINKY_JT1
+                    , "Pinky jointB"        : intel.realsense.hand.JointType.JOINT_PINKY_JT2
+                    , "Pinky tip"           : intel.realsense.hand.JointType.JOINT_PINKY_TIP
+                };
+
+                this.majorJointDictionary = {
+                    "Index"                 : intel.realsense.hand.FingerType.FINGER_INDEX
+                    , "Thumb"               : intel.realsense.hand.FingerType.FINGER_THUMB
+                    , "Middle"              : intel.realsense.hand.FingerType.FINGER_MIDDLE
+                    , "Ring"                : intel.realsense.hand.FingerType.FINGER_RING
+                    , "Pinky"               : intel.realsense.hand.FingerType.FINGER_PINKY
+               };
             }
-              */
         }
     };
+    
     
   
     
@@ -116,27 +140,55 @@
         
         return {
             // public
-            isExist: false,
-            joints: [],                 
-            expressions_this_frame : [],
-            headRotation: {},
+            isExist: false
+            , joints: []              
+            , expressionsOccuredLastFrame : []
+            , headRotation: {}
             
-            // Converter: face joint index => face joint name
-            landmarkDictionary : {
-                    "Left eye": 77
-                    , "Right eye": 76
-                    , "Left eye brow" : 7
-                    , "Right eye brow" : 2
-                    , "Chin" : 61
-                    , "Upper lip" : 36
-                    , "Bottom lip": 42
-                    , "Nose": 29
+            , landmarkDictionary : {}  
+            , expressionsDictionary : {}
+            
+            , init: function(){
+                
+                this.expressionsDictionary = {
+                     "Brow lifted right"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_RIGHT
+                    , "Brow lifted left"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT
+                    , "Brow lowered left"   : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_LEFT
+                    , "Brow lowered right"  : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_RIGHT
+                    , "Smile"               : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE
+                    , "Kiss"                : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS
+                    , "Mouth open"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN
+                    , "Wink left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT
+                    , "Wink right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT
+                    , "Look left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_LEFT
+                    , "Look right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_RIGHT
+                    , "Look up"             : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_UP
+                    , "Look down"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_DOWN
+                    , "Tongue out"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT
+                };
+                
+                // Converter: face joint index => face joint name
+                // temporary solution. will be updated in the future
+                this.landmarkDictionary = {
+                    "Left eye"          : 77
+                    , "Right eye"       : 76
+                    , "Left eye brow"   : 7
+                    , "Right eye brow"  : 2
+                    , "Chin"            : 61
+                    , "Upper lip"       : 36
+                    , "Bottom lip"      : 42
+                    , "Nose"            : 29
+                };
 
-                }
+            }
         }
     };
     
-      var BlobModule = function () {
+         
+    
+    
+    
+    var BlobModule = function () {
         // private
         
         return {
@@ -211,8 +263,9 @@
             if (sts == -301) {
                 rsd.Status = {status: 1 , msg: 'intel realsense sensor was disconnected from USB. please plug in and refresh page'};
                 
-                onClearSensor();
             }
+            
+            onClearSensor();
         }
     };
     
@@ -221,7 +274,8 @@
         console.log("reset realsense sensor");
         
         if (sense != undefined) {
-            sense.release().then(function (result) {
+            sense.release()
+            .then(function (result) {
                 sense = undefined;
             });
         }
@@ -251,7 +305,7 @@
     var onFaceData = function(module, faceData) {
         
         //reset the face data every frame 
-        rsd.FaceModule.expressions_this_frame=[];
+        rsd.FaceModule.expressionsOccuredLastFrame=[];
         
         rsd.FaceModule.joints = [];
         
@@ -265,6 +319,7 @@
             rsd.FaceModule.isExist = false;
             return;
         }
+        
         
         
 //for face exist block
@@ -283,7 +338,7 @@
                         if (joint != null) {
                                
                             var faceJoint = {};
-                            faceJoint.originalJointIndex = i;
+                            faceJoint.originalJointIndex = i; //maybe use  joint.index;
                             faceJoint.position = {
                                  X: joint.image.x
                                 ,Y: joint.image.y
@@ -291,6 +346,7 @@
                             };
 
                             rsd.FaceModule.joints.push(faceJoint);
+                            
                         }
                     }
                 }
@@ -304,11 +360,11 @@
                         var f_expr = face.expressions.expressions[fe];
                         if (f_expr.intensity>20) {
                             //convert the expression to a string the extension would identify
-                            var scratchFaceExpressionName = convertFaceExpressionIndexToScratchName(fe);
+                            //var scratchFaceExpressionName = convertFaceExpressionIndexToScratchName(fe);
 
-                            if (scratchFaceExpressionName != "error"){
+                            //if (scratchFaceExpressionName != "error"){
                                 //add it to array of current frame only
-                                rsd.FaceModule.expressions_this_frame.push(scratchFaceExpressionName);
+                                rsd.FaceModule.expressionsOccuredLastFrame.push(fe);
 
         /*  
                                 //add expression to array with timestamp
@@ -323,7 +379,7 @@
                                     faceExpressionArray.shift();   
                                 }
         */
-                            }
+                            //}
                         }
                     }
                 }
@@ -358,103 +414,6 @@
    
 
 
-    
-    var convertFaceExpressionIndexToScratchName = function (expression_index)
-    {
-        switch (expression_index)
-        {
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT:
-                return "Brow lifted left";
-                break;
-
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_RIGHT:
-                return "Brow lifted right";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_LEFT:
-                return "Brow lowered left";
-                break;
-        
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_RIGHT:
-                return "Brow lowered right";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE:
-                return "Smile";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS:
-                return "Kiss";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN:
-                return "Mouth open";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT:
-                return "Wink left";
-                break;
-          
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT:
-                return "Wink right";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_LEFT:
-                return "Look left";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_RIGHT:
-                return "Look right";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_UP:
-                return "Look up";
-                break;
-         
-             case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_DOWN:
-                return "Look down";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TILT_LEFT: 
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TILT_RIGHT: 
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_TURN_LEFT:
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_TURN_RIGHT:
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_UP:
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_DOWN:
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT:
-                return "Tongue out";
-                break;
-   
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_PUFF_RIGHT:
-                return "error";
-                break;
-         
-            case intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_PUFF_LEFT:
-                return "error";
-                break; 
-        }
-        
-       return "error";
-    };
-    
     /**********************************************************************************************************/
     /*************************************END FACE RECOGNITION*************************************************/
     /**********************************************************************************************************/
@@ -464,14 +423,12 @@
     /*************************************HAND RECOGNITION*****************************************************/
     /**********************************************************************************************************/
 
-    /*RealSense Hands Viewer event being called continuously, once enabling Hands module*/
+    /* RealSense Hands Viewer event being called continuously, once enabling Hands module */
     var onHandData = function (module, handData) {
         
         //reset all data each frame
         rsd.HandModule.isRightExist = false;
         rsd.HandModule.isLeftExist = false;
-        
-        //rsd.HandModule.gestures = {};
         
         rsd.HandModule.leftHandJoints=[];
         rsd.HandModule.rightHandJoints=[];
@@ -483,8 +440,10 @@
             return;
         }
         
+        
         //start collecting
         var allHandsData = handData.queryHandData(intel.realsense.hand.AccessOrderType.ACCESS_ORDER_NEAR_TO_FAR);
+        
         for (var h = 0; h < handData.numberOfHands; h++) {
             var ihand = allHandsData[h];
             var joints = ihand.trackedJoints;
@@ -493,13 +452,10 @@
             
             for (var j = 0; j < joints.length; j++) {            
                 
-                var handJointName = convertHandJointIndexToScratchName(j);
-                
-                if (joints[j] == null || joints[j].confidence <= 10 || handJointName == "error") continue;
-
+                if (joints[j] == null || joints[j].confidence <= 10) continue;
+   
                 var joint = {};
                 joint.originalJointIndex = j;
-                joint.jointName = handJointName;
                 joint.confidence = joints[j].confidence;
                 
                 joint.position = {
@@ -524,7 +480,6 @@
                 
                 var majorJoint = {};
                 majorJoint.originalJointIndex = i;
-                majorJoint.jointName = convertHandJointMajorIndexToScratchName(i);
                 majorJoint.foldedness = ihand.fingerData[i].foldedness;
                 
                 tempResultFoldnessArray.push(majorJoint);
@@ -549,7 +504,6 @@
             }
             
             
-            
 //hand gestures block
             if (handData.firedGestureData.length == 0) return;
             
@@ -561,12 +515,11 @@
                     AddGestureObjectToArray(gestureData, rsd.HandModule.tempLeftHandGestures);
                
                 } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
-                    AddGestureObjectToArray(gestureData, rsd.HandModule.tempRightHandGesturestempRightHandGestures);
+                    AddGestureObjectToArray(gestureData, rsd.HandModule.tempRightHandGestures);
                 
                 }
             }
         }
-        
     };
     
   
@@ -587,151 +540,6 @@
         //if reach here, means gesture doesnt exist in array, so add it
         arr.push(dataObj);
     };
-    
-    
-    // Converter: hand major joint index => scratch joint name
-    var convertHandJointMajorIndexToScratchName =function (joint_index)
-    {
-        switch (joint_index) {
-            
-            case intel.realsense.hand.FingerType.FINGER_THUMB:
-                return "Thumb";
-                break;
-
-            case intel.realsense.hand.FingerType.FINGER_INDEX:       
-                return "Index";
-                break;
-
-            case intel.realsense.hand.FingerType.FINGER_MIDDLE:
-                return "Middle";
-                break;
-
-            case intel.realsense.hand.FingerType.FINGER_RING:
-                return "Ring";
-                break;
-
-            case intel.realsense.hand.FingerType.FINGER_PINKY:
-                return "Pinky";
-                break;
-                
-            default:
-                return "error";
-                break;
-        }
-        
-        return "error";
-    };
-    
-
-     
-    
-    // Converter: hand joint index => scratch joint name
-    var convertHandJointIndexToScratchName = function (joint_index)
-    {
-        switch (joint_index) {
-          
-           case intel.realsense.hand.JointType.JOINT_WRIST:
-                return "Wrist";
-                break;
-
-           case intel.realsense.hand.JointType.JOINT_CENTER:
-                return "Center";
-                break;
-
-              
-            case intel.realsense.hand.JointType.JOINT_THUMB_BASE:
-                return "Thumb base";
-                break;
-
-           case intel.realsense.hand.JointType.JOINT_THUMB_JT1:
-                return "Thumb jointC";
-                break;
-
-           case intel.realsense.hand.JointType.JOINT_THUMB_JT2:
-                return "Thumb jointB";
-                break;
-
-           case intel.realsense.hand.JointType.JOINT_THUMB_TIP:
-                return "Thumb tip";
-                break;
-
-            
-            case intel.realsense.hand.JointType.JOINT_INDEX_BASE:
-                return "Index base";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_INDEX_JT1:
-                return "Index jointC";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_INDEX_JT2:
-                return "Index jointB";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_INDEX_TIP:
-                return "Index tip";
-                break;
-
-              
-           case intel.realsense.hand.JointType.JOINT_MIDDLE_BASE:
-                return "Middle base";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_MIDDLE_JT1:
-                return "Middle jointC";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_MIDDLE_JT2:
-                return "Middle jointB";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_MIDDLE_TIP:
-                return "Middle tip";
-                break;
-
-
-            case intel.realsense.hand.JointType.JOINT_RING_BASE:
-                return "Ring base";
-                break;
-
-           case intel.realsense.hand.JointType.JOINT_RING_JT1:
-                return "Ring jointC";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_RING_JT2:
-                return "Ring jointB";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_RING_TIP:
-                return "Ring tip";
-                break;
-
- 
-            case intel.realsense.hand.JointType.JOINT_PINKY_BASE:
-                return "Pinky base";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_PINKY_JT1:
-                return "Pinky jointC";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_PINKY_JT2:
-                return "Pinky jointB";
-                break;
-
-            case intel.realsense.hand.JointType.JOINT_PINKY_TIP:
-                return "Pinky tip";
-                break;
-              
-
-          default:
-              return "error";
-              break;
-              
-      }
-        return "error";
-    };
-
     
      /**********************************************************************************************************/
     /*************************************BLOB RECOGNITION*************************************************/
@@ -809,8 +617,11 @@
 
             return faceConfiguration.applyChanges();
         })
-      
         
+        //check if this works and fixes capabilities bug
+        .then(function (result) {
+            return faceConfiguration.release();
+        })
         
         
         .then(function (result) {
@@ -827,7 +638,7 @@
             return handConfiguration.applyChanges();
         })
         .then(function (result) {
-            return handConfiguration.release();                 
+            return handConfiguration.release();    
         })
         
         
@@ -842,10 +653,15 @@
             
             return sense.init();
         })
+        
+        //release function of the hand module configurations
+        //Todo: if this fixes the size of the capabilities service - notify Erik!!!
+        
+        
         .then(function (result) {
-            
             imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_DEPTH);
             return sense.streamFrames();
+        
         })
         .then(function (result) {
             console.log('Streaming ' + imageSize.width + 'x' + imageSize.height);
@@ -860,7 +676,7 @@
             
             switch (error.status)
             {
-                case  -102:
+                case -102:
                     //sensor is already active on another window / app    //GZ said this should work
                     console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
                     rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
@@ -870,6 +686,10 @@
                 case -3:
                     //unknown error
                     rsd.Status = { status: 0, msg: 'Try restarting your computer'};
+                    
+                    //happens when the sensor is disconnected
+                    rsd.Status = { status: 1, msg: 'If your sensor is unplugged, plug it in and refresh.'};
+                    
                     PopAlert();
                     break;
             
@@ -960,6 +780,11 @@
         
         //validate realsense platform state
         ValidatePlatformState();
+        
+        
+        //create realsense data object
+        rsd.FaceModule.init();
+        rsd.HandModule.init();
     };
     
     
@@ -973,9 +798,18 @@
         $.getScript('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz')
         .done(function(script, textStatus) {
 
-            $.getScript('https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense.js')
+            $.getScript('https://cdn.rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense.js')
             .done(function(script, textStatus) {
-                dependencyAllCreated();
+             
+                $.getScript('http://intel-realsense-extension-for-scratch.github.io/public/extension/analytics.js')
+                .done(function(script, textStatus) {
+            
+                    dependencyAllCreated();
+                    
+                })
+                .fail(function(jqxhr, settings, exception) {
+                    console.log('Load realsense fail');
+                });
             })
             .fail(function(jqxhr, settings, exception) {
                 console.log('Load realsense fail');
@@ -1048,62 +882,91 @@
     
     
     ext.isHandExist = function (hand_side) {
-        if (hand_side == "Left Hand"){
+       
+        if (hand_side == 'Left Hand'){
             return rsd.HandModule.isLeftExist;
-        }else if (hand_side == "Right Hand"){
+        
+        }else if (hand_side == 'Right Hand'){
             return rsd.HandModule.isRightExist;
+        
         } else {
             return (rsd.HandModule.isRightExist || rsd.HandModule.isLeftExist);
+        
         }
+        
+        return false;
     };
     
     
     ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {
-        //QA TAG (Hand module)
         //console.log("(getHandJointPosition) *REQUESTED* hand position: " + hand_position + ", hand side: " + hand_side + ", joint name: " + joint_name);
-        //end of QA TAG*
         
-        
-        var jointArray = [];
         
         //get array of requested hand
+        var jointArray = [];
+        
         if (hand_side == 'Any Hand'){
-            jointArray = rsd.HandModule.leftHandJoints;
-            //jointArray.join(rsd.HandModule.rightHandJoints);
+            if (rsd.HandModule.isLeftExist == true){
+                hand_side='Left Hand';
             
-        } else {
-            jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
-                           'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
-        }
-        
-        
-        var result = {};
-        
-        if (joint_name === parseInt(joint_name, 10)) {
-        //joint_name is integer variable
-           for (var i = 0; i < jointArray.length; i++) {
-               if (jointArray[i].originalJointIndex === joint_name) {
-                    //console.log("joint index: " + i);
-                    result = jointArray[i];
-                    break;
-                }
-           }
-          
-         } else {
+            } else if (rsd.HandModule.isRightExist == true){
+                hand_side='Right Hand';
             
-        //joint_name is string variable from the menu
-            for (var i = 0; i < jointArray.length; i++) {
-                if (jointArray[i].jointName === joint_name) {
-                    //console.log("joint index: " + i);
-                    result = jointArray[i];
+            } else {
+                //no hand available
+                return -1000;
+            }
+        } 
+    
+        jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
+                       'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
+        
+        //
+        
+        
+        
+        //get the requested joint index
+        var requestedJointIndex = -1;
+        
+        if (joint_name !== parseInt(joint_name, 10)) {
+        
+            //joint_name is string variable from the menu
+            for(var key in rsd.HandModule.jointDictionary){
+                if (key == joint_name){
+                    requestedJointIndex = rsd.HandModule.jointDictionary[key];
                     break;
+                    
                 }
             }
+            
+            if (requestedJointIndex == -1) {
+                //couldnt find requested joint 
+                return -1000;
+                
+            }
+            
+        } else {
+            
+            //joint_name is integer variable
+            requestedJointIndex = joint_name;
         }
         
         
-        if(result.position != undefined) {
-            //return the right value
+        //get requested joint data object
+        var result = {};
+        
+        for (var i = 0; i < jointArray.length; i++) {
+            if (jointArray[i].originalJointIndex === requestedJointIndex) {
+                //console.log("joint index: " + i);
+                result = jointArray[i];
+                break;
+            }
+        }
+
+        
+        
+        //get the request value
+        if (result.position != undefined) {
             if (hand_position === "X Position") {
                 return ValueMapper(result.position.X, RS_HAND_X_MAX_LEFT, RS_HAND_X_MAX_RIGHT, SCRATCH_X_MAX_LEFT, SCRATCH_X_MAX_RIGHT);
                
@@ -1200,11 +1063,25 @@
                       'Right Hand': rsd.HandModule.rightHandJointsFoldness}[hand_side];
           
         
-        // console.warn("foldness "+ hand_side + " "+jointArray.length);
+        var requestedJointIndex = -1;
+        for(var key in rsd.HandModule.majorJointDictionary){
+               
+            if (key == finger_name){
+                requestedJointIndex = rsd.HandModule.majorJointDictionary[key];
+                break;
+
+            }
+        }
+            
+        if (requestedJointIndex == -1) {
+            //couldnt find requested joint 
+            return -1;
+
+        }
         
         for (var f=0; f<jointArray.length; f++){
             //console.warn("foldness "+jointArray[f].jointName+" "+jointArray[f].foldedness);
-            if (jointArray[f].jointName == finger_name){
+            if (jointArray[f].originalJointIndex == requestedJointIndex){
                 return jointArray[f].foldedness;
             }
         }
@@ -1217,22 +1094,29 @@
         
         var jointArray = [];
         
-        //get array of requested hand
         if (hand_side == 'Any Hand'){
-            jointArray = rsd.HandModule.leftHandJoints;
-            //jointArray.join(rsd.HandModule.rightHandJoints);
+            if (rsd.HandModule.isLeftExist == true){
+                hand_side='Left Hand';
             
-        } else {
-            jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
-                           'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
-        }
+            } else if (rsd.HandModule.isRightExist == true){
+                hand_side='Right Hand';
+            
+            } else {
+                //no hand available
+                return -1;   
+            
+            }
+        } 
+        
+        jointArray = { 'Left Hand'  : rsd.HandModule.leftHandJoints, 
+                        'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
+       
         
         
         var result = {};
         
-        //joint_name is string variable from the menu
         for (var i = 0; i < jointArray.length; i++) {
-            if (jointArray[i].jointName === "Wrist") {
+            if (jointArray[i].originalJointIndex == rsd.HandModule.jointDictionary.Wrist) {
                 result = jointArray[i];
                 break;
             }
@@ -1242,11 +1126,11 @@
         
         if (result.rotation != undefined) {
             //return the right value
-            if (rotation_type === "Yaw") {
+            if (rotation_type === 'Yaw') {
                 return result.rotation.X;
                
             } else {
-                if (rotation_type === "Pitch") {
+                if (rotation_type === 'Pitch') {
                     return result.rotation.Y;
                     
                 } else {
@@ -1269,9 +1153,7 @@
     
      
     ext.getFaceJointPosition = function (head_position, joint_name) {
-        //QA TAG (Face module)
         //console.log('(getFaceJointPosition) *REQUESTED*  head position: ' + head_position + ', joint name: ' + joint_name);
-        //end of QA TAG
          
         var result = {};
         
@@ -1333,9 +1215,26 @@
     
     ext.isFacialExpressionOccured = function (facial_expression) {
      
-        for (var fe = 0; fe < rsd.FaceModule.expressions_this_frame.length; fe++){
+        var requestedExpressionIndex = -1;
+        
+        for (var key in rsd.FaceModule.expressionsDictionary){
+
+            if (key == facial_expression){
+                requestedExpressionIndex = rsd.FaceModule.expressionsDictionary[key];
+                break;
+
+            }
+        }
             
-            if (rsd.FaceModule.expressions_this_frame[fe] == facial_expression){                
+        if (requestedExpressionIndex == -1) {
+            //couldnt find requested expression
+            return false;
+
+        }
+        
+        for (var fe = 0; fe < rsd.FaceModule.expressionsOccuredLastFrame.length; fe++){
+            
+            if (rsd.FaceModule.expressionsOccuredLastFrame[fe] == requestedExpressionIndex){                
                 return true;
                 break;
             }
@@ -1357,7 +1256,6 @@
         }, 1000);
         return false;
     };
-
     */
     
     ext.getHeadRotation = function(rotation_type){
@@ -1377,8 +1275,10 @@
         return 0;    
     };
     
-   
- 
+    
+    
+    
+    
     
     var descriptor = {
         blocks: [
@@ -1400,15 +1300,16 @@
             "hand_type": ["Left Hand", "Right Hand", "Any Hand"],
             "face_joints": ["Left eye", "Right eye", "Left eye brow", "Right eye brow", 
                             "Upper lip", "Bottom lip", "Nose", "Chin"],
-            "hand_joints": ["Index tip", "Index base", "Index c", "Index jointB",
+            "hand_joints": ["Index tip", "Index base", "Index jointC", "Index jointB",
                             "Thumb tip", "Thumb base", "Thumb jointC", "Thumb jointB",
                             "Middle tip", "Middle base", "Middle jointC", "Middle jointB",
                             "Ring tip", "Ring base", "Ring jointC", "Ring jointB",
                             "Pinky tip", "Pinky base", "Pinky jointC", "Pinky jointB",
                             "Wrist", "Center"],
             "major_joint_name": ["Index", "Thumb", "Middle", "Ring", "Pinky"],
-            "facial_expressions": ["Wink left", "Wink right" ,"Brow lifted left" ,"Brow lifted right" ,
-                                   "Brow lowered left", "Brow lowered right", "Mouth open","Tongue out" ,                                                              "Smile", "Kiss", "Look down" ,"Look up", "Look left", "Look right"],
+            "facial_expressions": ["Wink left", "Wink right" ,"Brow lifted left" ,"Brow lifted right",
+                                   "Brow lowered left", "Brow lowered right", "Mouth open", "Tongue out" ,
+                                   "Smile", "Kiss", "Look down" ,"Look up", "Look left", "Look right"],
             "hand_gestures": ["Spread fingers", "V sign", "Full pinch",
                                 "Two fingers pinch open", "Swipe down", "Swipe up", "Swipe left",
                                 "Swipe right", "Tap", "Fist", "Thumb up", "Thumb down",
