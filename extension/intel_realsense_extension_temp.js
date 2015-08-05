@@ -426,9 +426,6 @@
     /* RealSense Hands Viewer event being called continuously, once enabling Hands module */
     var onHandData = function (module, handData) {
         
-        //console.warn("hand data "+handData.numberOfHands);
-            
-        
         //reset all data each frame
         rsd.HandModule.isRightExist = false;
         rsd.HandModule.isLeftExist = false;
@@ -447,23 +444,16 @@
         //start collecting
         var allHandsData = handData.queryHandData(intel.realsense.hand.AccessOrderType.ACCESS_ORDER_NEAR_TO_FAR);
         
-        
         for (var h = 0; h < handData.numberOfHands; h++) {
             var ihand = allHandsData[h];
             var joints = ihand.trackedJoints;
             
             var tempResultJointsArray = [];
             
-           // console.warn("hand data 1 joint "+joints);
-            
             for (var j = 0; j < joints.length; j++) {            
                 
-                //console.warn("3 "+JSON.stringify(joints[j]));
-                
                 if (joints[j] == null || joints[j].confidence <= 10) continue;
-
-                
-                
+   
                 var joint = {};
                 joint.originalJointIndex = j;
                 joint.confidence = joints[j].confidence;
@@ -483,7 +473,6 @@
                 tempResultJointsArray.push(joint);
             }
             
-            //console.warn("hand data 2 "+joints);
             
 //foldness finger block
             var tempResultFoldnessArray = [];
@@ -491,17 +480,12 @@
                 
                 var majorJoint = {};
                 majorJoint.originalJointIndex = i;
-                //majorJoint.jointName = convertHandJointMajorIndexToScratchName(i);
                 majorJoint.foldedness = ihand.fingerData[i].foldedness;
                 
                 tempResultFoldnessArray.push(majorJoint);
             }
 
-            console.warn("hand data "+tempResultFoldnessArray);
             
-            console.warn("hand data "+rsd.HandModule);
-            console.warn("hand data "+rsd.HandModule.jointDictionary);
-        
             
 //joint position block  ;  hand exist block            
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
@@ -519,8 +503,6 @@
                 rsd.HandModule.isRightExist = true;
             }
             
-            console.warn("hand data "+rsd.HandModule.isRightExist);
-        
             
 //hand gestures block
             if (handData.firedGestureData.length == 0) return;
@@ -533,12 +515,11 @@
                     AddGestureObjectToArray(gestureData, rsd.HandModule.tempLeftHandGestures);
                
                 } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
-                    AddGestureObjectToArray(gestureData, rsd.HandModule.tempRightHandGesturestempRightHandGestures);
+                    AddGestureObjectToArray(gestureData, rsd.HandModule.tempRightHandGestures);
                 
                 }
             }
         }
-        
     };
     
   
@@ -636,12 +617,11 @@
 
             return faceConfiguration.applyChanges();
         })
-        /*
+        
         //check if this works and fixes capabilities bug
         .then(function (result) {
             return faceConfiguration.release();
         })
-        */
         
         
         .then(function (result) {
