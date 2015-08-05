@@ -426,6 +426,8 @@
     /*RealSense Hands Viewer event being called continuously, once enabling Hands module*/
     var onHandData = function (module, handData) {
         
+        console.warn("hand data");
+        
         //reset all data each frame
         rsd.HandModule.isRightExist = false;
         rsd.HandModule.isLeftExist = false;
@@ -621,12 +623,12 @@
 
             return faceConfiguration.applyChanges();
         })
-        
+        /*
         //check if this works and fixes capabilities bug
         .then(function (result) {
             return faceConfiguration.release();
         })
-        
+        */
         
         
         .then(function (result) {
@@ -681,7 +683,7 @@
             
             switch (error.status)
             {
-                case  -102:
+                case -102:
                     //sensor is already active on another window / app    //GZ said this should work
                     console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
                     rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
