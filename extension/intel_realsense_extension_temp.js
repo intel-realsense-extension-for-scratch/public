@@ -426,7 +426,7 @@
     /* RealSense Hands Viewer event being called continuously, once enabling Hands module */
     var onHandData = function (module, handData) {
         
-        console.warn("hand data "+handData.numberOfHands);
+        //console.warn("hand data "+handData.numberOfHands);
             
         
         //reset all data each frame
@@ -454,13 +454,13 @@
             
             var tempResultJointsArray = [];
             
-            console.warn("hand data 1 joint "+joints);
+           // console.warn("hand data 1 joint "+joints);
             
             for (var j = 0; j < joints.length; j++) {            
                 
-                console.warn("3 "+JSON.stringify(joints[j]));
+                //console.warn("3 "+JSON.stringify(joints[j]));
                 
-                if (joints[j] == null || joints[j].confidence <= 10 || handJointName == "error") continue;
+                if (joints[j] == null || joints[j].confidence <= 10) continue;
 
                 
                 
@@ -483,7 +483,7 @@
                 tempResultJointsArray.push(joint);
             }
             
-            console.warn("hand data 2 "+joints);
+            //console.warn("hand data 2 "+joints);
             
 //foldness finger block
             var tempResultFoldnessArray = [];
