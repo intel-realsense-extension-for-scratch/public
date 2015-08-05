@@ -497,7 +497,7 @@
         
             } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
                 //right hand
-                rsd.HandModule.leftHandJoints = tempResultJointsArray;  
+                rsd.HandModule.rightHandJoints = tempResultJointsArray;  
                 rsd.HandModule.rightHandJointsFoldness = tempResultFoldnessArray;
                 
                 rsd.HandModule.isRightExist = true;
