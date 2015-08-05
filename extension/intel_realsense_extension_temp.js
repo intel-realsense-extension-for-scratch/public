@@ -447,8 +447,6 @@
         //start collecting
         var allHandsData = handData.queryHandData(intel.realsense.hand.AccessOrderType.ACCESS_ORDER_NEAR_TO_FAR);
         
-        console.warn("hand data "+allHandsData);
-        console.warn("hand data "+allHandsData[0]);
         
         for (var h = 0; h < handData.numberOfHands; h++) {
             var ihand = allHandsData[h];
@@ -458,13 +456,10 @@
             
             for (var j = 0; j < joints.length; j++) {            
                 
-                //var handJointName = convertHandJointIndexToScratchName(j);
-                
                 if (joints[j] == null || joints[j].confidence <= 10 || handJointName == "error") continue;
 
                 var joint = {};
                 joint.originalJointIndex = j;
-                //joint.jointName = handJointName;
                 joint.confidence = joints[j].confidence;
                 
                 joint.position = {
@@ -495,7 +490,11 @@
                 tempResultFoldnessArray.push(majorJoint);
             }
 
-            
+            console.warn("hand data "+tempResultFoldnessArray);
+        
+            console.warn("hand data "+rsd.HandModule);
+            console.warn("hand data "+rsd.HandModule.jointDictionary);
+        
             
 //joint position block  ;  hand exist block            
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
