@@ -426,8 +426,6 @@
     /* RealSense Hands Viewer event being called continuously, once enabling Hands module */
     var onHandData = function (module, handData) {
         
-        console.warn("hand data "+handData.numberOfHands);
-        
         //reset all data each frame
         rsd.HandModule.isRightExist = false;
         rsd.HandModule.isLeftExist = false;
@@ -507,7 +505,9 @@
                 rsd.HandModule.isRightExist = true;
             }
             
-            
+            console.warn("hand data "+handData.numberOfHands);
+            console.warn("hand data "+rsd.HandModule.isRightExist);
+        
             
 //hand gestures block
             if (handData.firedGestureData.length == 0) return;
@@ -696,7 +696,6 @@
                     
                     //happens when the sensor is disconnected
                     rsd.Status = { status: 1, msg: 'If your sensor is unplugged, plug it in and refresh.'};
-                    
                     
                     PopAlert();
                     break;
@@ -1255,7 +1254,6 @@
         }, 1000);
         return false;
     };
-
     */
     
     ext.getHeadRotation = function(rotation_type){
