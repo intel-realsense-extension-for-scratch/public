@@ -423,10 +423,10 @@
     /*************************************HAND RECOGNITION*****************************************************/
     /**********************************************************************************************************/
 
-    /*RealSense Hands Viewer event being called continuously, once enabling Hands module*/
+    /* RealSense Hands Viewer event being called continuously, once enabling Hands module */
     var onHandData = function (module, handData) {
         
-        console.warn("hand data");
+        console.warn("hand data "+handData.numberOfHands);
         
         //reset all data each frame
         rsd.HandModule.isRightExist = false;
