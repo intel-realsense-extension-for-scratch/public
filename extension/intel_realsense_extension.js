@@ -1004,13 +1004,9 @@
         
         var gesturesArray = [];
         
-           
         //get array of requested hand
         if (hand_side == 'Any Hand'){
             gesturesArray = rsd.HandModule.tempRightHandGestures.concat(rsd.HandModule.tempLeftHandGestures);
-            
-             console.warn("gesturesArray Right:"+rsd.HandModule.tempRightHandGestures.length+ " Left "+rsd.HandModule.tempLeftHandGestures.length+ " all "+gesturesArray.length);
-        
             
         } else {
             gesturesArray = { 'Left Hand' : rsd.HandModule.tempLeftHandGestures, 
@@ -1028,9 +1024,12 @@
             if (gesturesArray[g].name == g_name) {
                 
                 //return true if gesture started or in progress
-                return (gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_START || 
-                        gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_IN_PROGRESS);
-                
+                if (gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_START || 
+                    gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_IN_PROGRESS)
+                {
+                    //we need to continue the cycle of testing since there is an option that we have 2 gestures with the same name in the AnyHand array
+                    return true;   
+                }
             }
         }
         
