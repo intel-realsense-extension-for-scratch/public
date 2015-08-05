@@ -1006,8 +1006,7 @@
         
         //get array of requested hand
         if (hand_side == 'Any Hand'){
-            gesturesArray = rsd.HandModule.tempRightHandGestures;
-            gesturesArray.concat(rsd.HandModule.tempLeftHandGestures);
+            gesturesArray = rsd.HandModule.tempRightHandGestures.concat(rsd.HandModule.tempLeftHandGestures);
             
         } else {
             gesturesArray = { 'Left Hand' : rsd.HandModule.tempLeftHandGestures, 
