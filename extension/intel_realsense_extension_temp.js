@@ -807,7 +807,16 @@
 
             $.getScript('https://cdn.rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense.js')
             .done(function(script, textStatus) {
-                dependencyAllCreated();
+             
+                $.getScript('http://intel-realsense-extension-for-scratch.github.io/public/extension/analytics.js')
+                .done(function(script, textStatus) {
+            
+                    dependencyAllCreated();
+                    
+                })
+                .fail(function(jqxhr, settings, exception) {
+                    console.log('Load realsense fail');
+                });
             })
             .fail(function(jqxhr, settings, exception) {
                 console.log('Load realsense fail');
