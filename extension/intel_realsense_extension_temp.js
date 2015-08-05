@@ -454,6 +454,8 @@
             
             var tempResultJointsArray = [];
             
+            console.warn("hand data "+joints);
+            
             for (var j = 0; j < joints.length; j++) {            
                 
                 if (joints[j] == null || joints[j].confidence <= 10 || handJointName == "error") continue;
@@ -477,6 +479,7 @@
                 tempResultJointsArray.push(joint);
             }
             
+            console.warn("hand data "+tempResultJointsArray);
             
 //foldness finger block
             var tempResultFoldnessArray = [];
@@ -491,7 +494,7 @@
             }
 
             console.warn("hand data "+tempResultFoldnessArray);
-        
+            
             console.warn("hand data "+rsd.HandModule);
             console.warn("hand data "+rsd.HandModule.jointDictionary);
         
