@@ -1006,12 +1006,12 @@
         
         //get array of requested hand
         if (hand_side == 'Any Hand'){
-            gesturesArray = rsd.HandModule.tempLeftHandGestures;
-            gesturesArray.join(rsd.HandModule.tempRightHandGestures);
+            gesturesArray = rsd.HandModule.tempRightHandGestures;
+            gesturesArray.join(rsd.HandModule.tempLeftHandGestures);
             
         } else {
             gesturesArray = { 'Left Hand' : rsd.HandModule.tempLeftHandGestures, 
-                             'Right Hand': rsd.HandModule.tempRightHandGestures}[hand_side];
+                              'Right Hand': rsd.HandModule.tempRightHandGestures}[hand_side];
         }
         
         
@@ -1108,7 +1108,7 @@
             }
         } 
         
-        jointArray = { 'Left Hand'  : rsd.HandModule.leftHandJoints, 
+        jointArray = {  'Left Hand' : rsd.HandModule.leftHandJoints, 
                         'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
        
         
@@ -1297,28 +1297,28 @@
         ]
          
         , menus: {
-            "hand_type": ["Left Hand", "Right Hand", "Any Hand"],
-            "face_joints": ["Left eye", "Right eye", "Left eye brow", "Right eye brow", 
-                            "Upper lip", "Bottom lip", "Nose", "Chin"],
-            "hand_joints": ["Index tip", "Index base", "Index jointC", "Index jointB",
-                            "Thumb tip", "Thumb base", "Thumb jointC", "Thumb jointB",
-                            "Middle tip", "Middle base", "Middle jointC", "Middle jointB",
-                            "Ring tip", "Ring base", "Ring jointC", "Ring jointB",
-                            "Pinky tip", "Pinky base", "Pinky jointC", "Pinky jointB",
-                            "Wrist", "Center"],
-            "major_joint_name": ["Index", "Thumb", "Middle", "Ring", "Pinky"],
-            "facial_expressions": ["Wink left", "Wink right" ,"Brow lifted left" ,"Brow lifted right",
-                                   "Brow lowered left", "Brow lowered right", "Mouth open", "Tongue out" ,
-                                   "Smile", "Kiss", "Look down" ,"Look up", "Look left", "Look right"],
-            "hand_gestures": ["Spread fingers", "V sign", "Full pinch",
-                                "Two fingers pinch open", "Swipe down", "Swipe up", "Swipe left",
-                                "Swipe right", "Tap", "Fist", "Thumb up", "Thumb down",
-                                "Wave"],
-            "rotation_value": ["Yaw", "Pitch", "Roll"],
-            "position_value": ["X Position",  "Y Position",  "Z Position"]
+            "hand_type":            [ "Left Hand", "Right Hand", "Any Hand" ],
+            "face_joints":          [ "Left eye", "Right eye", "Left eye brow", "Right eye brow", 
+                                    "Upper lip", "Bottom lip", "Nose", "Chin" ],
+            "hand_joints":          [ "Index tip", "Index base", "Index jointC", "Index jointB",
+                                    "Thumb tip", "Thumb base", "Thumb jointC", "Thumb jointB",
+                                    "Middle tip", "Middle base", "Middle jointC", "Middle jointB",
+                                    "Ring tip", "Ring base", "Ring jointC", "Ring jointB",
+                                    "Pinky tip", "Pinky base", "Pinky jointC", "Pinky jointB",
+                                    "Wrist", "Center" ],
+            "major_joint_name":     [ "Index", "Thumb", "Middle", "Ring", "Pinky" ],
+            "facial_expressions":   [ "Wink left", "Wink right" ,"Brow lifted left", "Brow lifted right",
+                                       "Brow lowered left", "Brow lowered right", "Mouth open", "Tongue out",
+                                       "Smile", "Kiss", "Look down" ,"Look up", "Look left", "Look right" ],
+            "hand_gestures":        [ "Spread fingers", "V sign", "Full pinch",
+                                    "Two fingers pinch open", "Swipe down", "Swipe up", "Swipe left",
+                                    "Swipe right", "Tap", "Fist", "Thumb up", "Thumb down",
+                                    "Wave" ],
+            "rotation_value":       [ "Yaw", "Pitch", "Roll" ],
+            "position_value":       [ "X Position",  "Y Position",  "Z Position" ]
         }
         
-        , url: 'http://intel-realsense-extension-for-scratch.github.io/public/realsense-system-check.html'
+        , url: 'http://www.intel-realsense-extension-for-scratch.github.io/'
     };
     
     ScratchExtensions.register('Intel RealSense', descriptor, ext);
