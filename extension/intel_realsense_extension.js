@@ -1004,9 +1004,12 @@
         
         var gesturesArray = [];
         
+        console.warn("gesturesArray Right:"+rsd.HandModule.tempRightHandGestures.length+ " Left "+rsd.HandModule.tempLeftHandGestures.length+ " all "+gesturesArray.length);
+            
         //get array of requested hand
         if (hand_side == 'Any Hand'){
             gesturesArray = rsd.HandModule.tempRightHandGestures.concat(rsd.HandModule.tempLeftHandGestures);
+            
             
         } else {
             gesturesArray = { 'Left Hand' : rsd.HandModule.tempLeftHandGestures, 
