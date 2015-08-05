@@ -642,7 +642,9 @@
             handConfiguration.allGestures = true;
             return handConfiguration.applyChanges();
         })
-        
+        .then(function (result) {
+            return handConfiguration.release();    
+        })
         
         
         
@@ -659,14 +661,12 @@
         
         //release function of the hand module configurations
         //Todo: if this fixes the size of the capabilities service - notify Erik!!!
-        .then(function (result) {
-            return handConfiguration.release();    
-        })
+        
         
         .then(function (result) {
-            
             imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_DEPTH);
             return sense.streamFrames();
+        
         })
         .then(function (result) {
             console.log('Streaming ' + imageSize.width + 'x' + imageSize.height);
@@ -1105,7 +1105,7 @@
             }
         } 
         
-        jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
+        jointArray = { 'Left Hand'  : rsd.HandModule.leftHandJoints, 
                         'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
        
         
