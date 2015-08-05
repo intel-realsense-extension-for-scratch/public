@@ -6,12 +6,23 @@
 
 
 
-/*
-    capabilities service is growing too big (more than 50,000K). maybe we have something that is not releasing.
-    
-    
 
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -42,17 +53,13 @@
     var blobConfiguration, handConfiguration, faceConfiguration;
     var imageSize;
     
-    
-    
-    
-    const MAX_NUM_OF_RECOGNIZED_WORDS = 99;             //saving last 100 recognized words
 
     
     //stage mapping
-    const RS_FACE_X_MAX_RIGHT = 0;    //MIRRORED
-    const RS_FACE_X_MAX_LEFT = 600;    //MIRRORED
-    const RS_FACE_Y_MAX_UP = 250;      //MIRRORED
-    const RS_FACE_Y_MAX_DOWN = 0;       //MIRRORED
+    const RS_FACE_X_MAX_RIGHT = 0;    
+    const RS_FACE_X_MAX_LEFT = 600;    
+    const RS_FACE_Y_MAX_UP = 250;      
+    const RS_FACE_Y_MAX_DOWN = 0;       
     
     const RS_FACE_ROTATION_MIN = -30;
     const RS_FACE_ROTATION_MAX = 30;
@@ -62,10 +69,10 @@
     const RS_HAND_Y_MAX_UP = 400;
     const RS_HAND_Y_MAX_DOWN = -100;
 
-    const SCRATCH_X_MAX_RIGHT = 240;    //MIRRORED
-    const SCRATCH_X_MAX_LEFT = -240;    //MIRRORED
-    const SCRATCH_Y_MAX_UP = -180;      //MIRRORED
-    const SCRATCH_Y_MAX_DOWN = 180;     //MIRRORED
+    const SCRATCH_X_MAX_RIGHT = 240;    
+    const SCRATCH_X_MAX_LEFT = -240;   
+    const SCRATCH_Y_MAX_UP = -180; 
+    const SCRATCH_Y_MAX_DOWN = 180;
     
 
     
@@ -254,15 +261,16 @@
         if (sts < 0) {
             console.warn('Error ' + sts + ' on module ' + sender);
             
-            if (sts == 503){
-                console.warn('Capabilities.Servicer.Realsense.exe must be restarted! shut it down and restart Intel technologyAccess and DCM');   
-            }
-            
-            
-            // error on sensor disconnect from USB (sometimes not occurs)
-            if (sts == -301) {
-                rsd.Status = {status: 1 , msg: 'intel realsense sensor was disconnected from USB. please plug in and refresh page'};
-                
+            switch (sts){
+                case 503:
+                    console.warn('Capabilities.Servicer.Realsense.exe must be restarted! shut it down and restart Intel technologyAccess and DCM');   
+                    break;
+
+
+                // error on sensor disconnect from USB (sometimes not occurs)
+                case -301:
+                    rsd.Status = {status: 1 , msg: 'intel realsense sensor was disconnected from USB. please plug in and refresh page'};
+                    break;
             }
             
             onClearSensor();
@@ -338,15 +346,14 @@
                         if (joint != null) {
                                
                             var faceJoint = {};
-                            faceJoint.originalJointIndex = i; //maybe use  joint.index;
+                            faceJoint.originalJointIndex = i; //maybe use joint.index;
                             faceJoint.position = {
                                  X: joint.image.x
                                 ,Y: joint.image.y
                                 ,Z: joint.world.z
                             };
-
-                            rsd.FaceModule.joints.push(faceJoint);
                             
+                            rsd.FaceModule.joints.push(faceJoint);
                         }
                     }
                 }
@@ -359,10 +366,6 @@
                     for (var fe=0; fe<face.expressions.expressions.length; fe++){
                         var f_expr = face.expressions.expressions[fe];
                         if (f_expr.intensity>20) {
-                            //convert the expression to a string the extension would identify
-                            //var scratchFaceExpressionName = convertFaceExpressionIndexToScratchName(fe);
-
-                            //if (scratchFaceExpressionName != "error"){
                                 //add it to array of current frame only
                                 rsd.FaceModule.expressionsOccuredLastFrame.push(fe);
 
@@ -379,7 +382,6 @@
                                     faceExpressionArray.shift();   
                                 }
         */
-                            //}
                         }
                     }
                 }
@@ -939,18 +941,17 @@
                 }
             }
             
-            if (requestedJointIndex == -1) {
-                //couldnt find requested joint 
-                return -1000;
-                
-            }
-            
         } else {
             
             //joint_name is integer variable
             requestedJointIndex = joint_name;
         }
         
+        if (requestedJointIndex < 0) {
+            //couldnt find requested joint 
+            return -1000;
+
+        }
         
         //get requested joint data object
         var result = {};
@@ -967,6 +968,9 @@
         
         //get the request value
         if (result.position != undefined) {
+            
+            console.warn("pos data "+joint_name+" "+JSON.stringify(result.position));
+            
             if (hand_position === "X Position") {
                 return ValueMapper(result.position.X, RS_HAND_X_MAX_LEFT, RS_HAND_X_MAX_RIGHT, SCRATCH_X_MAX_LEFT, SCRATCH_X_MAX_RIGHT);
                
@@ -1173,16 +1177,15 @@
                 }
             }
             
-            if (requestedJointIndex == -1) {
-                //couldnt find requested joint 
-                return -1000;
-                
-            }
-            
         } else {
             
             //joint_name is integer variable
-            requestedJointIndex = joint_name;   
+            requestedJointIndex = joint_name;
+        }
+        
+        if (requestedJointIndex < 0) {
+            //couldnt find requested joint 
+            return -1000;
         }
         
         for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
@@ -1191,6 +1194,11 @@
                 result = rsd.FaceModule.joints[i];
                 break;
             }
+        }
+        
+        if (result == {}) {
+            //couldnt find requested joint 
+            return -1000;
         }
         
         
