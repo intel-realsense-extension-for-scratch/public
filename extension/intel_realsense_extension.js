@@ -66,8 +66,8 @@
     
     const RS_HAND_X_MAX_RIGHT = 0;
     const RS_HAND_X_MAX_LEFT = 600;
-    const RS_HAND_Y_MAX_UP = 0;
-    const RS_HAND_Y_MAX_DOWN = 600;
+    const RS_HAND_Y_MAX_UP = 600;
+    const RS_HAND_Y_MAX_DOWN = 0;
 
     const SCRATCH_X_MAX_RIGHT = 240;    
     const SCRATCH_X_MAX_LEFT = -240;   
