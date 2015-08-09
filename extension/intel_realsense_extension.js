@@ -1320,10 +1320,12 @@
             "facial_expressions":   [ "Wink left", "Wink right" ,"Brow lifted left", "Brow lifted right",
                                        "Brow lowered left", "Brow lowered right", "Mouth open", "Tongue out",
                                        "Smile", "Kiss", "Look down" ,"Look up", "Look left", "Look right" ],
-            "hand_gestures":        [ "Spread fingers", "V sign", "Full pinch",
+            "hand_gestures":        [ "V sign", "Two fingers pinch open", "Tap", "Fist", "Thumb up", "Thumb down",
+                                      "Wave" ],
+            /*"hand_gestures":      [ "Spread fingers", "V sign", "Full pinch",
                                     "Two fingers pinch open", "Swipe down", "Swipe up", "Swipe left",
                                     "Swipe right", "Tap", "Fist", "Thumb up", "Thumb down",
-                                    "Wave" ],
+                                    "Wave" ],*/
             "rotation_value":       [ "Yaw", "Pitch", "Roll" ],
             "position_value":       [ "X Position",  "Y Position",  "Z Position" ]
         }
