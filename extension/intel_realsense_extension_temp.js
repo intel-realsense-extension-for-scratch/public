@@ -576,12 +576,12 @@
     
     var OnSpeechRecognized = function(result){
     
-        console.log("all recognized speech: "+JSON.stringify( result.data ));
+        console.warn("all recognized speech: "+JSON.stringify( result.data ));
         
         //result.data contain all commands with score for each
         var res = result.data.scores[0];
         if (res.confidence != undefined && res.confidence != 0) res.sentence += ' (' + res.confidence + '%)';
-        console.log('recognized speech: '+res.sentence);
+        console.warn('recognized speech: '+res.sentence);
     };
     
     
@@ -670,7 +670,7 @@
         
 //speech module
         .then(function (result) {
-            console.log('Initialize SpeechRecognition module');
+            console.warn('Initialize SpeechRecognition module');
             return rs.speech.SpeechRecognition.createInstance(sense);
         }).then(function (result) {
             console.log('Generating commands');
