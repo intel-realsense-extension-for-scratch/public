@@ -576,11 +576,12 @@
     
     var OnSpeechRecognized = function(module){
     
-        console.warn("all recognized speech: "+module.data + " "+JSON.stringify( module.data ) +" "+ module.data.score);
+        console.warn("all recognized speech1: "+module.data + " "+JSON.stringify(module.data));
+        console.warn("all recognized speech2: "+ module.data.score.length);
         
         //result.data contain all commands with score for each
         var res = module.data.scores[0];
-        console.warn("all recognized speech: "+res);
+        console.warn("all recognized speech3: "+res);
         
         if (res.confidence != undefined && res.confidence != 0) res.sentence += ' (' + res.confidence + '%)';
         console.warn('recognized speech: '+res.sentence);
