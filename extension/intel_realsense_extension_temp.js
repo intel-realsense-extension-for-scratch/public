@@ -574,12 +574,14 @@
     /*************************************SPEECH RECOGNITION*************************************************/
     /**********************************************************************************************************/
     
-    var OnSpeechRecognized = function(result){
+    var OnSpeechRecognized = function(module){
     
-        console.warn("all recognized speech: "+JSON.stringify( result.data ));
+        console.warn("all recognized speech: "+module.data + " "+JSON.stringify( module.data ) +" "+ module.data.score);
         
         //result.data contain all commands with score for each
-        var res = result.data.scores[0];
+        var res = module.data.scores[0];
+        console.warn("all recognized speech: "+res);
+        
         if (res.confidence != undefined && res.confidence != 0) res.sentence += ' (' + res.confidence + '%)';
         console.warn('recognized speech: '+res.sentence);
     };
