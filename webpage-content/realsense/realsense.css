@@ -7,11 +7,9 @@
     color: white;
     font-family: 'Open Sans', sans-serif;
     margin-top: 200px;
-}
+} 
 
 .intel-title {
-    background-color: white;
-    height: 100px;
     padding-top: 10px;
 }
 
@@ -44,7 +42,7 @@
 }
 
 .intel-paragraph #age-checkbox {
-    width:25px;
+    width: 25px;
     height: 25px;
 }
 
@@ -69,24 +67,23 @@
 
 
 .intel-screen-modal {
-    background-color: #0071C5;
-    color: white;
+    background-color: #ffffff;
+    color: #1c272d;
     font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
     border: 1px white solid;
     margin: 0 auto;
-    width: 800px;
+    width: 650px;
 }
 
 .intel-paragraph-modal {
     height: 200px;
-    margin: 0 auto;
-    width: 700px;
-    
 }
 
 .intel-paragraph-modal h2 {
     text-align: left;
     font-family: 'Open Sans', sans-serif;
+    font-size: 30px;
 }
 
 .bottom-line-modal {
