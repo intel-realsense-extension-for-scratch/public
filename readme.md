@@ -1,14 +1,40 @@
-Intel® RealSense™ Extension for Scratch* Beta**
+Intel® RealSense™ Extension for Scratch* 
 ==============
-**Exposing Intel® RealSense™ F200 Sensor capabilities to Scratchers with simple blocks** <br>
+**Hands tracking. Gesture recognition. Face tracking. Face expressions. Voice commands.** <br>
 version 1.0
 
-
+Intel® RealSense™ Extension for Scratch introduces new and amazing capabilities - all made simple with just a few Scratch blocks
 
 <br>*  Scratch is a project of the Lifelong Kindergarten group of the MIT Media Lab 
-<br>** Beta version performance and gesture detection quality might be lower than average <br>
 
 
+
+Please go to our <a href="https://intel-realsense-extension-for-scratch.github.io/">official page</a> for more details and to get started.
+
+
+
+Team:
+--------------
+**Product Lead and Developer**:  Shachar Oz  , Wizard.Oz at intel.com <br>
+**Product Manager**:             Yaron Yanai <br>
+**Vision and User Testing**:     Avi Salmon and Yotam Salmon <br>
+
+Group:  Perceptual Computing , New Technology Group , Intel Corporation
+
+
+Big thanks to:
+- Kreg Hanning for supporting us in our journey.
+<br>And all other developers who helped getting here:
+- Omer Goshen
+- Moria Ilan-Navi
+- Yossi Avital
+- Yinon Oshrat
+- Guozhong Zhuang
+- Erik R. Paulson
+
+
+
+<!--
 
 
 What can this do?
@@ -35,25 +61,9 @@ Getting started:
 
 
 
-Team:
---------------
-**Product Lead and Developer**:  Shachar Oz  , Wizard.Oz @ intel.com <br>
-**Product Manager**:             Yaron Yanai <br>
-**Vision and User Testing**:     Avi Salmon and Yotam Salmon <br>
-
-Group:  Perceptual Computing , New Technology Group , Intel Corporation
 
 
-Big thanks to:
-- Kreg Hanning for supporting us in our journey.
-<br>And all other developers who helped getting here:
-- Omer Goshen
-- Moria Ilan-Navi
-- Yossi Avital
-- Yinon Oshrat
-
-
-
+-->
 
 <!--
 *This will be Italic*
