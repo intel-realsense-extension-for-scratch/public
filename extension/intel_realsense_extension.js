@@ -89,12 +89,12 @@
             , leftHandJointsFoldness: []  
             , rightHandJoints: []  
             , rightHandJointsFoldness: []  
-            , gestures: {}
             , tempLeftHandGestures: []
             , tempRightHandGestures: []
            
             , jointDictionary : {}
-           , majorJointDictionary : {}
+            , majorJointDictionary : {}
+            , gestureDictionary : {}
             
             , init: function(){
                 this.jointDictionary = {
@@ -133,7 +133,25 @@
                     , "Middle"              : intel.realsense.hand.FingerType.FINGER_MIDDLE
                     , "Ring"                : intel.realsense.hand.FingerType.FINGER_RING
                     , "Pinky"               : intel.realsense.hand.FingerType.FINGER_PINKY
-               };
+                };
+                
+                this.gestureDictionary = {
+                    "Spread fingers"            : "spreadfingers"
+                    , "V sign"                  : "v_sign"
+                    , "Full pinch"              : "full_pinch"
+                    , "Two fingers pinch open"  : "two_fingers_pinch_open"
+                    , "Fist"                    : "fist"
+                    , "Thumb up"                : "thumb_up"
+                    , "Thumb down"              : "thumb_down"
+                    
+                    , "Swipe down"              : "swipe_down"
+                    , "Swipe up"                : "swipe_up"
+                    , "Swipe left"              : "swipe_left"
+                    , "Swipe right"             : "swipe_right"
+                    
+                    , "Tap"                     : "tap"
+                    , "Wave"                    : "wave"
+                };
             }
         }
     };
@@ -1005,7 +1023,7 @@
 */
     
     ext.getHandGesture = function(hand_side, gesture_name) {
-        
+       
         var gesturesArray = [];
         
         //get array of requested hand
@@ -1013,23 +1031,45 @@
             gesturesArray = rsd.HandModule.tempRightHandGestures.concat(rsd.HandModule.tempLeftHandGestures);
             
         } else {
-            gesturesArray = { 'Left Hand' : rsd.HandModule.tempLeftHandGestures, 
-                              'Right Hand': rsd.HandModule.tempRightHandGestures}[hand_side];
+            gesturesArray = { 'Left Hand'  : rsd.HandModule.tempLeftHandGestures, 
+                              'Right Hand' : rsd.HandModule.tempRightHandGestures}[hand_side];
         }
         
         
         //if no gestures, break now
         if (gesturesArray.length == 0) return false;
         
-        //map display name to SDK's
-        var g_name = gesture_name.toLowerCase().replace(' ', '_');
+        //if no rellevant hands exist, return false
+        if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
+            || (hand_side == 'Right Hand' && rsd.HandModule.isRightExist == false) 
+            || (hand_side == 'Any Hand' && rsd.HandModule.isRightExist == false && rsd.HandModule.isLeftExist == false) ){
+            return false;   
+        }
         
+        
+        
+        //map display name to SDK's
+        var requestedGestureSdkName = "";
+        
+        for (var key in rsd.HandModule.gestureDictionary){
+
+            if (key == gesture_name){
+                requestedGestureSdkName = rsd.HandModule.gestureDictionary[key];
+                break;
+
+            }
+        }
+            
+        if (requestedGestureSdkName == "") {
+            //couldnt find requested gesture
+            return false;
+        }
+               
         for (var g = 0; g<gesturesArray.length; g++){
-            if (gesturesArray[g].name == g_name) {
+            if (gesturesArray[g].name == requestedGestureSdkName) {
                 
                 //return true if gesture started or in progress
-                if (gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_START || 
-                    gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_IN_PROGRESS)
+                if (gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_START)
                 {
                     //we need to continue the cycle of testing since there is an option that we have 2 gestures with the same name in the AnyHand array
                     return true;   
@@ -1317,15 +1357,15 @@
                                     "Pinky tip", "Pinky base", "Pinky jointC", "Pinky jointB",
                                     "Wrist", "Center" ],
             "major_joint_name":     [ "Index", "Thumb", "Middle", "Ring", "Pinky" ],
-            "facial_expressions":   [ "Wink left", "Wink right" ,"Brow lifted left", "Brow lifted right",
-                                       "Brow lowered left", "Brow lowered right", "Mouth open", "Tongue out",
-                                       "Smile", "Kiss", "Look down" ,"Look up", "Look left", "Look right" ],
-           "hand_gestures":        [ "V sign", "Two fingers pinch open", "Tap", "Fist", "Thumb up", "Thumb down",
-                                      "Wave" ],
-           /* "hand_gestures":      [ "Spread fingers", "V sign", "Full pinch",
-                                    "Two fingers pinch open", "Swipe down", "Swipe up", "Swipe left",
-                                    "Swipe right", "Tap", "Fist", "Thumb up", "Thumb down",
-                                    "Wave" ],*/
+            "facial_expressions":   [ "Wink left", "Wink right" ,"Brow lifted left", 
+                                     "Brow lifted right", "Brow lowered left", 
+                                     "Brow lowered right", "Mouth open", "Tongue out",
+                                     "Smile", "Kiss", "Look down" ,"Look up", "Look left", 
+                                     "Look right" ],
+            "hand_gestures":      [ "Spread fingers", "V sign", "Full pinch",
+                                    "Two fingers pinch open", "Swipe down", "Swipe up", 
+                                   "Swipe left", "Swipe right", "Tap", "Fist", "Thumb up", 
+                                   "Thumb down", "Wave" ],
             "rotation_value":       [ "Yaw", "Pitch", "Roll" ],
             "position_value":       [ "X Position",  "Y Position",  "Z Position" ]
         }
