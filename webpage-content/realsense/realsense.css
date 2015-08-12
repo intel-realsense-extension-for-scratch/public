@@ -23,7 +23,7 @@
     font-weight: bold;
 }
 
-.bottom-line-modal .btn {
+.intel-paragraph .btn {
     background-color: #00AEEF;
     font-size: 16px;
     color:white;
@@ -32,7 +32,7 @@
     border: 0px;
 }
 
-.bottom-line-modal .btn:hover {
+.intel-paragraph .btn:hover {
     background-color: #286090;
 }
 
