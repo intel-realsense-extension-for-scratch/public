@@ -78,12 +78,17 @@
 
 .intel-paragraph-modal {
     height: 240px;
+    text-align: center;
 }
 
 .intel-paragraph-modal h2 {
     text-align: left;
     font-family: 'Open Sans', sans-serif;
     font-size: 30px;
+}
+
+.intel-paragraph-modal p {
+    text-align: left;
 }
 
 .bottom-line-modal {
