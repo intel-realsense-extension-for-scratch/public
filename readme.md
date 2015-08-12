@@ -24,6 +24,7 @@ Group:  Perceptual Computing , New Technology Group , Intel Corporation
 
 Big thanks to:
 - Kreg Hanning for supporting us in our journey.
+
 <br>And all other developers who helped getting here:
 - Omer Goshen
 - Moria Ilan-Navi
