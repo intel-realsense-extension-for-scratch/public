@@ -881,7 +881,7 @@
         $.getScript('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz')
         .done(function(script, textStatus) {
 
-            $.getScript('https://cdn.rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense-vs1.2.js')
+            $.getScript('https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense-vs1.2.js')
             .done(function(script, textStatus) {
              
                 $.getScript('http://intel-realsense-extension-for-scratch.github.io/public/extension/analytics-extension.js')
