@@ -48,7 +48,7 @@
     
     
     var rs = null;
-    var sense; 
+    var sense, session, capture; 
     var faceModule, blobModule, handModule, speechModule;
     var blobConfiguration, handConfiguration, faceConfiguration;
     var imageSize;
@@ -282,10 +282,14 @@
         console.log("reset realsense sensor");
 
         //reset speech module before closing sense manager
-        speechModule.stopRec()
+        speechModule.StopRec()
         .then(function (result) {
+            
+            speechModule.Release();
+            speechModule = undefined;
+                
             if (sense != undefined) {
-                sense.release()
+                sense.Release()
                 .then(function (result) {
                     sense = undefined;
                 });
@@ -574,20 +578,25 @@
     /*************************************SPEECH RECOGNITION*************************************************/
     /**********************************************************************************************************/
     
-    var OnSpeechRecognized = function(module){
+    var OnSpeechRecognized = function(recognizedSpeech){
     
-        console.warn("all recognized speech1: "+module.data + " "+JSON.stringify(module.data));
-        console.warn("all recognized speech2: "+ module.data.score.length);
+        console.warn("all recognized speech1: "+recognizedSpeech.data + " "+JSON.stringify(recognizedSpeech.data));
+        console.warn("all recognized speech2: "+ recognizedSpeech.data.score.length);
         
         //result.data contain all commands with score for each
-        var res = module.data.scores[0];
+        var res = recognizedSpeech.data.scores[0];
         console.warn("all recognized speech3: "+res);
         
         if (res.confidence != undefined && res.confidence != 0) res.sentence += ' (' + res.confidence + '%)';
         console.warn('recognized speech: '+res.sentence);
     };
     
-    
+    var OnSpeechAlertFired = function(speechAlert){
+        console.warn("speech alert "+speechAlert.data.name);
+        
+        // any time user say something or ends a sentence, we get alert for it
+        // if nothing is identified, it means that the user said something new...
+    };
     
     /**********************************************************************************************************/
     /*************************************END SPEECH RECOGNITION*************************************************/
@@ -598,12 +607,29 @@
     var StartRealSense = function(){
         var rs = intel.realsense;
                     
-        rs.SenseManager.createInstance()
+        rs.SenseManager.CreateSenseManager()
         .then(function (result) {
             sense = result;
-            return result;
+            
+            return sense.QuerySession();
+        })
+//speech module
+        .then(function (result) {
+            session = result;
+            return session.CreateImpl(undefined, undefined, intel.realsense.enum.SpeechRecognition.CUID);
+        }).then(function (result) {
+            console.log('Generating commands');
+            speechModule = result;
+            var commands = ['yes', 'no','hello', 'goodbye' ];
+            return speechModule.BuildGrammarFromStringList(1, commands, null);
+        }).then(function (result) {
+            return speechModule.SetGrammar(1);
+        }).then(function (result) {
+            console.log('Grammar created');
+            return speechModule.StartRec(OnSpeechRecognized, OnSpeechAlertFired);
         })
         
+                
         
 /*        
          .then(function (result) {
@@ -631,7 +657,7 @@
         })
         .then(function (result) {
             faceModule = result;
-            return faceModule.createActiveConfiguration();
+            return faceModule.CreateActiveConfiguration();
         })
         .then(function (result) {
             faceConfiguration = result;
@@ -644,70 +670,52 @@
             faceConfiguration.pose.isEnabled = true;
             faceConfiguration.expressions.properties.isEnabled = true;
 
-            return faceConfiguration.applyChanges();
+            return faceConfiguration.ApplyChanges();
         })
         //not a must in sdk samples
         .then(function (result) {
-            return faceConfiguration.release();
+            return faceConfiguration.Release();
         })
         
 
 //hand module
         .then(function (result) {
-            return rs.hand.HandModule.activate(sense);
+            return sense.EnableHand();
         })
         .then(function (result) {
             handModule = result;
-            return handModule.createActiveConfiguration();
+            return sense.Init({ 'onModuleProcessedFrame': onFaceHandData, 'onConnect': onConnect, 'onStatus': onStatus });  
+          })
+        
+        .then(function (result) {   
+            return handModule.CreateActiveConfiguration();
         })
         .then(function (result) {
             handConfiguration = result;
             handConfiguration.allAlerts = false;
             handConfiguration.allGestures = true;
-            return handConfiguration.applyChanges();
+            return handConfiguration.ApplyChanges();
         })
         .then(function (result) {
-            return handConfiguration.release();    
+            return handConfiguration.Release();    
         })
         
         
-//speech module
-        .then(function (result) {
-            console.warn('Initialize SpeechRecognition module');
-            return rs.speech.SpeechRecognition.createInstance(sense);
-        }).then(function (result) {
-            console.log('Generating commands');
-            speechModule = result;
-            var commands = ['yes', 'no','hello', 'goodbye' ];
-            return speechModule.buildGrammarFromStringList(1, commands, null);
-        }).then(function (result) {
-            return speechModule.setGrammar(1);
-        }).then(function (result) {
-            console.log('Grammar created');
-            speechModule.onSpeechRecognized = OnSpeechRecognized;
-            //speechModule.onAlertFired = OnSpeechAlertFired;
-            return speechModule.startRec();
-        })
-        
-        
+
 //general sdk
         .then(function (result) {
-            sense.onDeviceConnected = onConnect;
-            sense.onStatusChanged = onStatus;
-            
-            faceModule.onFrameProcessed = onFaceHandData;
-            handModule.onFrameProcessed = onFaceHandData;
-            
-            return sense.init();
+           return sense.QueryCaptureManager();
         })
-        
-        //release function of the hand module configurations
-        //Todo: if this fixes the size of the capabilities service - notify Erik!!!
-        
-        
         .then(function (result) {
-            imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_DEPTH);
-            return sense.streamFrames();
+            capture = result;
+            return capture.QueryImageSize(intel.realsense.enum.Capture.STREAM_TYPE_DEPTH);
+        })
+        .then(function (result) {
+            imageSize = result.size;
+            var ret = sense.StreamFrames();
+            return ret;    
+            //imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_DEPTH);
+            //return sense.streamFrames();
         
         })
         .then(function (result) {
@@ -771,6 +779,34 @@
                 
                 //console.warn("Error detectPlatform: isCameraReady "+info.isCameraReady+ " isDCMUpdateNeeded:  "+info.isDCMUpdateNeeded+" isRuntimeInstalled: "+info.isRuntimeInstalled);
                 
+                if ((info.isCameraReady) && info.isRuntimeInstalled) {
+                    rsd.Status = { status: 2, msg: 'RealSense sensor is ready' };
+                    
+                    //we are now able to start realsense sensor automatically!
+                    StartRealSense();
+                
+                } else {
+                   if (info.isCheckNeeded) {
+                   } else {
+                       if (!info.isCameraReady && !info.isDCMUpdateNeeded) {
+                            //driver called when DCM is too old and should be upgraded
+                            rsd.Status = { status: 0, msg: 'some other error' };
+                       }
+                       
+                       if (!info.isCameraReady && info.isDCMUpdateNeeded) {
+                            //driver called when DCM is too old and should be upgraded
+                            rsd.Status = { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
+                       }
+                       
+                       if (!info.isRuntimeInstalled) {
+                            //runtime called when runtime needs to be installed
+                            rsd.Status = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
+                       }
+                   }
+                    
+                }
+                
+                /*
                 if (info.nextStep == 'ready') {
                     rsd.Status = { status: 2, msg: 'RealSense sensor is ready' };
                     
@@ -790,7 +826,7 @@
                     rsd.Status = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
                 
                 }
-                
+                */
                 PopAlert();
                 
             }).catch(function (error) {
@@ -845,10 +881,10 @@
         $.getScript('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz')
         .done(function(script, textStatus) {
 
-            $.getScript('https://cdn.rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense.js')
+            $.getScript('https://cdn.rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense-vs1.2.js')
             .done(function(script, textStatus) {
              
-                $.getScript('http://intel-realsense-extension-for-scratch.github.io/public/extension/analytics.js')
+                $.getScript('http://intel-realsense-extension-for-scratch.github.io/public/extension/analytics-extension.js')
                 .done(function(script, textStatus) {
             
                     dependencyAllCreated();
