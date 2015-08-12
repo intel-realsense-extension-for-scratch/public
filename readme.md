@@ -1,16 +1,12 @@
 Intel® RealSense™ Extension for Scratch* 
 ==============
 **Hands tracking. Gesture recognition. Face tracking. Face expressions. Voice commands.** <br>
-version 1.0
-
 Intel® RealSense™ Extension for Scratch introduces new and amazing capabilities - all made simple with just a few Scratch blocks
-
-<br>*  Scratch is a project of the Lifelong Kindergarten group of the MIT Media Lab 
-
 
 
 Please go to our <a href="https://intel-realsense-extension-for-scratch.github.io/">official page</a> for more details and to get started.
 
+<br>*  Scratch is a project of the Lifelong Kindergarten group of the MIT Media Lab 
 
 
 Team:
