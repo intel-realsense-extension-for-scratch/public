@@ -11,9 +11,3 @@
   ga('create', 'UA-66218400-1', 'auto');
   ga('send', 'pageview');
 
-
-
-//add functionality for usage of each block
-
-//https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide
-
