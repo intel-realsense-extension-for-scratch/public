@@ -451,8 +451,11 @@
         var _isRightExist = false;
         var _isLeftExist = false;
         
-        rsd.HandModule.leftHandJoints = [];
-        rsd.HandModule.rightHandJoints = [];
+        var _leftHandJoints = [];
+        var _rightHandJoints = [];
+        
+        //rsd.HandModule.leftHandJoints = [];
+        //rsd.HandModule.rightHandJoints = [];
         
         rsd.HandModule.leftHandJointsFoldness = [];
         rsd.HandModule.rightHandJointsFoldness = [];
@@ -515,14 +518,14 @@
 //joint position block  ;  hand exist block            
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                 //left hand
-                rsd.HandModule.leftHandJoints = tempResultJointsArray;
+                _leftHandJoints = tempResultJointsArray;
                 rsd.HandModule.leftHandJointsFoldness = tempResultFoldnessArray;
                 
                 _isLeftExist = true;
         
             } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
                 //right hand
-                rsd.HandModule.rightHandJoints = tempResultJointsArray;  
+                _rightHandJoints = tempResultJointsArray;  
                 rsd.HandModule.rightHandJointsFoldness = tempResultFoldnessArray;
                 
                 _isRightExist = true;
@@ -548,7 +551,8 @@
         
         rsd.HandModule.isRightExist = _isRightExist;
         rsd.HandModule.isLeftExist = _isLeftExist;
-            
+        rsd.HandModule.leftHandJoints = _leftHandJoints;
+        rsd.HandModule.rightHandJoints = _rightHandJoints;
     };
     
   
@@ -1010,10 +1014,10 @@
                 }
             }
         } else {
-            console.warn("exit 31");   
+            //console.warn("exit 31");   
         }
         
-        console.warn("exit 3 "+requestedJointIndex+" "+ +result.position);
+        //console.warn("exit 3 "+requestedJointIndex+" "+ +result.position);
         return -1000;
     };
     
