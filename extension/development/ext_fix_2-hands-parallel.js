@@ -469,6 +469,10 @@
         }
         
         
+        //saving hand id rellevant in order to know which gesture belongs to which hand
+        var _leftHandId, _rightHandId = -1;
+        
+        
         //start collecting
         var allHandsData = handData.queryHandData(intel.realsense.hand.AccessOrderType.ACCESS_ORDER_NEAR_TO_FAR);
         
@@ -514,7 +518,8 @@
             }
 
             
-            
+            console.warn(JSON.stringify(ihand);
+             
 //joint position block  ;  hand exist block            
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                 //left hand
@@ -523,33 +528,36 @@
                 
                 _isLeftExist = true;
                 
+                _leftHandId = ihand.uniqueId;
+                
             } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
                 //right hand
                 _rightHandJoints = tempResultJointsArray;  
                 rsd.HandModule.rightHandJointsFoldness = tempResultFoldnessArray;
                 
                 _isRightExist = true;
+            
+                _rightHandId = ihand.uniqueId;
             }
-            
-            
+        }
+        
+        
 //hand gestures block
-            console.warn("--*******--");
+            //console.warn("--*******--");
             for (var g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gestureData = handData.firedGestureData[g];
                 
-                if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
+                if (gestureData.handId == _leftHandId){
                     AddGestureObjectToArray(gestureData, rsd.HandModule.leftHandGestures);
         
-        console.warn("added "+gestureData.name+" state "+gestureData.state+" to left");            
-                } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
-                    AddGestureObjectToArray(gestureData, rsd.HandModule.rightHandGestures);
-                        console.warn("added "+gestureData.name+" state "+gestureData.state+" to right");            
+        //console.warn("added "+gestureData.name+" state "+gestureData.state+" to left");            
+                } else if (gestureData.handId == _rightHandId){
+                        AddGestureObjectToArray(gestureData, rsd.HandModule.rightHandGestures);
+                       // console.warn("added "+gestureData.name+" state "+gestureData.state+" to right");            
 
                 }
             }
-        }
-        
         
         //console.warn("gestures: "+ (rsd.HandModule.rightHandGestures== rsd.HandModule.leftHandGestures));
         console.warn("gestures right: "+ rsd.HandModule.rightHandGestures.length+" left: " +rsd.HandModule.leftHandGestures.length);
