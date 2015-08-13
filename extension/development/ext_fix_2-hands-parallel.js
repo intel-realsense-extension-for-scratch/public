@@ -448,8 +448,11 @@
     var onHandData = function (module, handData) {
         
         //reset all data each frame
-        rsd.HandModule.isRightExist = false;
-        rsd.HandModule.isLeftExist = false;
+        var _isRightExist = false;
+        var _isLeftExist = false;
+        
+        
+        
         
         rsd.HandModule.leftHandJoints = [];
         rsd.HandModule.rightHandJoints = [];
@@ -457,7 +460,11 @@
         rsd.HandModule.leftHandJointsFoldness=[];
         rsd.HandModule.rightHandJointsFoldness=[];
         
+        
         if (handData.numberOfHands == 0) {
+            
+            rsd.HandModule.isRightExist = _isRightExist;
+            rsd.HandModule.isLeftExist = _isLeftExist;
             return;
         }
         
@@ -514,14 +521,14 @@
                 rsd.HandModule.leftHandJoints = tempResultJointsArray;
                 rsd.HandModule.leftHandJointsFoldness = tempResultFoldnessArray;
                 
-                rsd.HandModule.isLeftExist = true;
+                _isLeftExist = true;
         
             } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
                 //right hand
                 rsd.HandModule.rightHandJoints = tempResultJointsArray;  
                 rsd.HandModule.rightHandJointsFoldness = tempResultFoldnessArray;
                 
-                rsd.HandModule.isRightExist = true;
+                _isRightExist = true;
             }
             
             
@@ -541,6 +548,10 @@
                 }
             }
         }
+        
+        rsd.HandModule.isRightExist = _isRightExist;
+        rsd.HandModule.isLeftExist = _isLeftExist;
+            
     };
     
   
