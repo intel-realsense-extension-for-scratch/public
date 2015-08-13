@@ -6,15 +6,9 @@
 
 <style>
     .intel-screen-modal {
-       /*
-       background-color: #ffffff;
-        color: #1c272d;
-        width: 650px;
-        */
         font-family: 'Open Sans', sans-serif;
         font-size: 18px;
         margin: 0 auto;
-        
     }
     
     .intel-image {
@@ -24,17 +18,34 @@
     
     .intel-title {
         position: absolute; 
-        top: 80px; 
+        top: 40px; 
         left: 0; 
         width: 100%; 
+        padding: 20px;
     }
     
-    .intel-title .intel-button-centered {
-        
+    .intel-title h2 {
+        text-align:left;
     }
     
-    .intel-title .intel-button-centered:hover {
-        
+    .intel-button .btn{
+        background-color: #00AEEF;
+        font-size: 16px;
+        color:white;
+        border-radius: 6px;
+        padding: 5px 40px;
+        border: 0px;
+    }
+    
+    .intel-button .btn:hover {
+        color:white;
+        background-color: #286090;
+    }
+    
+    .bottom-centered {
+        position: absolute; 
+        bottom: 0; 
+        margin: 0px auto; 
     }
 </style>
 
@@ -49,11 +60,11 @@
 
                 <h2>Hmm, something is wrong...</h2>
                 <p>See more information on extension website.</p>
-
-                <div class="intel-button-centered">
-                    <a href="https://intel-realsense-extension-for-scratch.github.io/" class="page-scroll btn btn-xl" role="button">Extension Home</a> 
-                </div>
             </div>
+            
+            <div class="intel-button bottom-centered">
+                    <a href="https://intel-realsense-extension-for-scratch.github.io/" class="btn" role="button">Extension Home</a> 
+                </div>
         </div>
     </div>                 
           
