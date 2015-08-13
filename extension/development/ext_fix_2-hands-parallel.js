@@ -518,7 +518,7 @@
             }
 
             
-            console.warn(JSON.stringify(ihand);
+            console.warn(JSON.stringify(ihand));
              
 //joint position block  ;  hand exist block            
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
