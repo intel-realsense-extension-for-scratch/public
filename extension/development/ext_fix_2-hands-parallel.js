@@ -924,7 +924,7 @@
         if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
             || (hand_side == 'Right Hand' && rsd.HandModule.isRightExist == false) 
             || (hand_side == 'Any Hand' && rsd.HandModule.isRightExist == false && rsd.HandModule.isLeftExist == false) ){
-            console.warn("exit 1");
+            //console.warn("exit 1");
             return -1000;   
         }
         
@@ -950,6 +950,11 @@
         
         //
         
+        
+        if (jointArray.length == 0){
+            console.warn("exit 30");
+            return -1000;
+        }
         
         
         //get the requested joint index
@@ -991,7 +996,7 @@
         
         //get the request value
         if (result.position != undefined) {
-            console.log("exit 2");       
+                   
             if (hand_position === "X Position") {
                 return ValueMapper(result.position.X, RS_HAND_X_MAX_LEFT, RS_HAND_X_MAX_RIGHT, SCRATCH_X_MAX_LEFT, SCRATCH_X_MAX_RIGHT);
                
@@ -1004,8 +1009,11 @@
                 
                 }
             }
+        } else {
+            console.warn("exit 31");   
         }
-        console.warn("exit 3");
+        
+        console.warn("exit 3 "+requestedJointIndex+" "+ +result.position);
         return -1000;
     };
     
