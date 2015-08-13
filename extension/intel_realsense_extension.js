@@ -174,14 +174,15 @@
             , expressionsDictionary : {}
             
             , init: function(){
-                
+                //Bug: Smile and Kiss are switched!
                 this.expressionsDictionary = {
                      "Brow lifted right"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_RIGHT
                     , "Brow lifted left"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT
                     , "Brow lowered left"   : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_LEFT
                     , "Brow lowered right"  : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_RIGHT
-                    , "Smile"               : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE
-                    , "Kiss"                : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS
+                    , "Smile"               :
+                    intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS
+                    , "Kiss"                :  intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE
                     , "Mouth open"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN
                     , "Wink left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT
                     , "Wink right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT
