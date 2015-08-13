@@ -533,22 +533,26 @@
             
             
 //hand gestures block
+            console.warn("--*******--");
             for (var g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gestureData = handData.firedGestureData[g];
                 
                 if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                     AddGestureObjectToArray(gestureData, rsd.HandModule.leftHandGestures);
-               
+        
+        console.warn("added "+gestureData.name+" state "+gestureData.state+" to left");            
                 } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
                     AddGestureObjectToArray(gestureData, rsd.HandModule.rightHandGestures);
-                
+                        console.warn("added "+gestureData.name+" state "+gestureData.state+" to right");            
+
                 }
             }
         }
         
         
-        console.warn("gestures: "+ (rsd.HandModule.rightHandGestures== rsd.HandModule.leftHandGestures));
+        //console.warn("gestures: "+ (rsd.HandModule.rightHandGestures== rsd.HandModule.leftHandGestures));
+        console.warn("gestures right: "+ rsd.HandModule.rightHandGestures.length+" left: " +rsd.HandModule.leftHandGestures.length);
         
         rsd.HandModule.isRightExist = _isRightExist;
         rsd.HandModule.isLeftExist = _isLeftExist;
@@ -573,6 +577,7 @@
         
         //if reach here, means gesture doesnt exist in array, so add it
         arr.push(dataObj);
+        
     };
     
      /**********************************************************************************************************/
