@@ -465,6 +465,9 @@
             
             rsd.HandModule.isRightExist = _isRightExist;
             rsd.HandModule.isLeftExist = _isLeftExist;
+            rsd.HandModule.leftHandJoints = _leftHandJoints;
+            rsd.HandModule.rightHandJoints = _rightHandJoints;
+            
             return;
         }
         
@@ -533,8 +536,6 @@
             
             
 //hand gestures block
-            if (handData.firedGestureData.length == 0) return;
-            
             for (var g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gestureData = handData.firedGestureData[g];
