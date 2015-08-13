@@ -174,14 +174,15 @@
             , expressionsDictionary : {}
             
             , init: function(){
-                
+                //Bug: Smile and Kiss are switched!
                 this.expressionsDictionary = {
                      "Brow lifted right"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_RIGHT
                     , "Brow lifted left"    : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_RAISER_LEFT
                     , "Brow lowered left"   : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_LEFT
                     , "Brow lowered right"  : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_RIGHT
-                    , "Smile"               : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE
-                    , "Kiss"                : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS
+                    , "Smile"               :
+                    intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS
+                    , "Kiss"                :  intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE
                     , "Mouth open"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN
                     , "Wink left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT
                     , "Wink right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT
@@ -192,24 +193,7 @@
                     , "Tongue out"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT
                 };
                 
-                // Converter: face joint index => face joint name
-                // temporary solution. will be updated in the future
-                this.landmarkDictionary = {
-                    "Left eye"          : 77
-                    , "Right eye"       : 76
-                    , "Left eye brow"   : 7
-                    , "Right eye brow"  : 2
-                    , "Chin"            : 61
-                    , "Upper lip"       : 36
-                    , "Bottom lip"      : 42
-                    , "Nose"            : 29
-                };
-
-            }
-        }
-    };
-    
-         
+                
     
     
     
@@ -450,8 +434,8 @@
         rsd.HandModule.isRightExist = false;
         rsd.HandModule.isLeftExist = false;
         
-        //rsd.HandModule.leftHandJoints=[];
-        //rsd.HandModule.rightHandJoints=[];
+        rsd.HandModule.leftHandJoints = [];
+        rsd.HandModule.rightHandJoints = [];
         
         rsd.HandModule.leftHandJointsFoldness=[];
         rsd.HandModule.rightHandJointsFoldness=[];
@@ -874,7 +858,7 @@
     
     
     
-    // work in scratchX not in scratch. added an event to the window.beforeupload in order for this to really restart the sensor
+    // works in scratchX not in scratch. added an event to the window.beforeupload in order for this to really restart the sensor
     ext._shutdown = function () {
         console.warn("Scratch _shutdown called");
         onClearSensor();
@@ -886,7 +870,7 @@
     };
    
     
-    // Scratch blocks events (Face recognition module)
+    // Scratch blocks events
     ext.isBlobExist = function () {
         return rsd.BlobModule.isExist;
     };
@@ -910,6 +894,8 @@
     
     
     ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {        
+        
+        console.warn("left: "+rsd.HandModule.isLeftExist+" right: "+ rsd.HandModule.isRightExist);
         
         //if no rellevant hands exist, return false
         if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
