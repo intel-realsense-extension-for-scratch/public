@@ -160,6 +160,7 @@
   
     
     
+    
     var FaceModule = function () {
         // private
         
@@ -193,7 +194,23 @@
                     , "Tongue out"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT
                 };
                 
-                
+                // Converter: face joint index => face joint name
+                // temporary solution. will be updated in the future
+                this.landmarkDictionary = {
+                    "Left eye"          : 77
+                    , "Right eye"       : 76
+                    , "Left eye brow"   : 7
+                    , "Right eye brow"  : 2
+                    , "Chin"            : 61
+                    , "Upper lip"       : 36
+                    , "Bottom lip"      : 42
+                    , "Nose"            : 29
+                };
+
+            }
+        }
+    };
+          
     
     
     
@@ -1321,4 +1338,5 @@
     
     ScratchExtensions.register('Intel RealSense', descriptor, ext);
     
-})({});
+})
+            ({});
