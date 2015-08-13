@@ -541,7 +541,7 @@
         
         
 //hand gestures block
-=            for (var g = 0; g < handData.firedGestureData.length; g++) {
+            for (var g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gestureData = handData.firedGestureData[g];
                 
