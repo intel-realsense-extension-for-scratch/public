@@ -838,9 +838,7 @@
 
     
 
-    //#endregion
-    
-    
+   
     
     var ValueMapper = function(value, source_min, source_max, dest_min, dest_max) {
        
@@ -888,7 +886,7 @@
     };
    
     
-    //#region Scratch blocks events (Face recognition module)
+    // Scratch blocks events (Face recognition module)
     ext.isBlobExist = function () {
         return rsd.BlobModule.isExist;
     };
