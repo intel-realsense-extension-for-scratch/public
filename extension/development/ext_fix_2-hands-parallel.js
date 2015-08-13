@@ -451,14 +451,11 @@
         var _isRightExist = false;
         var _isLeftExist = false;
         
-        
-        
-        
         rsd.HandModule.leftHandJoints = [];
         rsd.HandModule.rightHandJoints = [];
         
-        rsd.HandModule.leftHandJointsFoldness=[];
-        rsd.HandModule.rightHandJointsFoldness=[];
+        rsd.HandModule.leftHandJointsFoldness = [];
+        rsd.HandModule.rightHandJointsFoldness = [];
         
         
         if (handData.numberOfHands == 0) {
@@ -922,9 +919,7 @@
     
     
     ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {        
-        
-        console.warn("left: "+rsd.HandModule.isLeftExist+" right: "+ rsd.HandModule.isRightExist);
-        
+                
         //if no rellevant hands exist, return false
         if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
             || (hand_side == 'Right Hand' && rsd.HandModule.isRightExist == false) 
