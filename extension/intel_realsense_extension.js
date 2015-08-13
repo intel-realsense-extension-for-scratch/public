@@ -89,8 +89,8 @@
             , leftHandJointsFoldness: []  
             , rightHandJoints: []  
             , rightHandJointsFoldness: []  
-            , tempLeftHandGestures: []
-            , tempRightHandGestures: []
+            , leftHandGestures: []
+            , rightHandGestures: []
            
             , jointDictionary : {}
             , majorJointDictionary : {}
@@ -454,9 +454,6 @@
         var _leftHandJoints = [];
         var _rightHandJoints = [];
         
-        //rsd.HandModule.leftHandJoints = [];
-        //rsd.HandModule.rightHandJoints = [];
-        
         rsd.HandModule.leftHandJointsFoldness = [];
         rsd.HandModule.rightHandJointsFoldness = [];
         
@@ -470,6 +467,10 @@
             
             return;
         }
+        
+        
+        //saving hand id rellevant in order to know which gesture belongs to which hand
+        var _leftHandId, _rightHandId = -1;
         
         
         //start collecting
@@ -516,8 +517,7 @@
                 tempResultFoldnessArray.push(majorJoint);
             }
 
-            
-            
+                         
 //joint position block  ;  hand exist block            
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                 //left hand
@@ -525,31 +525,35 @@
                 rsd.HandModule.leftHandJointsFoldness = tempResultFoldnessArray;
                 
                 _isLeftExist = true;
-        
+                
+                _leftHandId = ihand.uniqueId;
+                
             } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
                 //right hand
                 _rightHandJoints = tempResultJointsArray;  
                 rsd.HandModule.rightHandJointsFoldness = tempResultFoldnessArray;
                 
                 _isRightExist = true;
-            }
             
-            
-//hand gestures block
-            for (var g = 0; g < handData.firedGestureData.length; g++) {
-                
-                var gestureData = handData.firedGestureData[g];
-                
-                if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
-                    AddGestureObjectToArray(gestureData, rsd.HandModule.tempLeftHandGestures);
-               
-                } else if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_RIGHT){
-                    AddGestureObjectToArray(gestureData, rsd.HandModule.tempRightHandGestures);
-                
-                }
+                _rightHandId = ihand.uniqueId;
             }
         }
         
+        
+//hand gestures block
+=            for (var g = 0; g < handData.firedGestureData.length; g++) {
+                
+                var gestureData = handData.firedGestureData[g];
+                
+                if (gestureData.handId == _leftHandId){
+                    AddGestureObjectToArray(gestureData, rsd.HandModule.leftHandGestures);
+        
+                } else if (gestureData.handId == _rightHandId){
+                        AddGestureObjectToArray(gestureData, rsd.HandModule.rightHandGestures);
+
+                }
+            }
+    
         rsd.HandModule.isRightExist = _isRightExist;
         rsd.HandModule.isLeftExist = _isLeftExist;
         rsd.HandModule.leftHandJoints = _leftHandJoints;
@@ -573,6 +577,7 @@
         
         //if reach here, means gesture doesnt exist in array, so add it
         arr.push(dataObj);
+        
     };
     
      /**********************************************************************************************************/
@@ -1030,11 +1035,11 @@
         
         //get array of requested hand
         if (hand_side == 'Any Hand'){
-            gesturesArray = rsd.HandModule.tempRightHandGestures.concat(rsd.HandModule.tempLeftHandGestures);
+            gesturesArray = rsd.HandModule.rightHandGestures.concat(rsd.HandModule.leftHandGestures);
             
         } else {
-            gesturesArray = { 'Left Hand'  : rsd.HandModule.tempLeftHandGestures, 
-                              'Right Hand' : rsd.HandModule.tempRightHandGestures}[hand_side];
+            gesturesArray = { 'Left Hand'  : rsd.HandModule.leftHandGestures, 
+                              'Right Hand' : rsd.HandModule.rightHandGestures}[hand_side];
         }
         
         

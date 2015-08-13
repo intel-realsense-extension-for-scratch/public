@@ -517,9 +517,7 @@
                 tempResultFoldnessArray.push(majorJoint);
             }
 
-            
-            console.warn(JSON.stringify(ihand));
-             
+                         
 //joint position block  ;  hand exist block            
             if (ihand.bodySide == intel.realsense.hand.BodySideType.BODY_SIDE_LEFT){
                 //left hand
@@ -543,25 +541,19 @@
         
         
 //hand gestures block
-            //console.warn("--*******--");
-            for (var g = 0; g < handData.firedGestureData.length; g++) {
+=            for (var g = 0; g < handData.firedGestureData.length; g++) {
                 
                 var gestureData = handData.firedGestureData[g];
                 
                 if (gestureData.handId == _leftHandId){
                     AddGestureObjectToArray(gestureData, rsd.HandModule.leftHandGestures);
         
-        //console.warn("added "+gestureData.name+" state "+gestureData.state+" to left");            
                 } else if (gestureData.handId == _rightHandId){
                         AddGestureObjectToArray(gestureData, rsd.HandModule.rightHandGestures);
-                       // console.warn("added "+gestureData.name+" state "+gestureData.state+" to right");            
 
                 }
             }
-        
-        //console.warn("gestures: "+ (rsd.HandModule.rightHandGestures== rsd.HandModule.leftHandGestures));
-        console.warn("gestures right: "+ rsd.HandModule.rightHandGestures.length+" left: " +rsd.HandModule.leftHandGestures.length);
-        
+    
         rsd.HandModule.isRightExist = _isRightExist;
         rsd.HandModule.isLeftExist = _isLeftExist;
         rsd.HandModule.leftHandJoints = _leftHandJoints;
