@@ -758,7 +758,7 @@
             speechModule.onSpeechRecognized = OnSpeechRecognized;
             speechModule.onAlertFired = OnSpeechAlert;
             return speechModule.startRec();
-        
+        })
             
         
 //general functionality        
