@@ -653,6 +653,25 @@
         
         
     }
+    
+    
+    function UpdateVoiceCommandGrammer(voiceCommand) {
+        if (speechModule != undefined) {
+            
+            //stop speech module before changing grammer
+            speechModule.stopRec()
+            .then(function (result) {
+                rsd.SpeechModule.commands.push(voiceCommand);
+                return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);               })
+            .then(function (result) {
+                return speechModule.setGrammar(1);
+            })
+            .then(function (result) {
+                return speechModule.startRec();
+            })
+            
+        }
+    }
 
 
          
@@ -750,7 +769,7 @@
         })
         .then(function (result) {
             speechModule = result;
-            var commands = ['yes', 'no', 'high', 'low'];
+            var commands = ['hello', 'yes', 'no'];
             return speechModule.buildGrammarFromStringList(1, commands, null);              
         }).then(function (result) {
             return speechModule.setGrammar(1);
@@ -1395,6 +1414,15 @@
     
     ext.hasUserSaid = function (word, sec) {
         
+        //make sure this word exists in the voice commands array
+        if (rsd.SpeechModule.commands.indexOf(word) <= -1) {
+            UpdateVoiceCommandGrammer(word);
+            return false;
+        }
+        
+        
+        
+        //make sure we have anything detected
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
 
         if (numberOfWords == 0) return false;
