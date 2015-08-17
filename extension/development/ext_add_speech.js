@@ -1405,9 +1405,12 @@
         
         var now = new Date().getTime();
         
+        console.warn("---start search speech");
         //going backwards from last recognized word to search for the wanted one
         for (var i= numberOfWords-1; i<0; i--){
             var speechItem= rsd.SpeechModule.recognizedWords[i];
+            
+            console.warn("ss "+JSON.stringify(speechItem));
             
             /*
             //if reached time stamp difference larger than wished for, exit search
@@ -1417,6 +1420,7 @@
             }
             */
             
+            console.warn("ss "+word);
             if (speechItem.text.toLowerCase() == word.toLowerCase()){
                 return true;   
             }
