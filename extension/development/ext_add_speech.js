@@ -231,6 +231,7 @@
             // public
             commands : []
             , recognizedWords : []  // { timestamp , word }
+            , tolerance : 2         // speech tolerance in seconds
                    
         }
     };
@@ -1457,11 +1458,42 @@
     }
 
     
-    ext.setSpeechTolerance = function(){
-        
+    ext.setSpeechTolerance = function(toleranceValue){
+        rsd.SpeechModule.tolerance = toleranceValue;
+    
     }
     
-    ext.hasUserSaidNoTolerance = function (){
+    ext.hasUserSaidNoTolerance = function (word){
+        //make sure this word exists in the voice commands array
+        if (rsd.SpeechModule.commands.indexOf(word) <= -1) {
+            UpdateVoiceCommandGrammer(word);
+            return false;
+        }
+        
+        
+        
+        //make sure we have anything detected
+        var numberOfWords = rsd.SpeechModule.recognizedWords.length;
+
+        if (numberOfWords == 0) return false;
+        
+        var now = new Date().getTime();
+        
+        //going backwards from last recognized word to search for the wanted one
+        for (var i= numberOfWords-1; i>=0; i--){
+            var speechItem= rsd.SpeechModule.recognizedWords[i];
+            
+            //if reached time stamp difference larger than wished for, exit search
+            if (now - speechItem.time > rsd.SpeechModule.tolerance*1000){
+                return false;
+                break;
+            }
+            
+            if (speechItem.text.toLowerCase() == word.toLowerCase()){
+                return true;   
+            }
+        }
+        
         return false;
         
     }
