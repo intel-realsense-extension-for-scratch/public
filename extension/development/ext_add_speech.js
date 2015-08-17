@@ -1451,8 +1451,8 @@
             ,['r', '%m.hand_type %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Any Hand', 'Index']
            // ,['r', '%m.rotation_value of %m.hand_type', 'getHandRotation', 'Rotation X', 'Any Hand']
         ,['-']
-            ,['b', 'Has user said %s since %n secs?', 'hasUserSaid', 'Hello', '2']
-            ,['r', 'Recognized speech', 'getRecognizedSpeech']
+            ,['b', 'Has user said %s in the past %n sec.?', 'hasUserSaid', 'Hello', '2']
+            ,['r', 'Recognized word', 'getRecognizedSpeech']
         
         ]
          
