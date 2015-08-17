@@ -640,7 +640,7 @@
 
             var recognizedWord = {
                 text: res.sentence
-                , time: new Date()
+                , time: new Date().getTime()
             };
             
             rsd.SpeechModule.recognizedWords.push(recognizedWord);
@@ -1403,7 +1403,7 @@
 
         if (numberOfWords == 0) return false;
         
-        var now = new Date();
+        var now = new Date().getTime();
         
         //going backwards from last recognized word to search for the wanted one
         for (var i= numberOfWords-1; i<0; i--){
