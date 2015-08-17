@@ -1394,10 +1394,6 @@
     
     
     ext.hasUserSaid = function (word, sec) {
-        /*QA TAG*/
-        //console.log("(isUserSaid) Word to find: " + word.toLowerCase());
-        //console.log('(isUserSaid) for the last' + sec + ' seconds');
-        /*end of QA TAG*/
         
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
 
@@ -1405,13 +1401,9 @@
         
         var now = new Date().getTime();
         
-        console.warn("---start search speech");
         //going backwards from last recognized word to search for the wanted one
         for (var i= numberOfWords-1; i>=0; i--){
             var speechItem= rsd.SpeechModule.recognizedWords[i];
-            
-            console.warn("ss "+JSON.stringify(speechItem));
-            
             
             //if reached time stamp difference larger than wished for, exit search
             if (now - speechItem.time > sec*1000){
@@ -1419,7 +1411,6 @@
                 break;
             }
             
-            console.warn("ss "+word);
             if (speechItem.text.toLowerCase() == word.toLowerCase()){
                 return true;   
             }
