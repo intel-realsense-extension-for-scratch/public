@@ -1460,8 +1460,8 @@
             ,['b', 'Has user said %s in the past %n sec.?', 'hasUserSaid', 'Hello', '2']
             ,['b', 'Has user said %s? set speech tolerance to %n sec.', 'hasUserSaid', 'Hello', '2']
             ,['b', 'Has user said %s? tolerance: %n sec.', 'hasUserSaid', 'Hello', '2']
-            ,['b', 'Has user said %s?', 'hasUserSaidNotolerance', 'Hello']
-            ,['b', 'set speech tolerance to %n sec.', 'setSpeechTolerance', '2']
+            ,['b', 'Has user said %s?', 'hasUserSaidNoTolerance', 'Hello']
+            ,['', 'set speech tolerance to %n sec.', 'setSpeechTolerance', '2']
             
             ,['r', 'Recognized word', 'getRecognizedSpeech']
         
