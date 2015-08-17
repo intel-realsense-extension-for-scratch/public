@@ -1408,11 +1408,14 @@
         //going backwards from last recognized word to search for the wanted one
         for (var i= numberOfWords-1; i<0; i--){
             var speechItem= rsd.SpeechModule.recognizedWords[i];
+            
+            /*
             //if reached time stamp difference larger than wished for, exit search
             if (now - speechItem.time > sec*1000){
                 return false;
                 break;
             }
+            */
             
             if (speechItem.text.toLowerCase() == word.toLowerCase()){
                 return true;   
