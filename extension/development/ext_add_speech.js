@@ -636,8 +636,8 @@
             console.warn(res.sentence);
 
             var recognizedWord = {
-                text: res.sentence
-                , time: new Date().getTime()
+                text: res.sentence.toLowerCase()
+                , time: new Date()
             };
             
             rsd.SpeechModule.recognizedWords.push(recognizedWord);
@@ -1410,6 +1410,8 @@
     
     
     
+    
+    
     ext.getRecognizedSpeech = function()
     {
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
@@ -1422,8 +1424,10 @@
     
     ext.hasUserSaid = function (word){
         
-        console.warn("hasUserSaid search for: "+ word);
+        //make sure its in lowercase
+        word = word.toLowerCase();
         
+        console.warn("hasUserSaid search for: "+ word);
         
         //make sure this word exists in the voice commands array
         if (rsd.SpeechModule.commands.indexOf(word) <= -1) {
@@ -1435,24 +1439,25 @@
         
         //make sure we have anything detected
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
-
+        
         console.warn("user said: "+ numberOfWords);
         
         if (numberOfWords == 0) return false;
         
-        var now = new Date().getTime();
+        
+        var now = new Date();
         
         //going backwards from last recognized word to search for the wanted one
-        for (var i= numberOfWords-1; i>=0; i--){
-            var speechItem= rsd.SpeechModule.recognizedWords[i];
+        for (var i = numberOfWords-1; i>=0; i--){
+            var speechItem = rsd.SpeechModule.recognizedWords[i];
             
             //if reached time stamp difference larger than wished for, exit search
-            if (now - speechItem.time > rsd.SpeechModule.tolerance*1000){
+            if (now.getTime() - speechItem.time.getTime() > rsd.SpeechModule.tolerance * 1000){
                 return false;
                 break;
             }
             
-            if (speechItem.text.toLowerCase() == word.toLowerCase()){
+            if (speechItem.text == word) {
                 return true;   
             }
         }
