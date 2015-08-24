@@ -227,7 +227,7 @@
             // public
             commands : []
             , recognizedWords : []  // { timestamp , word }
-            , tolerance : 2         // speech tolerance in seconds
+            , tolerance : 3         // speech tolerance in seconds
                    
         }
     };
@@ -1409,57 +1409,22 @@
     
     
     
-    ext.hasUserSaid = function (word, sec) {
-        
-        //make sure this word exists in the voice commands array
-        if (rsd.SpeechModule.commands.indexOf(word) <= -1) {
-            UpdateVoiceCommandGrammer(word);
-            return false;
-        }
-        
-        
-        
-        //make sure we have anything detected
-        var numberOfWords = rsd.SpeechModule.recognizedWords.length;
-
-        if (numberOfWords == 0) return false;
-        
-        var now = new Date().getTime();
-        
-        //going backwards from last recognized word to search for the wanted one
-        for (var i= numberOfWords-1; i>=0; i--){
-            var speechItem= rsd.SpeechModule.recognizedWords[i];
-            
-            //if reached time stamp difference larger than wished for, exit search
-            if (now - speechItem.time > sec*1000){
-                return false;
-                break;
-            }
-            
-            if (speechItem.text.toLowerCase() == word.toLowerCase()){
-                return true;   
-            }
-        }
-        
-        return false;
-    };
     
     ext.getRecognizedSpeech = function()
     {
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
         
-        if (numberOfWords==0) return "";
+        if (numberOfWords == 0) return "";
         
         return rsd.SpeechModule.recognizedWords[numberOfWords-1].text;
-    }
+    };
 
     
-    ext.setSpeechTolerance = function(toleranceValue){
-        rsd.SpeechModule.tolerance = toleranceValue;
-    
-    }
-    
-    ext.hasUserSaidNoTolerance = function (word){
+    ext.hasUserSaid = function (word){
+        
+        console.warn("hasUserSaid search for: "+ word);
+        
+        
         //make sure this word exists in the voice commands array
         if (rsd.SpeechModule.commands.indexOf(word) <= -1) {
             UpdateVoiceCommandGrammer(word);
@@ -1471,6 +1436,8 @@
         //make sure we have anything detected
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
 
+        console.warn("user said: "+ numberOfWords);
+        
         if (numberOfWords == 0) return false;
         
         var now = new Date().getTime();
@@ -1492,8 +1459,15 @@
         
         return false;
         
-    }
+    };
     
+    
+    ext.hasUserSaidUnknown = function() {
+        
+        
+        return false;   
+    
+    };
     
     
     
@@ -1501,9 +1475,9 @@
     
     var descriptor = {
         blocks: [
-             ['b', 'Face visible?', 'isFaceExist', '']
+             ['b', 'face visible?', 'isFaceExist', '']
             ,['r', '%m.position_value of %d.face_joints', 'getFaceJointPosition', 'X Position', 'Nose']
-            ,['b', 'Face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
+            ,['b', 'face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
             ,['r', '%m.rotation_value rotation of Head', 'getHeadRotation', 'Yaw']
             
         ,['-']
@@ -1512,15 +1486,12 @@
             ,['b', '%m.hand_type gesture %m.hand_gestures?', 'getHandGesture', 'Any Hand', 'V sign']
             ,['r', '%m.hand_type %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Any Hand', 'Index']
            // ,['r', '%m.rotation_value of %m.hand_type', 'getHandRotation', 'Rotation X', 'Any Hand']
-        ,['-']
-            ,['b', 'Has user said %s in the past %n sec.?', 'hasUserSaid', 'Hello', '2']
-            ,['b', 'Has user said %s? set speech tolerance to %n sec.', 'hasUserSaid', 'Hello', '2']
-            ,['b', 'Has user said %s? tolerance: %n sec.', 'hasUserSaid', 'Hello', '2']
-            ,['b', 'User said %s?', 'hasUserSaidNoTolerance', 'Hello']
-            ,['', 'set speech tolerance to %n sec.', 'setSpeechTolerance', '2']
             
-            ,['r', 'Recognized word', 'getRecognizedSpeech']
-        
+        ,['-']
+            ,['b', 'user said %s?', 'hasUserSaid', 'Hello']
+            ,['b', 'user said unknown?', 'hasUserSaidUnknown']
+            ,['r', 'last recognized word', 'getRecognizedSpeech']
+            
         ]
          
         , menus: {
@@ -1543,7 +1514,7 @@
                                     "Swipe left", "Swipe right", "Tap", "Fist", "Thumb up", 
                                     "Thumb down", "Wave" ],
             "rotation_value":       [ "Yaw", "Pitch", "Roll" ],
-            "position_value":       [ "X Position",  "Y Position",  "Z Position" ]
+            "position_value":       [ "X Position",  "Y Position",  "Z Position" ],
         }
         
         , url:                      'http://intel-realsense-extension-for-scratch.github.io/'
