@@ -187,10 +187,6 @@
                     , "Mouth open"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN
                     , "Wink left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT
                     , "Wink right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT
-                    , "Look left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_LEFT
-                    , "Look right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_RIGHT
-                    , "Look up"             : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_UP
-                    , "Look down"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_DOWN
                     , "Tongue out"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT
                 };
                 
@@ -1540,9 +1536,8 @@
             "major_joint_name":     [ "Index", "Thumb", "Middle", "Ring", "Pinky" ],
             "facial_expressions":   [ "Wink left", "Wink right" ,"Brow lifted left", 
                                      "Brow lifted right", "Brow lowered left", 
-                                     "Brow lowered right", "Mouth open", "Tongue out",
-                                     "Smile", "Kiss", "Look down" ,"Look up", "Look left", 
-                                     "Look right" ],
+                                     "Brow lowered right", "Mouth open", 
+                                     "Tongue out", "Smile", "Kiss"],
             "hand_gestures":        [ "Spread fingers", "V sign", "Full pinch",
                                     "Two fingers pinch open", "Swipe down", "Swipe up", 
                                     "Swipe left", "Swipe right", "Tap", "Fist", "Thumb up", 

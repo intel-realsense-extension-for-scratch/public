@@ -98,7 +98,7 @@
             
             , init: function(){
                 this.jointDictionary = {
-                   "Wrist"                 : intel.realsense.hand.JointType.JOINT_WRIST
+                   "Wrist"                  : intel.realsense.hand.JointType.JOINT_WRIST
                     , "Center"              : intel.realsense.hand.JointType.JOINT_CENTER
 
                     , "Thumb base"          : intel.realsense.hand.JointType.JOINT_THUMB_BASE
@@ -187,10 +187,6 @@
                     , "Mouth open"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN
                     , "Wink left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT
                     , "Wink right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT
-                    , "Look left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_LEFT
-                    , "Look right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_TURN_RIGHT
-                    , "Look up"             : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_UP
-                    , "Look down"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_HEAD_DOWN
                     , "Tongue out"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_TONGUE_OUT
                 };
                 
@@ -385,22 +381,9 @@
                     for (var fe=0; fe<face.expressions.expressions.length; fe++){
                         var f_expr = face.expressions.expressions[fe];
                         if (f_expr.intensity>20) {
-                                //add it to array of current frame only
-                                rsd.FaceModule.expressionsOccuredLastFrame.push(fe);
-
-        /*  
-                                //add expression to array with timestamp
-                                var f_expression = new Object();
-                                f_expression.text = f_expr;
-                                f_expression.timestamp = new Date();
-
-                                faceExpressionArray.push(f_expression);
-
-                                //remove first array element if reached max number of face expressions allowed to save
-                                if (faceExpressionArray.length == MAX_NUM_OF_RECOGNIZED_FACE_EXPRESSIONS){
-                                    faceExpressionArray.shift();   
-                                }
-        */
+                            //add it to array of current frame only
+                            rsd.FaceModule.expressionsOccuredLastFrame.push(fe);
+                            
                         }
                     }
                 }
@@ -549,7 +532,7 @@
                     AddGestureObjectToArray(gestureData, rsd.HandModule.leftHandGestures);
         
                 } else if (gestureData.handId == _rightHandId){
-                        AddGestureObjectToArray(gestureData, rsd.HandModule.rightHandGestures);
+                    AddGestureObjectToArray(gestureData, rsd.HandModule.rightHandGestures);
 
                 }
             }
@@ -841,7 +824,7 @@
             .done(function(script, textStatus) {
              
                 dependencyAllCreated();
-                  
+            
             })
             .fail(function(jqxhr, settings, exception) {
                 console.log('Load realsense fail');
@@ -1346,9 +1329,8 @@
             "major_joint_name":     [ "Index", "Thumb", "Middle", "Ring", "Pinky" ],
             "facial_expressions":   [ "Wink left", "Wink right" ,"Brow lifted left", 
                                      "Brow lifted right", "Brow lowered left", 
-                                     "Brow lowered right", "Mouth open", "Tongue out",
-                                     "Smile", "Kiss", "Look down" ,"Look up", "Look left", 
-                                     "Look right" ],
+                                     "Brow lowered right", "Mouth open", 
+                                     "Tongue out", "Smile", "Kiss"],
             "hand_gestures":      [ "Spread fingers", "V sign", "Full pinch",
                                     "Two fingers pinch open", "Swipe down", "Swipe up", 
                                    "Swipe left", "Swipe right", "Tap", "Fist", "Thumb up", 
