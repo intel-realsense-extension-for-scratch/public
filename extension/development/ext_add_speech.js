@@ -629,9 +629,7 @@
     
     
     function OnSpeechRecognized(sender, recognizedSpeech) {
-        var res = recognizedSpeech.data.scores[0];
-        
-        
+       /* var res = recognizedSpeech.data.scores[0];
         if (res.confidence != undefined && res.confidence > 30) { 
             console.warn(res.sentence);
 
@@ -642,13 +640,34 @@
             
             rsd.SpeechModule.recognizedWords.push(recognizedWord);
         }
+        */
+        
+        //same process but making sure that all optional words will get in as well
+        for (var sp=0; sp < recognizedSpeech.data.scores.length; sp++){
+            var res = recognizedSpeech.data.scores[sp];
+            
+            if (res.confidence != undefined && res.confidence > 40) {
+                console.warn(res.sentence);
+
+                var recognizedWord = {
+                    text: res.sentence.toLowerCase()
+                    , time: new Date()
+                };
+
+                rsd.SpeechModule.recognizedWords.push(recognizedWord);
+            }
+        }
     }
 
     /* alert fired every time user start saying something and finishes talking */
     function OnSpeechAlert(sender, speechAlert) {
         console.warn(speechAlert.data.name);
         
-        
+        switch(speechAlert.data.name){
+                
+            case intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE:
+            break;
+        }
     }
     
     
@@ -1424,10 +1443,8 @@
     
     ext.hasUserSaid = function (word){
         
-        //make sure its in lowercase
+        //make sure word is lowercased
         word = word.toLowerCase();
-        
-        console.warn("hasUserSaid search for: "+ word);
         
         //make sure this word exists in the voice commands array
         if (rsd.SpeechModule.commands.indexOf(word) <= -1) {
@@ -1436,14 +1453,10 @@
         }
         
         
-        
         //make sure we have anything detected
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
         
-        console.warn("user said: "+ numberOfWords);
-        
         if (numberOfWords == 0) return false;
-        
         
         var now = new Date();
         
@@ -1522,7 +1535,7 @@
             "position_value":       [ "X Position",  "Y Position",  "Z Position" ],
         }
         
-        , url:                      'http://intel-realsense-extension-for-scratch.github.io/'
+        , url:                      'http://www.intel.com/realsense/scratch'
     };
     
     ScratchExtensions.register('Intel RealSense', descriptor, ext);

@@ -1339,7 +1339,7 @@
             "position_value":       [ "X Position",  "Y Position",  "Z Position" ]
         }
         
-        , url: 'http://intel-realsense-extension-for-scratch.github.io/'
+        , url: 'http://www.intel.com/realsense/scratch'
     };
     
     ScratchExtensions.register('Intel RealSense', descriptor, ext);
