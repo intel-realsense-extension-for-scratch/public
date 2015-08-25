@@ -314,7 +314,7 @@
             speechModule.stopRec().then(function (result) {
                 speechModule.release();
                 speechModule = undefined;
-
+                
                 if (sense != undefined) {
                     sense.release()
                     .then(function (result) {
@@ -402,22 +402,8 @@
                     for (var fe=0; fe<face.expressions.expressions.length; fe++){
                         var f_expr = face.expressions.expressions[fe];
                         if (f_expr.intensity>20) {
-                                //add it to array of current frame only
-                                rsd.FaceModule.expressionsOccuredLastFrame.push(fe);
-
-        /*  
-                                //add expression to array with timestamp
-                                var f_expression = new Object();
-                                f_expression.text = f_expr;
-                                f_expression.timestamp = new Date();
-
-                                faceExpressionArray.push(f_expression);
-
-                                //remove first array element if reached max number of face expressions allowed to save
-                                if (faceExpressionArray.length == MAX_NUM_OF_RECOGNIZED_FACE_EXPRESSIONS){
-                                    faceExpressionArray.shift();   
-                                }
-        */
+                            //add it to array of current frame only
+                            rsd.FaceModule.expressionsOccuredLastFrame.push(fe);
                         }
                     }
                 }
@@ -682,13 +668,13 @@
             speechModule.stopRec()
             .then(function (result) {
                 rsd.SpeechModule.commands.push(voiceCommand);
-                return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);               })
+                return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);                 })
             .then(function (result) {
                 return speechModule.setGrammar(1);
             })
             .then(function (result) {
                 return speechModule.startRec();
-            })
+            });
             
         }
     }
@@ -789,7 +775,7 @@
         })
         .then(function (result) {
             speechModule = result;
-            var commands = ['hello', 'yes', 'no'];
+            var commands = ['hello', 'hi', 'yes', 'no'];
             return speechModule.buildGrammarFromStringList(1, commands, null);              
         }).then(function (result) {
             return speechModule.setGrammar(1);
@@ -833,14 +819,16 @@
             
             switch (error.status)
             {
-                case -102:
+                case intel.realsense.Status.STATUS_ALLOC_FAILED: 
+                    // meaning -102
                     //sensor is already active on another window / app    //GZ said this should work
                     console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
                     rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
                     break;
-            
                     
-                case -3:
+                    
+                case intel.realsense.Status.STATUS_ITEM_UNAVAILABLE: 
+                    // meaning -3
                     //unknown error
                     rsd.Status = { status: 0, msg: 'Try restarting your computer'};
                     
@@ -858,12 +846,6 @@
             }
             
         });
-        
-        
-        
-        //speech module init
-        
-        //TODO load speech here
         
     };
     
@@ -911,7 +893,7 @@
                 PopAlert();
             });
             
-        }else{
+        } else {
             rsd.Status = { status: 0, msg: 'platform not ready' };  
             
             PopAlert();
@@ -923,8 +905,7 @@
     var PopAlert = function() {
             
         if (rsd.Status.status == 0) {
-            //console.warn("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
-
+            
             showModal("template-realsense");
         }
     };
