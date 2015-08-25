@@ -312,7 +312,7 @@
         
         if (speechModule != undefined) {
             speechModule.stopRec().then(function (result) {
-                speechModule.Release();
+                speechModule.release();
                 speechModule = undefined;
 
                 if (sense != undefined) {
