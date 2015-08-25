@@ -226,9 +226,9 @@
         return {
             // public
             commands : []
-            , recognizedWords : []  // { timestamp , word }
-            , tolerance : 3         // speech tolerance in seconds
-                   
+            , recognizedWords : []      // { timestamp , word }
+            , tolerance : 3             // speech tolerance in seconds
+            , isUserSaidUnknown : false // did user said something unknown
         }
     };
     
@@ -663,10 +663,14 @@
     function OnSpeechAlert(sender, speechAlert) {
         console.warn(speechAlert.data.name);
         
-        switch(speechAlert.data.name){
-                
-            case intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE:
-            break;
+        
+        if (speechAlert.data.name == intel.realsense.speech.AlertType.ALERT_SPEECH_BEGIN)
+        {
+            rsd.SpeechModule.isUserSaidUnknown = false;
+        } 
+        else if (speechAlert.data.name == intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE)
+        {
+            rsd.SpeechModule.isUserSaidUnknown = true;
         }
     }
     
@@ -1482,8 +1486,7 @@
     
     ext.hasUserSaidUnknown = function() {
         
-        
-        return false;   
+        return rsd.SpeechModule.isUserSaidUnknown;   
     
     };
     
