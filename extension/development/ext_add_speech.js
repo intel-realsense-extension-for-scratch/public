@@ -229,6 +229,11 @@
             , recognizedWords : []      // { timestamp , word }
             , tolerance : 3             // speech tolerance in seconds
             , isUserSaidUnknown : false // did user said something unknown
+            
+            , init : function() {
+                this.commands = ['hello', 'hi', 'bye', 'yes', 'no', 'left', 'right', 'up', 'down'];
+               
+            }
         }
     };
     
@@ -672,7 +677,8 @@
             speechModule.stopRec()
             .then(function (result) {
                 rsd.SpeechModule.commands.push(voiceCommand);
-                return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);                 })
+                return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);                 
+            })
             .then(function (result) {
                 return speechModule.setGrammar(1);
             })
@@ -779,11 +785,12 @@
         })
         .then(function (result) {
             speechModule = result;
-            var commands = ['hello', 'hi', 'yes', 'no'];
-            return speechModule.buildGrammarFromStringList(1, commands, null);              
-        }).then(function (result) {
+            return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);              
+        })
+        .then(function (result) {
             return speechModule.setGrammar(1);
-        }).then(function (result) {
+        })
+        .then(function (result) {
             speechModule.onSpeechRecognized = OnSpeechRecognized;
             speechModule.onAlertFired = OnSpeechAlert;
             return speechModule.startRec();
@@ -920,13 +927,15 @@
         rs = intel.realsense;
         
         
-        //validate realsense platform state
-        ValidatePlatformState();
-        
-        
         //create realsense data object
         rsd.FaceModule.init();
         rsd.HandModule.init();
+        rsd.SpeechModule.init();
+        
+        
+        //validate realsense platform state
+        ValidatePlatformState();
+        
     };
     
     
