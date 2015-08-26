@@ -650,13 +650,15 @@
         console.warn(JSON.stringify(speechAlert.data));
         
         
-        if (speechAlert.data.name == intel.realsense.speech.AlertType.ALERT_SPEECH_BEGIN 
-           || speechAlert.data.name == 'ALERT_SPEECH_BEGIN')
+        if (speechAlert.data.label == intel.realsense.speech.AlertType.ALERT_SPEECH_BEGIN 
+         //  || speechAlert.data.name == 'ALERT_SPEECH_BEGIN'
+           )
         {
             rsd.SpeechModule.isUserSaidUnknown = false;
         } 
-        else if (speechAlert.data.name == intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE
-                || speechAlert.data.name == 'ALERT_SPEECH_UNRECOGNIZABLE')
+        else if (speechAlert.data.label == intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE
+            //    || speechAlert.data.name == 'ALERT_SPEECH_UNRECOGNIZABLE'
+                )
         {
             rsd.SpeechModule.isUserSaidUnknown = true;
         }
