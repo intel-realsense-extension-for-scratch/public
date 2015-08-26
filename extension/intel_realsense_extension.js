@@ -1331,10 +1331,10 @@
                                      "Brow lifted right", "Brow lowered left", 
                                      "Brow lowered right", "Mouth open", 
                                      "Tongue out", "Smile", "Kiss"],
-            "hand_gestures":      [ "Spread fingers", "V sign", "Full pinch",
+            "hand_gestures":        [ "Spread fingers", "V sign", "Full pinch",
                                     "Two fingers pinch open", "Swipe down", "Swipe up", 
-                                   "Swipe left", "Swipe right", "Tap", "Fist", "Thumb up", 
-                                   "Thumb down", "Wave" ],
+                                    "Swipe left", "Swipe right", "Tap", "Fist", "Thumb up", 
+                                    "Thumb down", "Wave" ],
             "rotation_value":       [ "Yaw", "Pitch", "Roll" ],
             "position_value":       [ "X Position",  "Y Position",  "Z Position" ]
         }
