@@ -228,6 +228,7 @@
             commands : []
             , recognizedWords : []      // { timestamp , word }
             , tolerance : 3             // speech tolerance in seconds
+            , confidenceTolerance: 60   // speech tolerance to other words (in precentages)
             , isUserSaidUnknown : false // did user said something unknown
             
             , init : function() {
@@ -637,8 +638,8 @@
         for (var sp=0; sp < recognizedSpeech.data.scores.length; sp++){
             var res = recognizedSpeech.data.scores[sp];
             
-            if (res.confidence != undefined && res.confidence > 40) {
-                console.warn(res.sentence);
+            if (res.confidence != undefined && res.confidence > rsd.SpeechModule.confidenceTolerance) {
+                console.warn(res.sentence + " " + res.confidence);
 
                 var recognizedWord = {
                     text: res.sentence.toLowerCase()
@@ -655,15 +656,11 @@
         console.warn(JSON.stringify(speechAlert.data));
         
         
-        if (speechAlert.data.label == intel.realsense.speech.AlertType.ALERT_SPEECH_BEGIN 
-         //  || speechAlert.data.name == 'ALERT_SPEECH_BEGIN'
-           )
+        if (speechAlert.data.label == intel.realsense.speech.AlertType.ALERT_SPEECH_BEGIN)
         {
             rsd.SpeechModule.isUserSaidUnknown = false;
-        } 
-        else if (speechAlert.data.label == intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE
-            //    || speechAlert.data.name == 'ALERT_SPEECH_UNRECOGNIZABLE'
-                )
+        }
+        else if (speechAlert.data.label == intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE)
         {
             rsd.SpeechModule.isUserSaidUnknown = true;
         }
@@ -681,9 +678,11 @@
             })
             .then(function (result) {
                 return speechModule.setGrammar(1);
+           
             })
             .then(function (result) {
                 return speechModule.startRec();
+           
             });
             
         }
@@ -1386,7 +1385,7 @@
 
             }
         }
-            
+        
         if (requestedExpressionIndex == -1) {
             //couldnt find requested expression
             return false;
@@ -1439,7 +1438,7 @@
     };
 
     
-    ext.hasUserSaid = function (word){
+    ext.hasUserSaid = function (word) {
         
         //make sure word is lowercased
         word = word.toLowerCase();
