@@ -228,7 +228,7 @@
             commands : []
             , recognizedWords : []      // { timestamp , word }
             , tolerance : 3             // speech tolerance in seconds
-            , confidenceTolerance: 60   // speech tolerance to other words (in precentages)
+            , confidenceTolerance: 40   // speech tolerance to other words (in precentages)
             , isUserSaidUnknown : false // did user said something unknown
             
             , init : function() {
