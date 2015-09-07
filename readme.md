@@ -4,7 +4,7 @@ Intel® RealSense™ Extension for Scratch*
 Intel® RealSense™ Extension for Scratch introduces new and amazing capabilities - all made simple with just a few Scratch blocks
 
 
-Please go to our <a href="https://intel-realsense-extension-for-scratch.github.io/">official page</a> for more details and to get started.
+Please go to our <a href="http://www.intel.com/realsense/scratch">official page</a> for more details and to get started.
 
 <br>*  Scratch is a project of the Lifelong Kindergarten group of the MIT Media Lab 
 
