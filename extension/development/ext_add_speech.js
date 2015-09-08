@@ -699,6 +699,7 @@
 
                 })
                 .then(function (result) {
+                    console.warn(rsd.SpeechModule.commands);
                     return rsd.SpeechModule.isUpdatingGrammar = false;
                 });
             }
