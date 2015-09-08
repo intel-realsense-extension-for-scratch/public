@@ -231,6 +231,8 @@
             , confidenceTolerance: 40   // speech tolerance to other words (in precentages)
             , isUserSaidUnknown : false // did user said something unknown
             , addHighestResultOnly : true  // add to the result array only the result with the highest value 
+            , isUpdatingGrammar : false //make sure we dont update grammar twice in parallel
+
             
             , init : function() {
                 this.commands = ['hello', 'hi', 'bye', 'yes', 'no', 'left', 'right', 'up', 'down'];
