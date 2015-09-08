@@ -230,6 +230,7 @@
             , tolerance : 3             // speech tolerance in seconds
             , confidenceTolerance: 40   // speech tolerance to other words (in precentages)
             , isUserSaidUnknown : false // did user said something unknown
+            , addHighestResultOnly : true  // add to the result array only the result with the highest value 
             
             , init : function() {
                 this.commands = ['hello', 'hi', 'bye', 'yes', 'no', 'left', 'right', 'up', 'down'];
@@ -647,6 +648,10 @@
                 };
 
                 rsd.SpeechModule.recognizedWords.push(recognizedWord);
+                
+                if (rsd.SpeechModule.addHighestResultOnly == true){
+                    break;   
+                }
             }
         }
     }
@@ -655,14 +660,20 @@
     function OnSpeechAlert(sender, speechAlert) {
         console.warn(JSON.stringify(speechAlert.data));
         
-        
-        if (speechAlert.data.label == intel.realsense.speech.AlertType.ALERT_SPEECH_BEGIN)
-        {
-            rsd.SpeechModule.isUserSaidUnknown = false;
-        }
-        else if (speechAlert.data.label == intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE)
-        {
-            rsd.SpeechModule.isUserSaidUnknown = true;
+        switch (speechAlert.data.label) {
+
+            case intel.realsense.speech.AlertType.ALERT_SPEECH_BEGIN:
+                rsd.SpeechModule.isUserSaidUnknown = false;
+                break;
+
+            case intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE:
+                rsd.SpeechModule.isUserSaidUnknown = true;
+                break;
+
+            case intel.realsense.speech.AlertType.ALERT_SNR_LOW:
+                // there is a big background noise
+                
+                break;
         }
     }
     
