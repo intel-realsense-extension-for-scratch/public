@@ -680,22 +680,28 @@
     
     function UpdateVoiceCommandGrammer(voiceCommand) {
         if (speechModule != undefined) {
-            
-            //stop speech module before changing grammer
-            speechModule.stopRec()
-            .then(function (result) {
-                rsd.SpeechModule.commands.push(voiceCommand);
-                return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);                 
-            })
-            .then(function (result) {
-                return speechModule.setGrammar(1);
-           
-            })
-            .then(function (result) {
-                return speechModule.startRec();
-           
-            });
-            
+            if (rsd.SpeechModule.isUpdatingGrammar == false){
+                //make sure we dont update grammar twice in parallel
+                rsd.SpeechModule.isUpdatingGrammar = true;
+                
+                //stop speech module before changing grammer
+                speechModule.stopRec()
+                .then(function (result) {
+                    rsd.SpeechModule.commands.push(voiceCommand);
+                    return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);                 
+                })
+                .then(function (result) {
+                    return speechModule.setGrammar(1);
+
+                })
+                .then(function (result) {
+                    return speechModule.startRec();
+
+                })
+                .then(function (result) {
+                    return rsd.SpeechModule.isUpdatingGrammar = false;
+                });
+            }
         }
     }
 
