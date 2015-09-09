@@ -686,6 +686,10 @@
                 //make sure we dont update grammar twice in parallel
                 rsd.SpeechModule.isUpdatingGrammar = true;
                 
+                //stop listeners
+                speechModule.onSpeechRecognized = null;
+                speechModule.onAlertFired = null;
+                
                 //stop speech module before changing grammer
                 speechModule.stopRec()
                 .then(function (result) {
@@ -697,8 +701,10 @@
 
                 })
                 .then(function (result) {
+                    speechModule.onSpeechRecognized = OnSpeechRecognized;
+                    speechModule.onAlertFired = OnSpeechAlert;
                     return speechModule.startRec();
-
+                
                 })
                 .then(function (result) {
                     console.warn("new commands: "+rsd.SpeechModule.commands);
