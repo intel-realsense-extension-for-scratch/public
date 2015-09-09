@@ -689,6 +689,8 @@
     
     
     function UpdateVoiceCommandGrammer(voiceCommand) {
+        console.warn("UpdateVoiceCommandGrammer "+speechModule+ " isUpdatingGrammar "+ rsd.SpeechModule.isUpdatingGrammar);
+        
         if (speechModule != undefined) {
             if (rsd.SpeechModule.isUpdatingGrammar == false) {
                 //make sure we dont update grammar twice in parallel
