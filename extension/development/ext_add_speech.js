@@ -226,12 +226,12 @@
         return {
             // public
             commands : []
-            , recognizedWords : []      // { timestamp , word }
-            , tolerance : 3             // speech tolerance in seconds
-            , confidenceTolerance: 40   // speech tolerance to other words (in precentages)
-            , isUserSaidUnknown : false // did user said something unknown
-            , addHighestResultOnly : true  // add to the result array only the result with the highest value 
-            , isUpdatingGrammar : false //make sure we dont update grammar twice in parallel
+            , recognizedWords : []          // { timestamp , word }
+            , tolerance : 3                 // speech tolerance in seconds
+            , confidenceTolerance: 40       // speech tolerance to other words (in precentages)
+            , isUserSaidUnknown : false     // did user said something unknown
+            , addHighestResultOnly : true   // add to the result array only the result with the highest value 
+            , isUpdatingGrammar : false     //make sure we dont update grammar twice in parallel
 
             
             , init : function() {
@@ -1448,6 +1448,20 @@
     
     
     
+    function IsWordSimilar(timenow, speechWord, wordSaid){
+        //if reached time stamp difference larger than wished for, break and exit search
+        if (timenow.getTime() - speechWord.time.getTime() > rsd.SpeechModule.tolerance * 1000){
+            return false;
+        }
+
+        if (speechWord.text == wordSaid) {
+            return true;   
+        }
+        
+        return false;
+    }
+    
+    
     ext.getRecognizedSpeech = function()
     {
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
@@ -1479,24 +1493,26 @@
         
         console.warn("time now: "+now.getTime()+" last word time: "+rsd.SpeechModule.recognizedWords[numberOfWords-1].time.getTime());
         
+        
+        var speechItem = rsd.SpeechModule.recognizedWords[numberOfWords-1];
+        
+        return IsWordSimilar(now, speechItem, word);
+        
+        /*
         //going backwards from last recognized word to search for the wanted one
         for (var i = numberOfWords-1; i>=0; i--){
-            var speechItem = rsd.SpeechModule.recognizedWords[i];
+            var speechItemArr = rsd.SpeechModule.recognizedWords[i];
             
-            //if reached time stamp difference larger than wished for, break and exit search
-            if (now.getTime() - speechItem.time.getTime() > rsd.SpeechModule.tolerance * 1000){
-                return false;
-                break; 
-            }
-            
-            if (speechItem.text == word) {
-                return true;   
+            if (IsWordSimilar(now, speechItemArr, word) == true){
+                return true;
+                break;
             }
         }
         
         return false;
-        
+        */
     };
+    
     
     
     ext.hasUserSaidUnknown = function() {
