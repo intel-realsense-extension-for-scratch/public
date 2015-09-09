@@ -624,7 +624,10 @@
     
     
     function OnSpeechRecognized(sender, recognizedSpeech) {
-       /* var res = recognizedSpeech.data.scores[0];
+        
+        if (speechModule == undefined || rsd.SpeechModule.isUpdatingGrammar == true) return;
+        
+        /* var res = recognizedSpeech.data.scores[0];
         if (res.confidence != undefined && res.confidence > 30) { 
             console.warn(res.sentence);
 
@@ -660,6 +663,11 @@
 
     /* alert fired every time user start saying something and finishes talking */
     function OnSpeechAlert(sender, speechAlert) {
+        
+        //make sure we dont use data while updating grammar
+        if (speechModule == undefined || rsd.SpeechModule.isUpdatingGrammar == true) return;
+        
+        
         console.warn(JSON.stringify(speechAlert.data));
         
         switch (speechAlert.data.label) {
