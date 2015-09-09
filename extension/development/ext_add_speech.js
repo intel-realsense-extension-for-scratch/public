@@ -682,7 +682,7 @@
     
     function UpdateVoiceCommandGrammer(voiceCommand) {
         if (speechModule != undefined) {
-            if (rsd.SpeechModule.isUpdatingGrammar == false){
+            if (rsd.SpeechModule.isUpdatingGrammar == false) {
                 //make sure we dont update grammar twice in parallel
                 rsd.SpeechModule.isUpdatingGrammar = true;
                 
@@ -701,7 +701,7 @@
 
                 })
                 .then(function (result) {
-                    console.warn(rsd.SpeechModule.commands);
+                    console.warn("new commands: "+rsd.SpeechModule.commands);
                     return rsd.SpeechModule.isUpdatingGrammar = false;
                 });
             }
@@ -1491,7 +1491,7 @@
         
         var now = new Date();
         
-        console.warn("time now: "+now.getTime()+" last word time: "+rsd.SpeechModule.recognizedWords[numberOfWords-1].time.getTime());
+        console.warn("time now: "+now.getTime()+" last word time: "+rsd.SpeechModule.recognizedWords[numberOfWords-1].time.getTime()+ " "+rsd.SpeechModule.recognizedWords[numberOfWords-1].text);
         
         
         var speechItem = rsd.SpeechModule.recognizedWords[numberOfWords-1];
