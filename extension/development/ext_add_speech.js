@@ -227,7 +227,7 @@
             // public
             commands : []
             , recognizedWords : []          // { timestamp , word }
-            , tolerance : 3                 // speech tolerance in seconds
+            , tolerance : 1                 // speech tolerance in seconds
             , confidenceTolerance: 40       // speech tolerance to other words (in precentages)
             , isUserSaidUnknown : false     // did user said something unknown
             , addHighestResultOnly : true   // add to the result array only the result with the highest value 
@@ -696,10 +696,10 @@
                 //make sure we dont update grammar twice in parallel
                 rsd.SpeechModule.isUpdatingGrammar = true;
                 
-                //stop listeners
+                /*//stop listeners
                 speechModule.onSpeechRecognized = null;
                 speechModule.onAlertFired = null;
-                
+                */
                 //stop speech module before changing grammer
                 speechModule.stopRec()
                 .then(function (result) {
@@ -711,12 +711,14 @@
 
                 })
                 .then(function (result) {
-                    speechModule.onSpeechRecognized = OnSpeechRecognized;
+                    /*speechModule.onSpeechRecognized = OnSpeechRecognized;
                     speechModule.onAlertFired = OnSpeechAlert;
+                    */
                     return speechModule.startRec();
                 
                 })
                 .then(function (result) {
+                    //TODO - we dont get here after one or two updates!!!
                     console.warn("new commands: "+rsd.SpeechModule.commands);
                     return rsd.SpeechModule.isUpdatingGrammar = false;
                 });
@@ -1500,6 +1502,8 @@
         }
         
         
+        
+        
         //make sure we have anything detected
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
         
@@ -1507,7 +1511,7 @@
         
         var now = new Date();
         
-        console.warn("time now: "+now.getTime()+" last word time: "+rsd.SpeechModule.recognizedWords[numberOfWords-1].time.getTime()+ " "+rsd.SpeechModule.recognizedWords[numberOfWords-1].text);
+        //console.warn("time now: "+now.getTime()+" last word time: "+rsd.SpeechModule.recognizedWords[numberOfWords-1].time.getTime()+ " "+rsd.SpeechModule.recognizedWords[numberOfWords-1].text);
         
         
         var speechItem = rsd.SpeechModule.recognizedWords[numberOfWords-1];
