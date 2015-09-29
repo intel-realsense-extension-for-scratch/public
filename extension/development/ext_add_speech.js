@@ -628,30 +628,19 @@
         
         if (speechModule == undefined || rsd.SpeechModule.isUpdatingGrammar == true) return;
         
-        /* var res = recognizedSpeech.data.scores[0];
-        if (res.confidence != undefined && res.confidence > 30) { 
-            console.warn(res.sentence);
-
-            var recognizedWord = {
-                text: res.sentence.toLowerCase()
-                , time: new Date()
-            };
-            
-            rsd.SpeechModule.recognizedWords.push(recognizedWord);
-        }
-        */
-        
-        //same process but making sure that all optional words will get in as well
         for (var sp=0; sp < recognizedSpeech.data.scores.length; sp++){
             var res = recognizedSpeech.data.scores[sp];
             
             if (res.confidence != undefined && res.confidence > rsd.SpeechModule.confidenceTolerance) {
-                console.warn(res.sentence + " " + res.confidence);
-
+                
+                console.warn(res);
+                
                 var recognizedWord = {
                     text: res.sentence.toLowerCase()
                     , time: new Date()
                 };
+                
+                console.warn(recognizedWord.text + " " + recognizedWord.time.getTime());
                 
                 rsd.SpeechModule.recognizedWords.push(recognizedWord);
                 
