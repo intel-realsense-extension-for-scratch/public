@@ -230,6 +230,7 @@
             , tolerance : 1                 // speech tolerance in seconds
             , confidenceTolerance: 40       // speech tolerance to other words (in precentages)
             , isUserSaidUnknown : false     // did user said something unknown
+            , isUserSpoke : false           // did user said something
             , addHighestResultOnly : true   // add to the result array only the result with the highest value 
             , isUpdatingGrammar : false     //make sure we dont update grammar twice in parallel
 
@@ -651,7 +652,7 @@
                     text: res.sentence.toLowerCase()
                     , time: new Date()
                 };
-
+                
                 rsd.SpeechModule.recognizedWords.push(recognizedWord);
                 
                 if (rsd.SpeechModule.addHighestResultOnly == true){
@@ -680,6 +681,10 @@
                 rsd.SpeechModule.isUserSaidUnknown = true;
                 break;
 
+            case intel.realsense.speech.AlertType.ALERT_SPEECH_END:
+                rsd.SpeechModule.isUserSpoke = true;
+                break;
+
             case intel.realsense.speech.AlertType.ALERT_SNR_LOW:
                 // there is a big background noise
                 
@@ -696,10 +701,6 @@
                 //make sure we dont update grammar twice in parallel
                 rsd.SpeechModule.isUpdatingGrammar = true;
                 
-                /*//stop listeners
-                speechModule.onSpeechRecognized = null;
-                speechModule.onAlertFired = null;
-                */
                 //stop speech module before changing grammer
                 speechModule.stopRec()
                 .then(function (result) {
@@ -711,14 +712,10 @@
 
                 })
                 .then(function (result) {
-                    /*speechModule.onSpeechRecognized = OnSpeechRecognized;
-                    speechModule.onAlertFired = OnSpeechAlert;
-                    */
                     return speechModule.startRec();
                 
                 })
                 .then(function (result) {
-                    //TODO - we dont get here after one or two updates!!!
                     console.warn("new commands: "+rsd.SpeechModule.commands);
                     return rsd.SpeechModule.isUpdatingGrammar = false;
                 });
@@ -1486,6 +1483,12 @@
         
         if (numberOfWords == 0) return "";
         
+        /*
+        //if word has been said too long ago, dont count it
+        var now = new Date();
+        if (now.time - rsd.SpeechModule.recognizedWords[numberOfWords-1].time > rsd.SpeechModule.tolerance) return "";
+        */
+        
         return rsd.SpeechModule.recognizedWords[numberOfWords-1].text;
     };
 
@@ -1542,6 +1545,18 @@
     };
     
     
+    ext.whenUserSpoke = function() {
+        
+        if (rsd.SpeechModule.isUserSpoke === true){
+            rsd.SpeechModule.isUserSpoke = false;    
+            return true;
+        }
+        
+        return false; 
+    
+    };
+    
+    
     
     
     
@@ -1563,6 +1578,7 @@
             ,['b', 'user said %s?', 'hasUserSaid', 'Hello']
             ,['b', 'user said unknown?', 'hasUserSaidUnknown']
             ,['r', 'last recognized word', 'getRecognizedSpeech']
+            ,['h', 'when user spoke', 'whenUserSpoke']
             
         ]
          
