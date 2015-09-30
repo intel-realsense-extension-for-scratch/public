@@ -644,6 +644,9 @@
                 
                 rsd.SpeechModule.recognizedWords.push(recognizedWord);
                 
+                // make sure the unknown flag is off
+                rsd.SpeechModule.isUserSaidUnknown = false;
+                
                 if (rsd.SpeechModule.addHighestResultOnly == true){
                     break;   
                 }
@@ -1541,12 +1544,23 @@
             return true;
         }
         
-        return false; 
+        return false;
     
     };
     
+    /*
+     ext.whenUserSpokeRecognized = function() {
+        
+        if (rsd.SpeechModule.isUserSpoke === true){
+            
+            
+            rsd.SpeechModule.isUserSpoke = false;    
+            return true;
+        }
+        
+        return false; 
     
-    
+    };*/
     
     
     var descriptor = {
@@ -1568,6 +1582,7 @@
             ,['b', 'user said unknown?', 'hasUserSaidUnknown']
             ,['r', 'last recognized word', 'getRecognizedSpeech']
             ,['h', 'when user spoke', 'whenUserSpoke']
+          //  ,['h', 'when user spoke recognized', 'whenUserSpokeRecognized']
             
         ]
          
