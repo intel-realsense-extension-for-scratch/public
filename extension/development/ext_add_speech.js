@@ -1532,6 +1532,14 @@
     
     ext.hasUserSaidUnknown = function() {
         
+        if (rsd.SpeechModule.isUserSaidUnknown == true) {
+            
+            //make sure to zero the variable after you return true
+            rsd.SpeechModule.isUserSaidUnknown = false;
+            return true;
+        }
+        
+        //return false
         return rsd.SpeechModule.isUserSaidUnknown;   
     
     };
