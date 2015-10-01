@@ -637,7 +637,7 @@
                 
                 var recognizedWord = {
                     text: res.sentence.toLowerCase()
-                    , time: new Date()
+                    , time: +new Date()
                 };
                 
                 console.warn(recognizedWord.text + " " + recognizedWord.time.getTime());
@@ -1457,7 +1457,7 @@
     
     function IsWordSimilar(timenow, speechWord, wordSaid){
         //if reached time stamp difference larger than wished for, break and exit search
-        if (timenow.getTime() - speechWord.time.getTime() > rsd.SpeechModule.tolerance * 1000){
+        if (timenow - speechWord.time > rsd.SpeechModule.tolerance * 1000){
             return false;
         }
 
@@ -1504,7 +1504,7 @@
         
         if (numberOfWords == 0) return false;
         
-        var now = new Date();
+        var now = +new Date();
         
         //console.warn("time now: "+now.getTime()+" last word time: "+rsd.SpeechModule.recognizedWords[numberOfWords-1].time.getTime()+ " "+rsd.SpeechModule.recognizedWords[numberOfWords-1].text);
         
@@ -1544,9 +1544,18 @@
     
     };
     
-   
     
-   
+    ext.whenUserSpoke = function() {
+        
+        if (rsd.SpeechModule.isUserSpoke === true){
+            rsd.SpeechModule.isUserSpoke = false;    
+            return true;
+        }
+        
+        return false;
+    
+    };
+    
     
     
     var descriptor = {
@@ -1567,6 +1576,7 @@
             ,['b', 'user said %s?', 'hasUserSaid', 'Hello']
             ,['b', 'user said unknown?', 'hasUserSaidUnknown']
             ,['r', 'last recognized word', 'getRecognizedSpeech']
+            ,['h', 'when user spoke', 'whenUserSpoke']
             
         ]
          
