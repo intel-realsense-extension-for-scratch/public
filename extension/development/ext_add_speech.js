@@ -636,8 +636,9 @@
                 console.warn(res);
                 
                 var recognizedWord = {
-                    text: res.sentence.toLowerCase()
-                    , time: +new Date()
+                    text            : res.sentence.toLowerCase()
+                    , time          : +new Date()
+                    , isIdentified  : false
                 };
                 
                 console.warn(recognizedWord.text + " " + recognizedWord.time.getTime());
@@ -1462,7 +1463,12 @@
         }
 
         if (speechWord.text == wordSaid) {
-            return true;   
+            
+            //this would allow a one time identification only
+            if (speechWord.isIdentified == false){
+                speechWord.isIdentified = true;
+                return true;
+            }
         }
         
         return false;
