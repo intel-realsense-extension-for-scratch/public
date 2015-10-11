@@ -1545,7 +1545,7 @@
         }
         
         //return false
-        return rsd.SpeechModule.isUserSaidUnknown;   
+        return rsd.SpeechModule.isUserSaidUnknown;
     
     };
     
