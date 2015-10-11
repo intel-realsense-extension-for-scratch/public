@@ -1464,8 +1464,11 @@
 
         if (speechWord.text == wordSaid) {
             
+            console.log("speechWord.isIdentified: "+speechWord.isIdentified);
+            
             //this would allow a one time identification only
             if (speechWord.isIdentified == false){
+                
                 speechWord.isIdentified = true;
                 return true;
             }
