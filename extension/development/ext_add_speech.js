@@ -633,7 +633,7 @@
             
             if (res.confidence != undefined && res.confidence > rsd.SpeechModule.confidenceTolerance) {
                 
-                console.warn(res);
+               // console.warn(res);
                 
                 var recognizedWord = {
                     text            : res.sentence.toLowerCase()
@@ -641,7 +641,7 @@
                     , isIdentified  : false
                 };
                 
-                console.warn(recognizedWord.text + " " + recognizedWord.time);
+                //console.warn(recognizedWord.text + " " + recognizedWord.time);
                 
                 rsd.SpeechModule.recognizedWords.push(recognizedWord);
                 
@@ -660,7 +660,6 @@
         
         //make sure we dont use data while updating grammar
         if (speechModule == undefined || rsd.SpeechModule.isUpdatingGrammar == true) return;
-        
         
         console.warn(JSON.stringify(speechAlert.data));
         
@@ -687,7 +686,7 @@
     
     
     function UpdateVoiceCommandGrammer(voiceCommand) {
-        console.warn("UpdateVoiceCommandGrammer "+speechModule+ " isUpdatingGrammar "+ rsd.SpeechModule.isUpdatingGrammar);
+        //console.warn("UpdateVoiceCommandGrammer "+speechModule+ " isUpdatingGrammar "+ rsd.SpeechModule.isUpdatingGrammar);
         
         if (speechModule != undefined) {
             if (rsd.SpeechModule.isUpdatingGrammar == false) {
@@ -1464,7 +1463,7 @@
 
         if (speechWord.text == wordSaid) {
             
-            console.warn("speechWord.isIdentified: "+speechWord.isIdentified);
+            //console.warn("speechWord.isIdentified: "+speechWord.isIdentified);
             
             //this would allow a one time identification only
             if (speechWord.isIdentified == false){
@@ -1514,9 +1513,6 @@
         if (numberOfWords == 0) return false;
         
         var now = +new Date();
-        
-        //console.warn("time now: "+now.getTime()+" last word time: "+rsd.SpeechModule.recognizedWords[numberOfWords-1].time.getTime()+ " "+rsd.SpeechModule.recognizedWords[numberOfWords-1].text);
-        
         
         var speechItem = rsd.SpeechModule.recognizedWords[numberOfWords-1];
         
@@ -1585,7 +1581,7 @@
             ,['b', 'user said %s?', 'hasUserSaid', 'Hello']
             ,['b', 'user said unknown?', 'hasUserSaidUnknown']
             ,['r', 'last recognized word', 'getRecognizedSpeech']
-            ,['h', 'when user spoke', 'whenUserSpoke']
+           // ,['h', 'when user spoke', 'whenUserSpoke']
             
         ]
          
