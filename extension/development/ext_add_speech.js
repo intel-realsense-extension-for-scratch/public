@@ -641,7 +641,7 @@
                     , isIdentified  : false
                 };
                 
-                console.warn(recognizedWord.text + " " + recognizedWord.time.getTime());
+                console.warn(recognizedWord.text + " " + recognizedWord.time);
                 
                 rsd.SpeechModule.recognizedWords.push(recognizedWord);
                 
