@@ -1,7 +1,18 @@
+/*******************************************************************************
+INTEL CORPORATION PROPRIETARY INFORMATION
+This software is supplied under the terms of a license agreement or nondisclosure
+agreement with Intel Corporation and may not be copied or disclosed except in
+accordance with the terms of that agreement
+@licence Copyright(c) 2014-2015 Intel Corporation. All Rights Reserved.
+*******************************************************************************/
+
+
+
 // intel_realsense_extension.js
 // Shachar Oz , Omer Goshen , Moria Ilan Navi
 // 2015
 // Intel RealSense Extension for Scratch 
+// version 1.3
 
 
 
@@ -10,8 +21,7 @@
 
 
 
-
-
+ 
 
 
 
@@ -42,14 +52,14 @@
                 $('body').append(data);
             }
         });
-
+    //
     
     
     
     
     var rs = null;
     var sense; 
-    var faceModule, blobModule, handModule;
+    var faceModule, blobModule, handModule, speechModule;
     var blobConfiguration, handConfiguration, faceConfiguration;
     var imageSize;
     
@@ -80,6 +90,7 @@
       
     var HandModule = function () {
         // private
+        //
         
         return {
             // public
@@ -163,6 +174,7 @@
     
     var FaceModule = function () {
         // private
+        //
         
         return {
             // public
@@ -212,6 +224,7 @@
     
     var BlobModule = function () {
         // private
+        //
         
         return {
             // public
@@ -219,9 +232,34 @@
         }
     };
     
+    
+    var SpeechModule = function () {
+        // private
+        //
+        
+        return {
+            // public
+            commands : []
+            , recognizedWords : []          // { timestamp , word }
+            , tolerance : 1                 // speech tolerance in seconds
+            , confidenceTolerance: 40       // speech tolerance to other words (in precentages)
+            , isUserSaidUnknown : false     // did user said something unknown
+            , addHighestResultOnly : true   // add to the result array only the result with the highest value 
+            , isUpdatingGrammar : false     //make sure we dont update grammar twice in parallel
+
+            
+            , init : function() {
+                //init the app with a set of commonly used voice commands 
+                this.commands = ['hello', 'hi', 'bye', 'yes', 'no', 'left', 'right', 'up', 'down'];
+               
+            }
+        }
+    };
+    
     //suitable for scratch status api
     var ScratchStatus = function () {
         // private
+        //
         
         return {
             // public
@@ -235,6 +273,7 @@
             HandModule: new HandModule(),
             FaceModule: new FaceModule(),            
             BlobModule: new BlobModule(),
+            SpeechModule: new SpeechModule(),
             Status: new ScratchStatus()
         }
     };
@@ -254,7 +293,7 @@
             
             //only after sense.init() and onDeviceConnected we know the sensor
             if (sender.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_R200 ||
-                sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING ) {
+                sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING )             {
                 
                 rsd.Status = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor' };
                 
@@ -264,7 +303,7 @@
         } else {
            // console.warn('sensor not connected');
             
-            rsd.Status = {status: 0, msg: 'Realsense sensor not connected'};
+            rsd.Status = { status: 0, msg: 'Realsense sensor not connected' };
             
             PopAlert();
         }
@@ -296,10 +335,17 @@
     var onClearSensor = function () {
         console.log("reset realsense sensor");
         
-        if (sense != undefined) {
-            sense.release()
-            .then(function (result) {
-                sense = undefined;
+        if (speechModule != undefined) {
+            speechModule.stopRec().then(function (result) {
+                speechModule.release();
+                speechModule = undefined;
+                
+                if (sense != undefined) {
+                    sense.release()
+                    .then(function (result) {
+                        sense = undefined;
+                    });
+                }
             });
         }
     };
@@ -383,7 +429,6 @@
                         if (f_expr.intensity>20) {
                             //add it to array of current frame only
                             rsd.FaceModule.expressionsOccuredLastFrame.push(fe);
-                            
                         }
                     }
                 }
@@ -392,11 +437,6 @@
                 
 //for head rotation block
                 if (face.pose != undefined && face.pose != null) {
-                    /*
-                    Pose: {"confidence":1,
-                    "headPosition":{"headCenter":{"x":-231.4698,"y":27.50793,"z":496.4164},"confidence":1},
-                    "poseAngles":{"yaw":-9.80811,"pitch":40.68155,"roll":-25.92934},"poseQuaternion":{"x":-0.2385482,"y":-0.1558126,"z":0.3195189,"w":0.9037283},"rotationMatrix":[0.7472601764402149,-0.5031789452630889,-0.4340658679860284,0.6518542284473986,0.6820048018979353,0.3315954086585106,0.12918317832359433,-0.5307357150523068,0.8376343517347717]}
-                    */
                     //console.warn('Pose: ' + JSON.stringify(face.pose));
                     //console.warn('Pose: ' + face.pose.poseAngles.roll);
                     
@@ -587,8 +627,106 @@
     /**********************************************************************************************************/
  
     
+     
+     /**********************************************************************************************************/
+    /*************************************VOICE  RECOGNITION*************************************************/
+    /**********************************************************************************************************/
+ 
     
-    /* Start RealSense- enable 4 modules: hands, face, blob & speech - not yet */
+    
+    function OnSpeechRecognized(sender, recognizedSpeech) {
+        
+        if (speechModule == undefined || rsd.SpeechModule.isUpdatingGrammar == true) return;
+        
+        for (var sp=0; sp < recognizedSpeech.data.scores.length; sp++){
+            var res = recognizedSpeech.data.scores[sp];
+            
+            if (res.confidence != undefined && res.confidence > rsd.SpeechModule.confidenceTolerance) {
+                
+                var recognizedWord = {
+                    text            : res.sentence.toLowerCase()
+                    , time          : +new Date()
+                    , isIdentified  : false
+                };
+                
+                rsd.SpeechModule.recognizedWords.push(recognizedWord);
+                
+                // make sure the unknown flag is off
+                rsd.SpeechModule.isUserSaidUnknown = false;
+                
+                if (rsd.SpeechModule.addHighestResultOnly == true){
+                    break;   
+                }
+            }
+        }
+    }
+
+    /* alert fired every time user start saying something and finishes talking */
+    function OnSpeechAlert(sender, speechAlert) {
+        
+        //make sure we dont use data while updating grammar
+        if (speechModule == undefined || rsd.SpeechModule.isUpdatingGrammar == true) return;
+        
+        switch (speechAlert.data.label) {
+
+            case intel.realsense.speech.AlertType.ALERT_SPEECH_BEGIN:
+                rsd.SpeechModule.isUserSaidUnknown = false;
+                break;
+
+            case intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE:
+                rsd.SpeechModule.isUserSaidUnknown = true;
+                break;
+
+            case intel.realsense.speech.AlertType.ALERT_SPEECH_END:
+                break;
+
+            case intel.realsense.speech.AlertType.ALERT_SNR_LOW:
+                // there is a big background noise
+                
+                break;
+        }
+    }
+    
+    
+    function UpdateVoiceCommandGrammer(voiceCommand) {
+        
+        if (speechModule != undefined) {
+            if (rsd.SpeechModule.isUpdatingGrammar == false) {
+                //make sure we dont update grammar twice in parallel
+                rsd.SpeechModule.isUpdatingGrammar = true;
+                
+                //stop speech module before changing grammer
+                speechModule.stopRec()
+                .then(function (result) {
+                    rsd.SpeechModule.commands.push(voiceCommand);
+                    return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);                 
+                })
+                .then(function (result) {
+                    return speechModule.setGrammar(1);
+
+                })
+                .then(function (result) {
+                    return speechModule.startRec();
+                
+                })
+                .then(function (result) {
+                    
+                    return rsd.SpeechModule.isUpdatingGrammar = false;
+                });
+            }
+        }
+    }
+
+
+         
+     /**********************************************************************************************************/
+    /*************************************END VOICE RECOGNITION*************************************************/
+    /**********************************************************************************************************/
+ 
+
+    
+    
+    /* Start RealSense- enable 4 modules: hands, face, blob & speech */
     var StartRealSense = function(){
         var rs = intel.realsense;
                     
@@ -619,6 +757,7 @@
         
    
   
+//face module         
         .then(function (result) {
             return rs.face.FaceModule.activate(sense); 
         })
@@ -646,6 +785,8 @@
         })
         
         
+        
+//hand module        
         .then(function (result) {
             return rs.hand.HandModule.activate(sense);
         })
@@ -666,6 +807,25 @@
         
         
         
+//speech module         
+        .then(function (result) {
+            return rs.speech.SpeechRecognition.createInstance(sense);
+        })
+        .then(function (result) {
+            speechModule = result;
+            return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);              
+        })
+        .then(function (result) {
+            return speechModule.setGrammar(1);
+        })
+        .then(function (result) {
+            speechModule.onSpeechRecognized = OnSpeechRecognized;
+            speechModule.onAlertFired = OnSpeechAlert;
+            return speechModule.startRec();
+        })
+            
+        
+//general functionality        
         .then(function (result) {
             sense.onDeviceConnected = onConnect;
             sense.onStatusChanged = onStatus;
@@ -677,9 +837,6 @@
         })
         
         //release function of the hand module configurations
-        //Todo: if this fixes the size of the capabilities service - notify Erik!!!
-        
-        
         .then(function (result) {
             imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_DEPTH);
             return sense.streamFrames();
@@ -698,14 +855,16 @@
             
             switch (error.status)
             {
-                case -102:
+                case intel.realsense.Status.STATUS_ALLOC_FAILED: 
+                    // meaning -102
                     //sensor is already active on another window / app    //GZ said this should work
                     console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
                     rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
                     break;
-            
                     
-                case -3:
+                    
+                case intel.realsense.Status.STATUS_ITEM_UNAVAILABLE: 
+                    // meaning -3
                     //unknown error
                     rsd.Status = { status: 0, msg: 'Try restarting your computer'};
                     
@@ -724,23 +883,17 @@
             
         });
         
-        
-        
-        //speech module init
-        
-        //TODO load speech here
-        
     };
     
     
     // check platform compatibility
     var ValidatePlatformState = function (){
         var rs = intel.realsense;
-          console.log("ValidatePlatformState");
+        console.log("ValidatePlatformState");
           
         if (rs != null && rs.SenseManager != null)
         {
-            rs.SenseManager.detectPlatform(['face3d','hand','blob'], ['f200'])
+            rs.SenseManager.detectPlatform(['face3d','hand','blob','voice','nuance_en_us_cnc'], ['f200'])
                 
             .then(function (info) {
                 
@@ -776,7 +929,7 @@
                 PopAlert();
             });
             
-        }else{
+        } else {
             rsd.Status = { status: 0, msg: 'platform not ready' };  
             
             PopAlert();
@@ -788,8 +941,7 @@
     var PopAlert = function() {
             
         if (rsd.Status.status == 0) {
-            //console.warn("sorry you have problems. go to http://intel-realsense-extension-for-scratch.github.io/public/#troubleshoot");
-
+            
             showModal("template-realsense");
         }
     };
@@ -800,13 +952,15 @@
         rs = intel.realsense;
         
         
-        //validate realsense platform state
-        ValidatePlatformState();
-        
-        
         //create realsense data object
         rsd.FaceModule.init();
         rsd.HandModule.init();
+        rsd.SpeechModule.init();
+        
+        
+        //validate realsense platform state
+        ValidatePlatformState();
+        
     };
     
     
@@ -824,7 +978,7 @@
             .done(function(script, textStatus) {
              
                 dependencyAllCreated();
-            
+                  
             })
             .fail(function(jqxhr, settings, exception) {
                 console.log('Load realsense fail');
@@ -1257,7 +1411,7 @@
 
             }
         }
-            
+        
         if (requestedExpressionIndex == -1) {
             //couldnt find requested expression
             return false;
@@ -1300,11 +1454,109 @@
     
     
     
+    function IsWordSimilar(timenow, speechWord, wordSaid){
+        //if reached time stamp difference larger than wished for, break and exit search
+        if (timenow - speechWord.time > rsd.SpeechModule.tolerance * 1000){
+            return false;
+        }
+
+        if (speechWord.text == wordSaid) {
+            
+            //console.warn("speechWord.isIdentified: "+speechWord.isIdentified);
+            
+            //this would allow a one time identification only
+            if (speechWord.isIdentified == false){
+                
+                speechWord.isIdentified = true;
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    
+    ext.getRecognizedSpeech = function()
+    {
+        var numberOfWords = rsd.SpeechModule.recognizedWords.length;
+        
+        if (numberOfWords == 0) return "";
+        
+        /*
+        //if word has been said too long ago, dont count it
+        var now = new Date();
+        if (now.time - rsd.SpeechModule.recognizedWords[numberOfWords-1].time > rsd.SpeechModule.tolerance) return "";
+        */
+        
+        return rsd.SpeechModule.recognizedWords[numberOfWords-1].text;
+    };
+
+    
+    ext.hasUserSaid = function (word) {
+        
+        //make sure word is lowercased
+        word = word.toLowerCase();
+        
+        //make sure this word exists in the voice commands array
+        if (rsd.SpeechModule.commands.indexOf(word) <= -1) {
+            UpdateVoiceCommandGrammer(word);
+            return false;
+        }
+        
+        
+        
+        
+        //make sure we have anything detected
+        var numberOfWords = rsd.SpeechModule.recognizedWords.length;
+        
+        if (numberOfWords == 0) return false;
+        
+        var now = +new Date();
+        
+        var speechItem = rsd.SpeechModule.recognizedWords[numberOfWords-1];
+        
+        return IsWordSimilar(now, speechItem, word);
+        
+        /*
+        //going backwards from last recognized word to search for the wanted one
+        for (var i = numberOfWords-1; i>=0; i--){
+            var speechItemArr = rsd.SpeechModule.recognizedWords[i];
+            
+            if (IsWordSimilar(now, speechItemArr, word) == true){
+                return true;
+                break;
+            }
+        }
+        
+        return false;
+        */
+    };
+    
+    
+    
+    ext.hasUserSaidUnknown = function() {
+        
+        if (rsd.SpeechModule.isUserSaidUnknown == true) {
+            
+            //make sure to zero the variable after you return true
+            rsd.SpeechModule.isUserSaidUnknown = false;
+            return true;
+        }
+        
+        //return false
+        return rsd.SpeechModule.isUserSaidUnknown;
+    
+    };
+    
+    
+    
+    
+    
     var descriptor = {
         blocks: [
-             ['b', 'Face visible?', 'isFaceExist', '']
+             ['b', 'face visible?', 'isFaceExist', '']
             ,['r', '%m.position_value of %d.face_joints', 'getFaceJointPosition', 'X Position', 'Nose']
-            ,['b', 'Face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
+            ,['b', 'face expression %m.facial_expressions?', 'isFacialExpressionOccured', 'Wink left']
             ,['r', '%m.rotation_value rotation of Head', 'getHeadRotation', 'Yaw']
             
         ,['-']
@@ -1313,7 +1565,12 @@
             ,['b', '%m.hand_type gesture %m.hand_gestures?', 'getHandGesture', 'Any Hand', 'V sign']
             ,['r', '%m.hand_type %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Any Hand', 'Index']
            // ,['r', '%m.rotation_value of %m.hand_type', 'getHandRotation', 'Rotation X', 'Any Hand']
-			
+            
+        ,['-']
+            ,['b', 'user said %s?', 'hasUserSaid', 'Hello']
+            ,['b', 'user said unknown?', 'hasUserSaidUnknown']
+            ,['r', 'last recognized word', 'getRecognizedSpeech']
+            
         ]
          
         , menus: {
@@ -1336,13 +1593,13 @@
                                     "Swipe left", "Swipe right", "Tap", "Fist", "Thumb up", 
                                     "Thumb down", "Wave" ],
             "rotation_value":       [ "Yaw", "Pitch", "Roll" ],
-            "position_value":       [ "X Position",  "Y Position",  "Z Position" ]
+            "position_value":       [ "X Position",  "Y Position",  "Z Position" ],
         }
         
-        , url: 'http://www.intel.com/realsense/scratch'
+        , url:                      'http://www.intel.com/realsense/scratch'
     };
     
     ScratchExtensions.register('Intel RealSense', descriptor, ext);
     
 })
-            ({});
+({});
