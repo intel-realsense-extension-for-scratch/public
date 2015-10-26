@@ -244,6 +244,7 @@ accordance with the terms of that agreement
             , tolerance : 1                 // speech tolerance in seconds
             , confidenceTolerance: 40       // speech tolerance to other words (in precentages)
             , isUserSaidUnknown : false     // did user said something unknown
+            , isUserSpoke : false           // did user said anything at all
             , addHighestResultOnly : true   // add to the result array only the result with the highest value 
             , isUpdatingGrammar : false     //make sure we dont update grammar twice in parallel
 
@@ -671,6 +672,7 @@ accordance with the terms of that agreement
 
             case intel.realsense.speech.AlertType.ALERT_SPEECH_BEGIN:
                 rsd.SpeechModule.isUserSaidUnknown = false;
+                rsd.SpeechModule.isUserSpoke = false;
                 break;
 
             case intel.realsense.speech.AlertType.ALERT_SPEECH_UNRECOGNIZABLE:
@@ -678,6 +680,8 @@ accordance with the terms of that agreement
                 break;
 
             case intel.realsense.speech.AlertType.ALERT_SPEECH_END:
+                rsd.SpeechModule.isUserSpoke = true;
+                
                 break;
 
             case intel.realsense.speech.AlertType.ALERT_SNR_LOW:
@@ -1549,6 +1553,20 @@ accordance with the terms of that agreement
     };
     
     
+    ext.hasUserSaidAnything = function() {
+        
+        if (rsd.SpeechModule.isUserSpoke == true) {
+            
+            //make sure to zero the variable after you return true
+            rsd.SpeechModule.isUserSpoke = false;
+            return true;
+        }
+        
+        //return false
+        return rsd.SpeechModule.isUserSpoke;
+        
+    };
+    
     
     
     
@@ -1568,8 +1586,8 @@ accordance with the terms of that agreement
             
         ,['-']
             ,['b', 'user said %s?', 'hasUserSaid', 'Hello']
-            ,['b', 'user said unknown?', 'hasUserSaidUnknown']
-            ,['r', 'last recognized word', 'getRecognizedSpeech']
+            ,['b', 'user said anything?', 'hasUserSaidAnything']
+            ,['r', 'last word user said', 'getRecognizedSpeech']
             
         ]
          
