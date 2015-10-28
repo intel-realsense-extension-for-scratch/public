@@ -962,9 +962,10 @@ accordance with the terms of that agreement
         rsd.SpeechModule.init();
         
         
+                
+        //temporarily not validating
         //validate realsense platform state
-        ValidatePlatformState();
-        
+        //ValidatePlatformState();
     };
     
     
@@ -1537,7 +1538,7 @@ accordance with the terms of that agreement
     };
     
     
-    
+    /*
     ext.hasUserSaidUnknown = function() {
         
         if (rsd.SpeechModule.isUserSaidUnknown == true) {
@@ -1567,7 +1568,7 @@ accordance with the terms of that agreement
         
     };
     
-    
+    */
     
     
     var descriptor = {
@@ -1586,7 +1587,7 @@ accordance with the terms of that agreement
             
         ,['-']
             ,['b', 'user said %s?', 'hasUserSaid', 'Hello']
-            ,['b', 'user said anything?', 'hasUserSaidAnything']
+         //   ,['b', 'user said anything?', 'hasUserSaidAnything']
             ,['r', 'last word user said', 'getRecognizedSpeech']
             
         ]
