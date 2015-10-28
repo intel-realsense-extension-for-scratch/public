@@ -963,9 +963,11 @@ accordance with the terms of that agreement
         
         
                 
-        //temporarily not validating
+        //temporarily not validating and starting realsense
         //validate realsense platform state
         //ValidatePlatformState();
+        
+        StartRealSense();
     };
     
     
