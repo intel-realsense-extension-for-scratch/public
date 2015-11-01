@@ -861,7 +861,7 @@ accordance with the terms of that agreement
             {
                 case intel.realsense.Status.STATUS_ALLOC_FAILED: 
                     // meaning -102
-                    //sensor is already active on another window / app    //GZ said this should work
+                    //sensor is already active on another window / app 
                     console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
                     rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
                     break;
@@ -963,11 +963,15 @@ accordance with the terms of that agreement
         
         
                 
-        //temporarily not validating and starting realsense
-        //validate realsense platform state
-        //ValidatePlatformState();
+        //temporarily not validating and starting realsense (Erik requested this in order to check Localization check)
         
-        StartRealSense();
+        //validate realsense platform state
+        ValidatePlatformState(); 
+        
+        //or simply start realsense component right away without DetectPlatform()
+        //StartRealSense();
+        
+        
     };
     
     
@@ -1072,7 +1076,7 @@ accordance with the terms of that agreement
     };
     
     
-    ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {        
+    ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {       
                 
         //if no rellevant hands exist, return false
         if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
@@ -1283,7 +1287,7 @@ accordance with the terms of that agreement
     };
     
     //hand rotation
-    ext.getHandRotation = function(rotation_type, hand_side){
+    ext.getHandRotation = function(rotation_type, hand_side) {
         
         var jointArray = [];
         
@@ -1439,7 +1443,7 @@ accordance with the terms of that agreement
     
     
     
-    ext.getHeadRotation = function(rotation_type){
+    ext.getHeadRotation = function(rotation_type) {
        
         if (rotation_type === "Yaw"){
             return ValueMapper(rsd.FaceModule.headRotation.Yaw, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
@@ -1461,7 +1465,7 @@ accordance with the terms of that agreement
     
     
     
-    function IsWordSimilar(timenow, speechWord, wordSaid){
+    function IsWordSimilar(timenow, speechWord, wordSaid) {
         //if reached time stamp difference larger than wished for, break and exit search
         if (timenow - speechWord.time > rsd.SpeechModule.tolerance * 1000){
             return false;
@@ -1480,11 +1484,10 @@ accordance with the terms of that agreement
         }
         
         return false;
-    }
+    };
     
     
-    ext.getRecognizedSpeech = function()
-    {
+    ext.getRecognizedSpeech = function() {
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
         
         if (numberOfWords == 0) return "";
@@ -1555,6 +1558,7 @@ accordance with the terms of that agreement
     
     };
     
+    */
     
     ext.hasUserSaidAnything = function() {
         
@@ -1570,7 +1574,7 @@ accordance with the terms of that agreement
         
     };
     
-    */
+    
     
     
     var descriptor = {
@@ -1589,7 +1593,7 @@ accordance with the terms of that agreement
             
         ,['-']
             ,['b', 'user said %s?', 'hasUserSaid', 'Hello']
-         //   ,['b', 'user said anything?', 'hasUserSaidAnything']
+            ,['b', 'user said anything?', 'hasUserSaidAnything']
             ,['r', 'last word user said', 'getRecognizedSpeech']
             
         ]
