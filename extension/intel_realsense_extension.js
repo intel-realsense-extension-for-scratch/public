@@ -901,8 +901,11 @@ accordance with the terms of that agreement
         if (rs != null && rs.SenseManager != null)
         {
        
-            //trying to fix the SR300 support removed 'f200'
-            rs.SenseManager.detectPlatform(['face3d','hand','blob','voice','nuance_en_us_cnc'], [])
+            /*
+            detectPlatform([module names in string], [supported sensors names in string])
+            in order to support both F200 and SR300 sensor, we keep this empty array (meaning, support any connected sensor)
+            */
+            rs.SenseManager.detectPlatform(['face3d', 'hand', 'blob', 'voice', 'nuance_en_us_cnc'], [])
                 
             .then(function (info) {
                 
