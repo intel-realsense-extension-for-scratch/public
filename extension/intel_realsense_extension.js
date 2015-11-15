@@ -102,7 +102,7 @@ accordance with the terms of that agreement
             , rightHandJointsFoldness: []  
             , leftHandGestures: []
             , rightHandGestures: []
-           
+            
             , jointDictionary : {}
             , majorJointDictionary : {}
             , gestureDictionary : {}
@@ -294,9 +294,12 @@ accordance with the terms of that agreement
             
             //only after sense.init() and onDeviceConnected we know the sensor
             if (sender.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_R200 ||
-                sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING )             {
+                sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING) {
                 
-                rsd.Status = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor' };
+                rsd.Status = { 
+                    status: 0, 
+                    msg: 'This extension supports only F200 Intel Realsense 3D Sensor' 
+                };
                 
                 PopAlert();
             }
@@ -897,7 +900,9 @@ accordance with the terms of that agreement
           
         if (rs != null && rs.SenseManager != null)
         {
-            rs.SenseManager.detectPlatform(['face3d','hand','blob','voice','nuance_en_us_cnc'], ['f200'])
+       
+            //trying to fix the SR300 support removed 'f200'
+            rs.SenseManager.detectPlatform(['face3d','hand','blob','voice','nuance_en_us_cnc'], [])
                 
             .then(function (info) {
                 
