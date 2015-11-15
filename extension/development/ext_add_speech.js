@@ -900,10 +900,9 @@ accordance with the terms of that agreement
                         rsd.Status = { status: 1, msg: 'No recording device is properly connected or enabled. Voice command capabilities are disabled in the meantime.'};
                         
                         //clear senseManager and try init again without speech module
-                        onClearSensor()
-                        .then(function (result) {
-                            StartRealSense(false);
-                        });
+                        onClearSensor();
+                        StartRealSense(false);
+                       
                         
                     } else {
                     
