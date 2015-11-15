@@ -734,7 +734,7 @@ accordance with the terms of that agreement
     
     
     /* Start RealSense- enable 4 modules: hands, face, blob & speech */
-    var StartRealSense = function(){
+    var StartRealSense = function(useSpeech=true){
         var rs = intel.realsense;
                     
         rs.SenseManager.createInstance()
@@ -808,7 +808,7 @@ accordance with the terms of that agreement
             return handConfiguration.applyChanges();
         })
         .then(function (result) {
-            return handConfiguration.release();    
+            return handConfiguration.release();
         })
         
         
@@ -816,16 +816,24 @@ accordance with the terms of that agreement
         
 //speech module         
         .then(function (result) {
+            if (useSpeech==false) return;
+            
             return rs.speech.SpeechRecognition.createInstance(sense);
         })
         .then(function (result) {
+            if (useSpeech==false) return;
+            
             speechModule = result;
             return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);              
         })
         .then(function (result) {
+            if (useSpeech==false) return;
+            
             return speechModule.setGrammar(1);
         })
         .then(function (result) {
+            if (useSpeech==false) return;
+            
             speechModule.onSpeechRecognized = OnSpeechRecognized;
             speechModule.onAlertFired = OnSpeechAlert;
             return speechModule.startRec();
@@ -882,7 +890,7 @@ accordance with the terms of that agreement
                     if (error.request.method == "PXCMSpeechRecognition_StartRec"){
                         //happens when no recording device is connected or enabled properly. speech module cannot work
                         rsd.Status = { status: 1, msg: 'No recording device is properly connected or enabled. Voice command capabilities are disabled in the meantime.'};
-                    
+                        
                     } else {
                     
                         PopAlert();
