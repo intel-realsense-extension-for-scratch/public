@@ -891,6 +891,7 @@ accordance with the terms of that agreement
                         //happens when no recording device is connected or enabled properly. speech module cannot work
                         rsd.Status = { status: 1, msg: 'No recording device is properly connected or enabled. Voice command capabilities are disabled in the meantime.'};
                         
+                        StartRealSense(false);
                     } else {
                     
                         PopAlert();
