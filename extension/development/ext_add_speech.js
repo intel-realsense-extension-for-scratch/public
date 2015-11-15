@@ -734,7 +734,7 @@ accordance with the terms of that agreement
     
     
     /* Start RealSense- enable 4 modules: hands, face, blob & speech */
-    var StartRealSense = function(useSpeech=true){
+    var StartRealSense = function(useSpeech){
         var rs = intel.realsense;
                     
         rs.SenseManager.createInstance()
@@ -892,6 +892,7 @@ accordance with the terms of that agreement
                         rsd.Status = { status: 1, msg: 'No recording device is properly connected or enabled. Voice command capabilities are disabled in the meantime.'};
                         
                         StartRealSense(false);
+                        
                     } else {
                     
                         PopAlert();
@@ -932,7 +933,7 @@ accordance with the terms of that agreement
                     rsd.Status = { status: 2, msg: 'RealSense sensor is ready' };
                     
                     //we are now able to start realsense sensor automatically!
-                    StartRealSense();
+                    StartRealSense(true);
                     
                 } else if (info.nextStep == 'unsupported') {
                     //unsupported called when DCM not installed OR when browser is too old OR .......
@@ -994,7 +995,7 @@ accordance with the terms of that agreement
         ValidatePlatformState(); 
         
         //or simply start realsense component right away without DetectPlatform()
-        //StartRealSense();
+        //StartRealSense(true);
         
         
     };
