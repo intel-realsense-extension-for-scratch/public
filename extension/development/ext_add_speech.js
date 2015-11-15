@@ -102,7 +102,7 @@ accordance with the terms of that agreement
             , rightHandJointsFoldness: []  
             , leftHandGestures: []
             , rightHandGestures: []
-           
+            
             , jointDictionary : {}
             , majorJointDictionary : {}
             , gestureDictionary : {}
@@ -294,9 +294,12 @@ accordance with the terms of that agreement
             
             //only after sense.init() and onDeviceConnected we know the sensor
             if (sender.deviceInfo.model == rs.DeviceModel.DEVICE_MODEL_R200 ||
-                sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING )             {
+                sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING) {
                 
-                rsd.Status = { status: 0, msg: 'This extension supports only F200 Intel Realsense 3D Sensor' };
+                rsd.Status = { 
+                    status: 0, 
+                    msg: 'This extension supports only F200 Intel Realsense 3D Sensor' 
+                };
                 
                 PopAlert();
             }
@@ -861,7 +864,7 @@ accordance with the terms of that agreement
             {
                 case intel.realsense.Status.STATUS_ALLOC_FAILED: 
                     // meaning -102
-                    //sensor is already active on another window / app    //GZ said this should work
+                    //sensor is already active on another window / app 
                     console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
                     rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
                     break;
@@ -875,7 +878,15 @@ accordance with the terms of that agreement
                     //happens when the sensor is disconnected
                     rsd.Status = { status: 1, msg: 'If your sensor is unplugged, plug it in and refresh.'};
                     
-                    PopAlert();
+                    console.log("error.request.method "+error.request.method);
+                    if (error.request.method == "PXCMSpeechRecognition_StartRec"){
+                        //happens when no recording device is connected or enabled properly. speech module cannot work
+                        rsd.Status = { status: 1, msg: 'No recording device is properly connected or enabled. Voice command capabilities are disabled in the meantime.'};
+                    
+                    } else {
+                    
+                        PopAlert();
+                    }
                     break;
             
                 default:
@@ -894,10 +905,15 @@ accordance with the terms of that agreement
     var ValidatePlatformState = function (){
         var rs = intel.realsense;
         console.log("ValidatePlatformState");
-        
+          
         if (rs != null && rs.SenseManager != null)
         {
-            rs.SenseManager.detectPlatform(['face3d','hand','blob','voice','nuance_en_us_cnc'], ['f200'])
+       
+            /*
+            detectPlatform([module names in string], [supported sensors names in string])
+            in order to support both F200 and SR300 sensor, we keep this empty array (meaning, support any connected sensor)
+            */
+            rs.SenseManager.detectPlatform(['face3d', 'hand', 'blob', 'voice', 'nuance_en_us_cnc'], [])
                 
             .then(function (info) {
                 
@@ -962,9 +978,15 @@ accordance with the terms of that agreement
         rsd.SpeechModule.init();
         
         
+                
+        //temporarily not validating and starting realsense (Erik requested this in order to check Localization check)
         
         //validate realsense platform state
-        ValidatePlatformState();
+        ValidatePlatformState(); 
+        
+        //or simply start realsense component right away without DetectPlatform()
+        //StartRealSense();
+        
         
     };
     
@@ -1070,7 +1092,7 @@ accordance with the terms of that agreement
     };
     
     
-    ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {        
+    ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {       
                 
         //if no rellevant hands exist, return false
         if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
@@ -1281,7 +1303,7 @@ accordance with the terms of that agreement
     };
     
     //hand rotation
-    ext.getHandRotation = function(rotation_type, hand_side){
+    ext.getHandRotation = function(rotation_type, hand_side) {
         
         var jointArray = [];
         
@@ -1437,7 +1459,7 @@ accordance with the terms of that agreement
     
     
     
-    ext.getHeadRotation = function(rotation_type){
+    ext.getHeadRotation = function(rotation_type) {
        
         if (rotation_type === "Yaw"){
             return ValueMapper(rsd.FaceModule.headRotation.Yaw, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
@@ -1459,7 +1481,7 @@ accordance with the terms of that agreement
     
     
     
-    function IsWordSimilar(timenow, speechWord, wordSaid){
+    function IsWordSimilar(timenow, speechWord, wordSaid) {
         //if reached time stamp difference larger than wished for, break and exit search
         if (timenow - speechWord.time > rsd.SpeechModule.tolerance * 1000){
             return false;
@@ -1478,11 +1500,10 @@ accordance with the terms of that agreement
         }
         
         return false;
-    }
+    };
     
     
-    ext.getRecognizedSpeech = function()
-    {
+    ext.getRecognizedSpeech = function() {
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
         
         if (numberOfWords == 0) return "";
@@ -1553,6 +1574,7 @@ accordance with the terms of that agreement
     
     };
     
+    */
     
     ext.hasUserSaidAnything = function() {
         
@@ -1568,7 +1590,7 @@ accordance with the terms of that agreement
         
     };
     
-    */
+    
     
     
     var descriptor = {
@@ -1587,7 +1609,7 @@ accordance with the terms of that agreement
             
         ,['-']
             ,['b', 'user said %s?', 'hasUserSaid', 'Hello']
-         //   ,['b', 'user said anything?', 'hasUserSaidAnything']
+            ,['b', 'user said anything?', 'hasUserSaidAnything']
             ,['r', 'last word user said', 'getRecognizedSpeech']
             
         ]
