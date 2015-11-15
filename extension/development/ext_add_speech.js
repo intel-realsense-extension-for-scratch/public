@@ -351,6 +351,14 @@ accordance with the terms of that agreement
                     });
                 }
             });
+        } else {
+            //even if no speech module, we should see if this needs a reset too
+            if (sense != undefined) {
+                sense.release()
+                .then(function (result) {
+                    sense = undefined;
+                });
+            }   
         }
     };
     
@@ -891,7 +899,11 @@ accordance with the terms of that agreement
                         //happens when no recording device is connected or enabled properly. speech module cannot work
                         rsd.Status = { status: 1, msg: 'No recording device is properly connected or enabled. Voice command capabilities are disabled in the meantime.'};
                         
-                        StartRealSense(false);
+                        //clear senseManager and try init again without speech module
+                        onClearSensor()
+                        .then(function (result) {
+                            StartRealSense(false);
+                        });
                         
                     } else {
                     
