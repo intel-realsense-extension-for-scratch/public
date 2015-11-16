@@ -894,15 +894,16 @@ accordance with the terms of that agreement
                     //happens when the sensor is disconnected
                     rsd.Status = { status: 1, msg: 'If your sensor is unplugged, plug it in and refresh.'};
                     
-                    console.log("error.request.method "+error.request.method);
+                    //console.log("error.request.method "+error.request.method);
                     if (error.request.method == "PXCMSpeechRecognition_StartRec"){
                         //happens when no recording device is connected or enabled properly. speech module cannot work
-                        rsd.Status = { status: 1, msg: 'No recording device is properly connected or enabled. Voice command capabilities are disabled in the meantime.'};
+                        rsd.Status = { status: 0, msg: 'No recording device is properly connected or enabled. Please fix issue and refresh the browser window.'};
                         
+                        /*
                         //clear senseManager and try init again without speech module
                         onClearSensor();
                         StartRealSense(false);
-                       
+                        */
                         
                     } else {
                     
