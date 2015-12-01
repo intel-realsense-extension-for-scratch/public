@@ -351,6 +351,14 @@ accordance with the terms of that agreement
                     });
                 }
             });
+        } else {
+            //even if no speech module, we should see if this needs a reset too
+            if (sense != undefined) {
+                sense.release()
+                .then(function (result) {
+                    sense = undefined;
+                });
+            }   
         }
     };
     
@@ -734,7 +742,7 @@ accordance with the terms of that agreement
     
     
     /* Start RealSense- enable 4 modules: hands, face, blob & speech */
-    var StartRealSense = function(){
+    var StartRealSense = function(useSpeech){
         var rs = intel.realsense;
                     
         rs.SenseManager.createInstance()
@@ -808,7 +816,7 @@ accordance with the terms of that agreement
             return handConfiguration.applyChanges();
         })
         .then(function (result) {
-            return handConfiguration.release();    
+            return handConfiguration.release();
         })
         
         
@@ -816,16 +824,24 @@ accordance with the terms of that agreement
         
 //speech module         
         .then(function (result) {
+            if (useSpeech==false) return;
+            
             return rs.speech.SpeechRecognition.createInstance(sense);
         })
         .then(function (result) {
+            if (useSpeech==false) return;
+            
             speechModule = result;
             return speechModule.buildGrammarFromStringList(1, rsd.SpeechModule.commands, null);              
         })
         .then(function (result) {
+            if (useSpeech==false) return;
+            
             return speechModule.setGrammar(1);
         })
         .then(function (result) {
+            if (useSpeech==false) return;
+            
             speechModule.onSpeechRecognized = OnSpeechRecognized;
             speechModule.onAlertFired = OnSpeechAlert;
             return speechModule.startRec();
@@ -878,7 +894,21 @@ accordance with the terms of that agreement
                     //happens when the sensor is disconnected
                     rsd.Status = { status: 1, msg: 'If your sensor is unplugged, plug it in and refresh.'};
                     
-                    PopAlert();
+                    //console.log("error.request.method "+error.request.method);
+                    if (error.request.method == "PXCMSpeechRecognition_StartRec"){
+                        //happens when no recording device is connected or enabled properly. speech module cannot work
+                        rsd.Status = { status: 0, msg: 'No recording device is properly connected or enabled. Please fix issue and refresh the browser window.'};
+                        
+                        /*
+                        //clear senseManager and try init again without speech module
+                        onClearSensor();
+                        StartRealSense(false);
+                        */
+                        
+                    } else {
+                    
+                        PopAlert();
+                    }
                     break;
             
                 default:
@@ -915,7 +945,7 @@ accordance with the terms of that agreement
                     rsd.Status = { status: 2, msg: 'RealSense sensor is ready' };
                     
                     //we are now able to start realsense sensor automatically!
-                    StartRealSense();
+                    StartRealSense(true);
                     
                 } else if (info.nextStep == 'unsupported') {
                     //unsupported called when DCM not installed OR when browser is too old OR .......
@@ -977,7 +1007,7 @@ accordance with the terms of that agreement
         ValidatePlatformState(); 
         
         //or simply start realsense component right away without DetectPlatform()
-        //StartRealSense();
+        //StartRealSense(true);
         
         
     };
