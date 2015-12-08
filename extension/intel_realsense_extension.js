@@ -251,7 +251,8 @@ accordance with the terms of that agreement
             
             , init : function() {
                 //init the app with a set of commonly used voice commands 
-                this.commands = ['hello', 'hi', 'bye', 'yes', 'no', 'left', 'right', 'up', 'down'];
+                this.commands = ['hello', 'hi', 'yes', 'no'];
+                //, 'bye', 'left', 'right', 'up', 'down'];
                
             }
         }
