@@ -235,7 +235,7 @@ accordance with the terms of that agreement
     
     var SpeechModule = function () {
         // private
-        //
+        // 
         
         return {
             // public
