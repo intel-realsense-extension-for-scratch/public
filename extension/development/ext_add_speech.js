@@ -12,7 +12,7 @@ accordance with the terms of that agreement
 // Shachar Oz , Omer Goshen , Moria Ilan Navi
 // 2015
 // Intel RealSense Extension for Scratch 
-// version 1.3
+// version 1.4
 
 
 
@@ -726,6 +726,7 @@ accordance with the terms of that agreement
                 
                 })
                 .then(function (result) {
+                    console.log("new grammar list: "+rsd.SpeechModule.commands);
                     
                     return rsd.SpeechModule.isUpdatingGrammar = false;
                 });

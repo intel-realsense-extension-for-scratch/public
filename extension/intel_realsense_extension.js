@@ -12,7 +12,7 @@ accordance with the terms of that agreement
 // Shachar Oz , Omer Goshen , Moria Ilan Navi
 // 2015
 // Intel RealSense Extension for Scratch 
-// version 1.3
+// version 1.4
 
 
 
@@ -726,6 +726,7 @@ accordance with the terms of that agreement
                 
                 })
                 .then(function (result) {
+                    console.log("new grammar list: "+rsd.SpeechModule.commands);
                     
                     return rsd.SpeechModule.isUpdatingGrammar = false;
                 });
@@ -868,6 +869,11 @@ accordance with the terms of that agreement
         })
         .then(function (result) {
             console.log('Streaming ' + imageSize.width + 'x' + imageSize.height);
+            
+            
+            //only now we are ready for real action
+            rsd.Status = { status: 2, msg: 'RealSense sensor is ready' };
+            
         })
         .catch(function (error) {
             //var meth = error.request.method;
@@ -943,8 +949,8 @@ accordance with the terms of that agreement
                 //console.warn("Error detectPlatform: isCameraReady "+info.isCameraReady+ " isDCMUpdateNeeded:  "+info.isDCMUpdateNeeded+" isRuntimeInstalled: "+info.isRuntimeInstalled);
                 
                 if (info.nextStep == 'ready') {
-                    rsd.Status = { status: 2, msg: 'RealSense sensor is ready' };
                     
+                    rsd.Status = { status: 1, msg: 'Sensor is on, but extension not ready yet' };
                     //we are now able to start realsense sensor automatically!
                     StartRealSense(true);
                     
@@ -1094,12 +1100,17 @@ accordance with the terms of that agreement
     
     // Scratch blocks events
     ext.isBlobExist = function () {
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return false;
+        
         return rsd.BlobModule.isExist;
     };
     
     
     ext.isHandExist = function (hand_side) {
-       
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return false;
+
         if (hand_side == 'Left Hand'){
             return rsd.HandModule.isLeftExist;
         
@@ -1116,7 +1127,9 @@ accordance with the terms of that agreement
     
     
     ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {       
-                
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return -1000;
+        
         //if no rellevant hands exist, return false
         if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
             || (hand_side == 'Right Hand' && rsd.HandModule.isRightExist == false) 
@@ -1217,7 +1230,9 @@ accordance with the terms of that agreement
 
     
     ext.getHandGesture = function(hand_side, gesture_name) {
-       
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return false;
+
         var gesturesArray = [];
         
         //get array of requested hand
@@ -1279,7 +1294,9 @@ accordance with the terms of that agreement
     
     //foldedness values: closed 0 - spread 100
     ext.getHandJointFoldedness = function (hand_side, finger_name) {
-    
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return -1;
+
         var jointArray = [];
        
         if (hand_side == 'Any Hand'){
@@ -1327,7 +1344,9 @@ accordance with the terms of that agreement
     
     //hand rotation
     ext.getHandRotation = function(rotation_type, hand_side) {
-        
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return -1000;
+
         var jointArray = [];
         
         if (hand_side == 'Any Hand'){
@@ -1383,13 +1402,17 @@ accordance with the terms of that agreement
     
     
     ext.isFaceExist = function () {
-       
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return false;
+
         return rsd.FaceModule.isExist;
     };
     
      
     ext.getFaceJointPosition = function (head_position, joint_name) {
-         
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return -1000;
+
         var result = {};
         
         var requestedJointIndex = -1;
@@ -1450,7 +1473,9 @@ accordance with the terms of that agreement
     
     
     ext.isFacialExpressionOccured = function (facial_expression) {
-     
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return false;
+
         var requestedExpressionIndex = -1;
         
         for (var key in rsd.FaceModule.expressionsDictionary){
@@ -1483,7 +1508,9 @@ accordance with the terms of that agreement
     
     
     ext.getHeadRotation = function(rotation_type) {
-       
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return 0;
+
         if (rotation_type === "Yaw"){
             return ValueMapper(rsd.FaceModule.headRotation.Yaw, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
            
@@ -1527,6 +1554,9 @@ accordance with the terms of that agreement
     
     
     ext.getRecognizedSpeech = function() {
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return "";
+
         var numberOfWords = rsd.SpeechModule.recognizedWords.length;
         
         if (numberOfWords == 0) return "";
@@ -1542,7 +1572,9 @@ accordance with the terms of that agreement
 
     
     ext.hasUserSaid = function (word) {
-        
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return false;
+
         //make sure word is lowercased
         word = word.toLowerCase();
         
@@ -1582,25 +1614,10 @@ accordance with the terms of that agreement
     };
     
     
-    /*
-    ext.hasUserSaidUnknown = function() {
-        
-        if (rsd.SpeechModule.isUserSaidUnknown == true) {
-            
-            //make sure to zero the variable after you return true
-            rsd.SpeechModule.isUserSaidUnknown = false;
-            return true;
-        }
-        
-        //return false
-        return rsd.SpeechModule.isUserSaidUnknown;
-    
-    };
-    
-    */
-    
     ext.hasUserSaidAnything = function() {
-        
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return false;
+
         if (rsd.SpeechModule.isUserSpoke == true) {
             
             //make sure to zero the variable after you return true
