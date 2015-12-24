@@ -1003,8 +1003,8 @@ accordance with the terms of that agreement
             
             showModal("template-realsense", 
                     { 
-                        title : 'Hmm, something is wrong ...' , 
-                        message : 'See more information on the extension website.'
+                        title : rsd.Status.msg //'Hmm, something is wrong ...' , 
+                        , message : rsd.Status.msgContent //'See more information on the extension website.'
                     } );
         }
         
