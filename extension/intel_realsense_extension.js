@@ -348,6 +348,8 @@ accordance with the terms of that agreement
                     break;
             }
             
+            PopAlert();
+            
             onClearSensor();
         }
     };
@@ -375,7 +377,7 @@ accordance with the terms of that agreement
                 .then(function (result) {
                     sense = undefined;
                 });
-            }   
+            }
         }
     };
     
