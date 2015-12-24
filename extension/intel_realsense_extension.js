@@ -1004,6 +1004,8 @@ accordance with the terms of that agreement
                         , msg: 'Sensor not supported or browser not supported' 
                         , msgContent: 'Intel® RealSense™ F200 Depth Camera Manager is not installed or browser not supported. <br>Download <a href="https://downloadcenter.intel.com/download/25044/Intel-RealSense-Depth-Camera-Manager-DCM-" target="_blank">lastest DCM version</a>. <br>Make sure we <a href="http://intel-realsense-extension-for-scratch.github.io/download.html" target="_blank">support</a> your browser.' 
                     };
+                    
+                    PopAlert();
                 
                 } else if (info.nextStep == 'driver') {
                     //driver called when DCM is too old and should be upgraded
@@ -1013,6 +1015,8 @@ accordance with the terms of that agreement
                         , msgContent: 'Please upgrade Intel® RealSense™ F200 <a href="https://downloadcenter.intel.com/download/25044/Intel-RealSense-Depth-Camera-Manager-DCM-" target="_blank">Depth Camera Manager</a>.'
                     };
                 
+                    PopAlert();
+                    
                 } else if (info.nextStep == 'runtime') {
                     //runtime called when runtime needs to be installed
                     rsd.Status = { 
@@ -1020,9 +1024,11 @@ accordance with the terms of that agreement
                         , msg: 'Software not installed properly'
                         , msgContent: 'Please install Intel® RealSense™ SDK <a href="http://intel-realsense-extension-for-scratch.github.io/download.html" target="_blank">Web Runtime</a>.'
                     };
+                    
+                    
+                    PopAlert();
                 }
                 
-                PopAlert();
                 
             }).catch(function (error) {
                 console.log('CheckPlatform failed: ' + JSON.stringify(error));
