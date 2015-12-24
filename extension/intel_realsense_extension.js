@@ -963,6 +963,7 @@ accordance with the terms of that agreement
                     break;
             }
             
+            PopAlert();
         });
         
     };
