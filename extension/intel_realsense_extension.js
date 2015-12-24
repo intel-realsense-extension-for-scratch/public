@@ -308,9 +308,13 @@ accordance with the terms of that agreement
             }
             
         } else {
-           // console.warn('sensor not connected');
+            // console.warn('sensor not connected');
             
-            rsd.Status = { status: 0, msg: 'Realsense sensor not connected' };
+            rsd.Status = { 
+                status : 0
+                , msg : 'Sensor not connected'
+                ,msgContent: 'Intel Realsense Sensor is not detected. Please reconnect your sensor and refresh the page.' 
+            };
             
             PopAlert();
         }
