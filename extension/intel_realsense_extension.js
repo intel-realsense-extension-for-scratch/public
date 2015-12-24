@@ -922,14 +922,22 @@ accordance with the terms of that agreement
                 case intel.realsense.Status.STATUS_ITEM_UNAVAILABLE: 
                     // meaning -3
                     //unknown error
-                    rsd.Status = { status: 0, msg: 'Try restarting your computer'};
-                    
-                    //happens when the sensor is disconnected
+                    //happens mostly when the sensor is disconnected
+                    //but also when DCM installation was removed 
                     rsd.Status = { 
                         status: 1
-                        , msg : 'Sensor not ready' 
+                        , msg : 'Sensor not ready'
                         , msgContent : 'If your sensor is disconnected, reconnect it and refresh the page. <br>Otherwise, please restart your PC.'
                     };
+                    
+                    //workaround - not supposed to be here
+                    if (error.request.method =="PXCMSenseManager_Init"){
+                        rsd.Status = { 
+                            status: 0
+                            , msg: 'Software not installed properly' 
+                            , msgContent: 'Please upgrade Intel® RealSense™ F200 <a href="https://downloadcenter.intel.com/download/25044/Intel-RealSense-Depth-Camera-Manager-DCM-" target="_blank">Depth Camera Manager</a>.'
+                        };
+                    }
                     
                     //console.log("error.request.method "+error.request.method);
                     if (error.request.method == "PXCMSpeechRecognition_StartRec"){
