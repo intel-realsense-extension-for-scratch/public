@@ -1050,7 +1050,7 @@ accordance with the terms of that agreement
     
     var PopAlert = function() {
         
-        if (rsd.Status.status == 0) {
+        if (rsd.Status.status < 2) {
             
             showModal("template-realsense", 
                     { 
