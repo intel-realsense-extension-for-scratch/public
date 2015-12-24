@@ -267,6 +267,7 @@ accordance with the terms of that agreement
             // public
             status: 1
             , msg: 'Checking your system...'
+            , msgContent: 'content for Error Message'
         }
     };
     
@@ -298,8 +299,9 @@ accordance with the terms of that agreement
                 sender.deviceInfo.orientation == rs.DeviceOrientation.DEVICE_ORIENTATION_WORLD_FACING) {
                 
                 rsd.Status = { 
-                    status: 0, 
-                    msg: 'This extension supports only F200 Intel Realsense 3D Sensor' 
+                    status : 0
+                    , msg : 'Intel Realsense 3D Sensor not suitable' 
+                    , msgContent : 'This extension currently supports Intel Realsense F200 Sensor. Visit <a href="https://www-ssl.intel.com/content/www/us/en/architecture-and-technology/realsense-devices.html" target="_blank">here</a> to get a new sensor.'
                 };
                 
                 PopAlert();
@@ -889,7 +891,11 @@ accordance with the terms of that agreement
                     // meaning -102
                     //sensor is already active on another window / app 
                     console.warn('Realsense Sensor is active in another window. please close the other one if you wish to work here');
-                    rsd.Status = { status: 1, msg: 'Realsense Sensor is active in another window. please close the other one if you wish to work here' };
+                    rsd.Status = { 
+                        status: 1
+                        , msg : 'Sensor not ready' 
+                        , msgContent : 'Intel Realsense Sensor is already running in another window. Please close all other browser windows, if you wish to work here.'
+                    };
                     break;
                     
                     
@@ -899,7 +905,11 @@ accordance with the terms of that agreement
                     rsd.Status = { status: 0, msg: 'Try restarting your computer'};
                     
                     //happens when the sensor is disconnected
-                    rsd.Status = { status: 1, msg: 'If your sensor is unplugged, plug it in and refresh.'};
+                     rsd.Status = { 
+                        status: 1
+                        , msg : 'Sensor not ready' 
+                        , msgContent : 'If your sensor is unplugged, plug it in and refresh the page.'
+                    };
                     
                     //console.log("error.request.method "+error.request.method);
                     if (error.request.method == "PXCMSpeechRecognition_StartRec"){
@@ -988,7 +998,7 @@ accordance with the terms of that agreement
     };
     
     var PopAlert = function() {
-            
+        
         if (rsd.Status.status == 0) {
             
             showModal("template-realsense", 
