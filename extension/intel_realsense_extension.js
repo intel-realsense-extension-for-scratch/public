@@ -991,7 +991,8 @@ accordance with the terms of that agreement
             
         if (rsd.Status.status == 0) {
             
-            showModal("template-realsense");
+            showModal("template-realsense", {title='Hmm, something is wrong :) ...' , 
+                                             message='See more information on the extension website. <a href="www.google.com">go here</a>'});
         }
     };
     
