@@ -300,8 +300,8 @@ accordance with the terms of that agreement
                 
                 rsd.Status = { 
                     status : 0
-                    , msg : 'Intel Realsense 3D Sensor not suitable' 
-                    , msgContent : 'This extension currently supports Intel Realsense F200 Sensor. Visit <a href="https://www-ssl.intel.com/content/www/us/en/architecture-and-technology/realsense-devices.html" target="_blank">here</a> to get a new sensor.'
+                    , msg : 'Intel® RealSense™ 3D Sensor not suitable' 
+                    , msgContent : 'This extension currently supports Intel® RealSense™ F200 Sensor. Visit <a href="https://www-ssl.intel.com/content/www/us/en/architecture-and-technology/realsense-devices.html" target="_blank">here</a> to get a new sensor.'
                 };
                 
                 PopAlert();
@@ -313,7 +313,7 @@ accordance with the terms of that agreement
             rsd.Status = { 
                 status : 0
                 , msg : 'Sensor not connected'
-                ,msgContent: 'Intel Realsense Sensor is not detected. Please reconnect your sensor and refresh the page.' 
+                ,msgContent: 'Intel® RealSense™ Sensor is not detected. <br>Please reconnect your sensor and refresh the page.' 
             };
             
             PopAlert();
@@ -334,7 +334,11 @@ accordance with the terms of that agreement
 
                 // error on sensor disconnect from USB (sometimes not occurs)
                 case -301:
-                    rsd.Status = {status: 1 , msg: 'intel realsense sensor was disconnected from USB. please plug in and refresh page'};
+                    rsd.Status = {
+                        status: 1 
+                        , msg : 'Sensor disconnected'
+                        , msgContent : 'Intel® RealSense™ Sensor was disconnected from USB. <br>Please reconnect your sensor and refresh the page.'
+                    };
                     break;
             }
             
@@ -878,7 +882,11 @@ accordance with the terms of that agreement
             
             
             //only now we are ready for real action
-            rsd.Status = { status: 2, msg: 'RealSense sensor is ready' };
+            rsd.Status = { 
+                status: 2
+                , msg: 'RealSense sensor is ready'
+                , msgContent: ''
+            };
             
         })
         .catch(function (error) {
@@ -898,7 +906,7 @@ accordance with the terms of that agreement
                     rsd.Status = { 
                         status: 1
                         , msg : 'Sensor not ready' 
-                        , msgContent : 'Intel Realsense Sensor is already running in another window. Please close all other browser windows, if you wish to work here.'
+                        , msgContent : 'Intel® RealSense™ Sensor is already running in another window. <br>Please close all other browser windows and refresh the page.'
                     };
                     break;
                     
@@ -909,16 +917,20 @@ accordance with the terms of that agreement
                     rsd.Status = { status: 0, msg: 'Try restarting your computer'};
                     
                     //happens when the sensor is disconnected
-                     rsd.Status = { 
+                    rsd.Status = { 
                         status: 1
                         , msg : 'Sensor not ready' 
-                        , msgContent : 'If your sensor is unplugged, plug it in and refresh the page.'
+                        , msgContent : 'If your sensor is disconnected, reconnect it and refresh the page. <br>Otherwise, please restart your PC.'
                     };
                     
                     //console.log("error.request.method "+error.request.method);
                     if (error.request.method == "PXCMSpeechRecognition_StartRec"){
                         //happens when no recording device is connected or enabled properly. speech module cannot work
-                        rsd.Status = { status: 0, msg: 'No recording device is properly connected or enabled. Please fix issue and refresh the browser window.'};
+                        rsd.Status = { 
+                            status: 0
+                            , msg: 'Recording device missing'
+                            , msgContent: 'No recording device is detected or properly enabled. <br>Please fix issue and refresh the page.'
+                        };
                         
                         /*
                         //clear senseManager and try init again without speech module
@@ -935,7 +947,11 @@ accordance with the terms of that agreement
                 default:
                     //if sensor not connected to usb - it gets here
                     //other option: sensor is already running somewhere else on the web
-                    rsd.Status = { status: 1, msg: 'Please Connect your Intel Realsense Sensor to USB and refresh page' };
+                    rsd.Status = { 
+                        status: 1
+                        , msg : 'Sensor not ready' 
+                        , msgContent : 'Either your sensor is disconnected or there are other browser windows using it at the moment. <br>Please fix issue and refresh the page.'
+                    };
                     break;
             }
             
@@ -964,22 +980,37 @@ accordance with the terms of that agreement
                 
                 if (info.nextStep == 'ready') {
                     
-                    rsd.Status = { status: 1, msg: 'Sensor is on, but extension not ready yet' };
+                    rsd.Status = { 
+                        status: 1
+                        , msg: 'Sensor is on, but extension not ready yet' 
+                        , msgContent: 'extension is still loading'
+                    };
                     //we are now able to start realsense sensor automatically!
                     StartRealSense(true);
                     
                 } else if (info.nextStep == 'unsupported') {
                     //unsupported called when DCM not installed OR when browser is too old OR .......
-                    rsd.Status = { status: 0, msg: 'Intel® RealSense™ 3D F200 camera is not available or browser not supported' };
+                    rsd.Status = { 
+                        status: 0
+                        , msg: 'Sensor not supported or browser not supported' 
+                        , msgContent: 'Intel® RealSense™ F200 Depth Camera Manager is not installed or browser not supported. <br>Download <a href="https://downloadcenter.intel.com/download/25044/Intel-RealSense-Depth-Camera-Manager-DCM-" target="_blank">lastest DCM version</a>. <br>Make sure we <a href="http://intel-realsense-extension-for-scratch.github.io/download.html" target="_blank">support</a> your browser.' 
+                    };
                 
                 } else if (info.nextStep == 'driver') {
                     //driver called when DCM is too old and should be upgraded
-                    rsd.Status = { status: 0, msg: 'Please upgrade RealSense(TM) F200 Depth Camera Manager and firmware' };
+                    rsd.Status = { 
+                        status: 0
+                        , msg: 'Software not installed properly' 
+                        , msgContent: 'Please upgrade Intel® RealSense™ F200 <a href="https://downloadcenter.intel.com/download/25044/Intel-RealSense-Depth-Camera-Manager-DCM-" target="_blank">Depth Camera Manager</a>.'
+                    };
                 
                 } else if (info.nextStep == 'runtime') {
                     //runtime called when runtime needs to be installed
-                    rsd.Status = { status: 0, msg: 'Please download and install Intel(R) RealSense(TM) SDK Runtime' };
-                
+                    rsd.Status = { 
+                        status: 0
+                        , msg: 'Software not installed properly'
+                        , msgContent: 'Please install Intel® RealSense™ SDK <a href="http://intel-realsense-extension-for-scratch.github.io/download.html" target="_blank">Web Runtime</a>.'
+                    };
                 }
                 
                 PopAlert();
@@ -987,13 +1018,21 @@ accordance with the terms of that agreement
             }).catch(function (error) {
                 console.log('CheckPlatform failed: ' + JSON.stringify(error));
                 
-                rsd.Status = { status: 0, msg: 'platform error' };
+                rsd.Status = { 
+                    status: 0
+                    , msg: 'Unknown platform error'
+                    , msgContent: 'We do not know this issue and would like to know more about it. <br>Please contact us for more details.'
+                };
                 
                 PopAlert();
             });
             
         } else {
-            rsd.Status = { status: 0, msg: 'platform not ready' };  
+            rsd.Status = { 
+                    status: 0
+                    , msg: 'Unknown platform error'
+                    , msgContent: 'We do not know this issue and would like to know more about it. <br>Please contact us for more details.'
+                };
             
             PopAlert();
         }
@@ -1007,16 +1046,11 @@ accordance with the terms of that agreement
             
             showModal("template-realsense", 
                     { 
-                        title : rsd.Status.msg //'Hmm, something is wrong ...' , 
-                        , message : rsd.Status.msgContent //'See more information on the extension website.'
+                        title : rsd.Status.msg 
+                        , message : rsd.Status.msgContent 
                     } );
         }
-        
-        /*  { 
-                title : 'Hmm, something is wrong ...' , 
-                message : 'See more information on the extension website. <a href="www.google.com">go here</a>'
-            }
-        */
+       
     };
     
     var dependencyAllCreated = function () {
