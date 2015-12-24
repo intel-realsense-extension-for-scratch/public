@@ -329,6 +329,12 @@ accordance with the terms of that agreement
             switch (sts){
                 case 503:
                     console.warn('Capabilities.Servicer.Realsense.exe must be restarted! shut it down and restart Intel technologyAccess and DCM');   
+                    
+                    rsd.Status = {
+                        status: 0 
+                        , msg : 'Software not ready'
+                        , msgContent : 'Intel® Technology Access not working properly. <br>Please restart your PC and make sure you are connected to a public WIFI network.'
+                    };
                     break;
 
 
