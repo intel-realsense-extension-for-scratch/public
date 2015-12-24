@@ -993,10 +993,16 @@ accordance with the terms of that agreement
             
             showModal("template-realsense", 
                     { 
-                        title : 'Hmm, something is wrong :) ...' , 
-                        message : 'See more information on the extension website. <a href="www.google.com">go here</a>'
+                        title : 'Hmm, something is wrong ...' , 
+                        message : 'See more information on the extension website.'
                     } );
         }
+        
+        /*  { 
+                title : 'Hmm, something is wrong ...' , 
+                message : 'See more information on the extension website. <a href="www.google.com">go here</a>'
+            }
+        */
     };
     
     var dependencyAllCreated = function () {
