@@ -954,9 +954,6 @@ accordance with the terms of that agreement
                         StartRealSense(false);
                         */
                         
-                    } else {
-                    
-                        PopAlert();
                     }
                     break;
             
@@ -1013,8 +1010,6 @@ accordance with the terms of that agreement
                         , msgContent: 'Intel® RealSense™ F200 Depth Camera Manager is not installed or browser not supported. <br>Download <a href="https://downloadcenter.intel.com/download/25044/Intel-RealSense-Depth-Camera-Manager-DCM-" target="_blank">lastest DCM version</a>. <br>Make sure we <a href="http://intel-realsense-extension-for-scratch.github.io/download.html" target="_blank">support</a> your browser.' 
                     };
                     
-                    PopAlert();
-                
                 } else if (info.nextStep == 'driver') {
                     //driver called when DCM is too old and should be upgraded
                     rsd.Status = { 
@@ -1023,20 +1018,21 @@ accordance with the terms of that agreement
                         , msgContent: 'Please upgrade Intel® RealSense™ F200 <a href="https://downloadcenter.intel.com/download/25044/Intel-RealSense-Depth-Camera-Manager-DCM-" target="_blank">Depth Camera Manager</a>.'
                     };
                 
-                    PopAlert();
-                    
                 } else if (info.nextStep == 'runtime') {
                     //runtime called when runtime needs to be installed
                     rsd.Status = { 
                         status: 0
-                        , msg: 'Software not installed properly'
-                        , msgContent: 'Please install Intel® RealSense™ SDK <a href="http://intel-realsense-extension-for-scratch.github.io/download.html" target="_blank">Web Runtime</a>.'
+                        , msg: 'Software not running properly'
+                        , msgContent: 'Intel® RealSense™ SDK <a href="http://intel-realsense-extension-for-scratch.github.io/download.html" target="_blank">Web Runtime</a> is either missing or not properly installed. <br>Please restart PC after installation.'
                     };
                     
-                    
-                    PopAlert();
                 }
                 
+                //pop alert 
+                if (rsd.Status.status == 0) 
+                {
+                    PopAlert();
+                }
                 
             }).catch(function (error) {
                 console.log('CheckPlatform failed: ' + JSON.stringify(error));
