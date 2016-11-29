@@ -841,7 +841,7 @@ accordance with the terms of that agreement
         
         
         
-        
+        /*
 //speech module         
         .then(function (result) {
             if (useSpeech==false) return;
@@ -867,7 +867,7 @@ accordance with the terms of that agreement
             return speechModule.startRec();
         })
             
-        
+        */
 //general functionality        
         .then(function (result) {
             sense.onDeviceConnected = onConnect;
