@@ -276,7 +276,7 @@ accordance with the terms of that agreement
             HandModule: new HandModule(),
             FaceModule: new FaceModule(),            
             BlobModule: new BlobModule(),
-            SpeechModule: new SpeechModule(),
+           // SpeechModule: new SpeechModule(),
             Status: new ScratchStatus()
         }
     };
