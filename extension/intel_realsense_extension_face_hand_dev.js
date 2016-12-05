@@ -1085,7 +1085,7 @@ accordance with the terms of that agreement
         //create realsense data object
         rsd.FaceModule.init();
         rsd.HandModule.init();
-        rsd.SpeechModule.init();
+        // not using speech module      rsd.SpeechModule.init();
         
         
                 
