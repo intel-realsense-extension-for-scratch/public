@@ -68,8 +68,8 @@ accordance with the terms of that agreement
     //stage mapping
     const RS_FACE_X_MAX_RIGHT = 0;    
     const RS_FACE_X_MAX_LEFT = 600;    
-    const RS_FACE_Y_MAX_UP = 100;      
-    const RS_FACE_Y_MAX_DOWN = -650;       
+    const RS_FACE_Y_MAX_UP = -500;      
+    const RS_FACE_Y_MAX_DOWN = 100;       
     
     const RS_FACE_ROTATION_MIN = -30;
     const RS_FACE_ROTATION_MAX = 30;
