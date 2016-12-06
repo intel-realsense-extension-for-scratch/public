@@ -399,6 +399,9 @@ accordance with the terms of that agreement
         else if (sender == handModule)
             onHandData(sender, data); 
         
+        
+        console.log('onFaceHandData  onFaceHandData  onFaceHandData  onFaceHandData');
+       
     };
     
     
@@ -842,9 +845,11 @@ accordance with the terms of that agreement
         })
             
         
-         .then(function (result) {
+//hand module
+        .then(function (result) {
             return rs.hand.HandModule.activate(sense);
         })
+
         
 //general functionality        
         .then(function (result) {
@@ -868,6 +873,7 @@ accordance with the terms of that agreement
             faceConfiguration.expressions.properties.isEnabled = true;
         })
           
+        
 //hand module        
         .then(function (result) {
             return handModule.createActiveConfiguration();
@@ -1005,7 +1011,7 @@ accordance with the terms of that agreement
                         , msgContent: 'extension is still loading'
                     };
                     //we are now able to start realsense sensor automatically!
-                    StartRealSense(false);
+                    StartRealSense(true);
                     
                 } else if (info.nextStep == 'unsupported') {
                     //unsupported called when DCM not installed OR when browser is too old OR .......
