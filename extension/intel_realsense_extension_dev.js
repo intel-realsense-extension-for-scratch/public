@@ -67,9 +67,9 @@ accordance with the terms of that agreement
     
     //stage mapping
     const RS_FACE_X_MAX_RIGHT = 0;    
-    const RS_FACE_X_MAX_LEFT = 600;    
-    const RS_FACE_Y_MAX_UP = 250;      
-    const RS_FACE_Y_MAX_DOWN = 0;       
+    const RS_FACE_X_MAX_LEFT = 600;  
+    const RS_FACE_Y_MAX_UP = 250;  //was 250    
+    const RS_FACE_Y_MAX_DOWN = 0; //was 0
     
     const RS_FACE_ROTATION_MIN = -30;
     const RS_FACE_ROTATION_MAX = 30;
@@ -1307,8 +1307,7 @@ accordance with the terms of that agreement
                
             } else {
                 if (hand_position === "Y Position") {
-                    return result.position.Y;
-                    //return ValueMapper(result.position.Y, RS_HAND_Y_MAX_DOWN, RS_HAND_Y_MAX_UP, SCRATCH_Y_MAX_DOWN, SCRATCH_Y_MAX_UP);
+                    return ValueMapper(result.position.Y, RS_HAND_Y_MAX_DOWN, RS_HAND_Y_MAX_UP, SCRATCH_Y_MAX_DOWN, SCRATCH_Y_MAX_UP);
                 
                 } else {
                    return result.position.Z;
@@ -1556,7 +1555,8 @@ accordance with the terms of that agreement
         
         } else {
             if (head_position === "Y Position") {
-                return ValueMapper(result.position.Y, RS_FACE_Y_MAX_DOWN, RS_FACE_Y_MAX_UP, SCRATCH_Y_MAX_DOWN, SCRATCH_Y_MAX_UP);
+                return result.position.Y;
+                //return ValueMapper(result.position.Y, RS_FACE_Y_MAX_DOWN, RS_FACE_Y_MAX_UP, SCRATCH_Y_MAX_DOWN, SCRATCH_Y_MAX_UP);
            
             } else {
                 return result.position.Z;
