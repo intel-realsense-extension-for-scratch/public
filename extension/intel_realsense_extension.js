@@ -12,7 +12,7 @@ accordance with the terms of that agreement
 // Shachar Oz , Omer Goshen , Moria Ilan Navi
 // 2015
 // Intel RealSense Extension for Scratch 
-// version 1.4
+// version 2.0
 
 
 
@@ -394,10 +394,11 @@ accordance with the terms of that agreement
 
   
     var onFaceHandData = function (sender, data) {
-        if (sender == faceModule)
+       /* if (sender == faceModule)
             onFaceData(sender, data);
         else if (sender == handModule)
             onHandData(sender, data); 
+            */
     };
     
     
@@ -771,7 +772,8 @@ accordance with the terms of that agreement
             return result;
         })
         
-        
+         
+           
 /*        
          .then(function (result) {
              return rs.blob.BlobModule.activate(sense);
@@ -806,38 +808,10 @@ accordance with the terms of that agreement
             faceConfiguration.detection.maxTrackedFaces = 1;
             faceConfiguration.trackingMode = intel.realsense.face.TrackingModeType.FACE_MODE_COLOR_PLUS_DEPTH;
             
-            faceConfiguration.landmarks.isEnabled = true;
-            faceConfiguration.landmarks.maxTrackedFaces = 1;
-            faceConfiguration.pose.isEnabled = true;
-            faceConfiguration.expressions.properties.isEnabled = true;
-
             return faceConfiguration.applyChanges();
         })
         
-        //check if this works and fixes capabilities bug
-        .then(function (result) {
-            return faceConfiguration.release();
-        })
         
-        
-        
-//hand module        
-        .then(function (result) {
-            return rs.hand.HandModule.activate(sense);
-        })
-        .then(function (result) {
-            handModule = result;
-            return handModule.createActiveConfiguration();
-        })
-        .then(function (result) {
-            handConfiguration = result;
-            handConfiguration.allAlerts = false;
-            handConfiguration.allGestures = true;
-            return handConfiguration.applyChanges();
-        })
-        .then(function (result) {
-            return handConfiguration.release();
-        })
         
         
         
@@ -868,8 +842,14 @@ accordance with the terms of that agreement
         })
             
         
+         .then(function (result) {
+            return rs.hand.HandModule.activate(sense);
+        })
+        
 //general functionality        
         .then(function (result) {
+            handModule = result;
+            
             sense.onDeviceConnected = onConnect;
             sense.onStatusChanged = onStatus;
             
@@ -879,9 +859,34 @@ accordance with the terms of that agreement
             return sense.init();
         })
         
+              
+//face module        
+        .then(function (result) {
+            faceConfiguration.landmarks.isEnabled = true;
+            faceConfiguration.landmarks.maxTrackedFaces = 1;
+            faceConfiguration.pose.isEnabled = true;
+            faceConfiguration.expressions.properties.isEnabled = true;
+        })
+          
+//hand module        
+        .then(function (result) {
+            return handModule.createActiveConfiguration();
+        })
+        .then(function (result) {
+            handConfiguration = result;
+            handConfiguration.allAlerts = false;
+            handConfiguration.allGestures = true;
+            return handConfiguration.applyChanges();
+        })
+        .then(function (result) {
+            return handConfiguration.release();
+        })
+
+
+        
         //release function of the hand module configurations
         .then(function (result) {
-            imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_DEPTH);
+            imageSize = sense.captureManager.queryImageSize(rs.StreamType.STREAM_TYPE_COLOR);
             return sense.streamFrames();
         
         })
@@ -986,7 +991,7 @@ accordance with the terms of that agreement
             detectPlatform([module names in string], [supported sensors names in string])
             in order to support both F200 and SR300 sensor, we keep this empty array (meaning, support any connected sensor)
             */
-            rs.SenseManager.detectPlatform(['face3d', 'hand', 'blob', 'voice', 'nuance_en_us_cnc'], [])
+            rs.SenseManager.detectPlatform(['face3d', 'hand'], [])
                 
             .then(function (info) {
                 
@@ -1000,7 +1005,7 @@ accordance with the terms of that agreement
                         , msgContent: 'extension is still loading'
                     };
                     //we are now able to start realsense sensor automatically!
-                    StartRealSense(true);
+                    StartRealSense(false);
                     
                 } else if (info.nextStep == 'unsupported') {
                     //unsupported called when DCM not installed OR when browser is too old OR .......
@@ -1081,7 +1086,7 @@ accordance with the terms of that agreement
         //create realsense data object
         rsd.FaceModule.init();
         rsd.HandModule.init();
-        rsd.SpeechModule.init();
+        // not using speech module      rsd.SpeechModule.init();
         
         
                 
@@ -1104,14 +1109,14 @@ accordance with the terms of that agreement
     $.getScript('https://www.promisejs.org/polyfills/promise-6.1.0.js')
     .done(function(script, textStatus) {
        
-        $.getScript('https://autobahn.s3.amazonaws.com/autobahnjs/latest/autobahn.min.jgz')
+        $.getScript('https://autobahn.s3.amazonaws.com/autobahnjs/0.9.4-2/autobahn.min.jgz')
         .done(function(script, textStatus) {
 
             //$.getScript('https://cdn.rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense.js')
         // dev link: https://rawgit.com/shacharoz/
         // production link (cached): https://cdn.rawgit.com/shacharoz/
 
-     $.getScript('https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense.js')
+        $.getScript('https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense-vs1.4.js')
             .done(function(script, textStatus) {
              
                 dependencyAllCreated();
@@ -1727,12 +1732,12 @@ accordance with the terms of that agreement
             ,['b', '%m.hand_type gesture %m.hand_gestures?', 'getHandGesture', 'Any Hand', 'V sign']
             ,['r', '%m.hand_type %m.major_joint_name foldedness amount', 'getHandJointFoldedness', 'Any Hand', 'Index']
            // ,['r', '%m.rotation_value of %m.hand_type', 'getHandRotation', 'Rotation X', 'Any Hand']
-            
+/*    
         ,['-']
             ,['b', 'user said %s?', 'hasUserSaid', 'Hello']
             ,['b', 'user said anything?', 'hasUserSaidAnything']
             ,['r', 'last word user said', 'getRecognizedSpeech']
-            
+*/  
         ]
          
         , menus: {
