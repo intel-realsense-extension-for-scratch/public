@@ -1012,7 +1012,7 @@ accordance with the terms of that agreement
                         , msgContent: 'extension is still loading'
                     };
                     //we are now able to start realsense sensor automatically!
-                    StartRealSense(true);
+                    StartRealSense(false);
                     
                 } else if (info.nextStep == 'unsupported') {
                     //unsupported called when DCM not installed OR when browser is too old OR .......
