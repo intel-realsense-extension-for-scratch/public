@@ -394,11 +394,11 @@ accordance with the terms of that agreement
 
   
     var onFaceHandData = function (sender, data) {
-       /* if (sender == faceModule)
+        if (sender == faceModule)
             onFaceData(sender, data);
         else if (sender == handModule)
             onHandData(sender, data); 
-            */
+        
     };
     
     
