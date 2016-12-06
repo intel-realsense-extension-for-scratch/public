@@ -400,14 +400,15 @@ accordance with the terms of that agreement
             onHandData(sender, data); 
         
         
-        console.log('onFaceHandData  onFaceHandData  onFaceHandData  onFaceHandData');
-       
+        
     };
     
     
     /*RealSense Face Recognition event being called continuously, once enabling Face module*/
     var onFaceData = function(module, faceData) {
         
+        console.log('onFaceData  onFaceData  onFaceData  onFaceData onFaceData onFaceData onFaceData onFaceData onFaceData');
+       
         //reset the face data every frame 
         rsd.FaceModule.expressionsOccuredLastFrame=[];
         
