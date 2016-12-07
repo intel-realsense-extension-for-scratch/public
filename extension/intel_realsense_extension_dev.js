@@ -463,10 +463,11 @@ accordance with the terms of that agreement
                 
                 
 //face expression block
+                 console.debug('EXPRESSION: '+face.expressions.expressions.length);
+                   
                 if (face.expressions !== null && face.expressions.expressions != null) {
                     // console.log('Expressions: ' + JSON.stringify(face.expressions.expressions));
                     
-                    console.debug('EXPRESSION: '+face.expressions.expressions.length);
                     
                     for (var fe=0; fe<face.expressions.expressions.length; fe++){
                         var f_expr = face.expressions.expressions[fe];
