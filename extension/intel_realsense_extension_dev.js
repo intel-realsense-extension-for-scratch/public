@@ -399,16 +399,11 @@ accordance with the terms of that agreement
             onFaceData(sender, data);
         else if (sender == handModule)
             onHandData(sender, data); 
-        
     };
     
     
     /*RealSense Face Recognition event being called continuously, once enabling Face module*/
     var onFaceData = function(module, faceData) {
-        
-        
-       // console.log();
-        
         
         //reset the face data every frame 
         rsd.FaceModule.expressionsOccuredLastFrame=[];
@@ -456,20 +451,10 @@ accordance with the terms of that agreement
                     }
                 }
                 
-                /*
-                    var exprs = face.expressions.expressions;
-                    $.each(intel.realsense.face.ExpressionsData.FaceExpression, function(key, index) {
-                        $('#myTable tr:last').after('<tr> <td>' + key + "</td> <td> +" + exprs[index].intensity + "</td></tr>");
-                    });
-                } else {
-                    $('#expressions_status').text('');
-                }*/
-                
+              
                 
 //face expression block
-                   
                 if (face.expressions !== null && face.expressions.expressions != null) {
-                 console.log('EXPRESSION: '+face.expressions.expressions.length);
                     // console.log('Expressions: ' + JSON.stringify(face.expressions.expressions));
                     
                     
