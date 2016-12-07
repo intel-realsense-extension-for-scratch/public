@@ -406,6 +406,10 @@ accordance with the terms of that agreement
     /*RealSense Face Recognition event being called continuously, once enabling Face module*/
     var onFaceData = function(module, faceData) {
         
+        
+       // console.log();
+        
+        
         //reset the face data every frame 
         rsd.FaceModule.expressionsOccuredLastFrame=[];
         
@@ -463,9 +467,9 @@ accordance with the terms of that agreement
                 
                 
 //face expression block
-                 console.log('EXPRESSION: '+face.expressions.expressions.length);
                    
                 if (face.expressions !== null && face.expressions.expressions != null) {
+                 console.log('EXPRESSION: '+face.expressions.expressions.length);
                     // console.log('Expressions: ' + JSON.stringify(face.expressions.expressions));
                     
                     
@@ -879,8 +883,14 @@ accordance with the terms of that agreement
             faceConfiguration.landmarks.maxTrackedFaces = 1;
             faceConfiguration.pose.isEnabled = true;
             faceConfiguration.expressions.properties.isEnabled = true;
+            
+            //apply face
+            return faceConfig.applyChanges();
         })
           
+       
+        
+        
 //hand module        
         .then(function (result) {
             return handModule.createActiveConfiguration();
@@ -1132,6 +1142,9 @@ accordance with the terms of that agreement
         $.getScript('https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense-vs1.4.js')
             .done(function(script, textStatus) {
              
+            
+            
+            
                 dependencyAllCreated();
                   
             })
@@ -1671,6 +1684,9 @@ accordance with the terms of that agreement
 
     
     ext.hasUserSaid = function (word) {
+      //  if(impl.hasUserSaid !== undefined)
+        //    return impl.hasUserSaid();
+        
         //make sure the extension is ready for use
         if (rsd.Status.status < 2) return false;
 
