@@ -65,12 +65,13 @@ accordance with the terms of that agreement
     
 
     
+     
     //stage mapping
     const RS_FACE_X_MAX_RIGHT = 0;    
     const RS_FACE_X_MAX_LEFT = 600;    
     const RS_FACE_Y_MAX_UP = 500;      
     const RS_FACE_Y_MAX_DOWN = 0;       
-    
+       
     const RS_FACE_ROTATION_MIN = -30;
     const RS_FACE_ROTATION_MAX = 30;
     
@@ -194,8 +195,8 @@ accordance with the terms of that agreement
                     , "Brow lowered left"   : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_LEFT
                     , "Brow lowered right"  : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_BROW_LOWERER_RIGHT
                     , "Smile"               :
-                    intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS
-                    , "Kiss"                :  intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE
+                    intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_SMILE
+                    , "Kiss"                :  intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_KISS
                     , "Mouth open"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_MOUTH_OPEN
                     , "Wink left"           : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_LEFT
                     , "Wink right"          : intel.realsense.face.ExpressionsData.FaceExpression.EXPRESSION_EYES_CLOSED_RIGHT
@@ -398,9 +399,6 @@ accordance with the terms of that agreement
             onFaceData(sender, data);
         else if (sender == handModule)
             onHandData(sender, data); 
-        
-        
-        
     };
     
     
@@ -453,10 +451,12 @@ accordance with the terms of that agreement
                     }
                 }
                 
-  
+              
+                
 //face expression block
                 if (face.expressions !== null && face.expressions.expressions != null) {
                     // console.log('Expressions: ' + JSON.stringify(face.expressions.expressions));
+                    
                     
                     for (var fe=0; fe<face.expressions.expressions.length; fe++){
                         var f_expr = face.expressions.expressions[fe];
@@ -810,9 +810,13 @@ accordance with the terms of that agreement
             faceConfiguration.detection.maxTrackedFaces = 1;
             faceConfiguration.trackingMode = intel.realsense.face.TrackingModeType.FACE_MODE_COLOR_PLUS_DEPTH;
             
+            faceConfiguration.landmarks.isEnabled = true;
+            faceConfiguration.landmarks.maxTrackedFaces = 1;
+            faceConfiguration.pose.isEnabled = true;
+            faceConfiguration.expressions.properties.isEnabled = true;
+            
             return faceConfiguration.applyChanges();
         })
-        
         
         
         
@@ -844,11 +848,9 @@ accordance with the terms of that agreement
         })
             
         
-//hand module
-        .then(function (result) {
+         .then(function (result) {
             return rs.hand.HandModule.activate(sense);
         })
-
         
 //general functionality        
         .then(function (result) {
@@ -863,15 +865,9 @@ accordance with the terms of that agreement
             return sense.init();
         })
         
-              
-//face module        
-        .then(function (result) {
-            faceConfiguration.landmarks.isEnabled = true;
-            faceConfiguration.landmarks.maxTrackedFaces = 1;
-            faceConfiguration.pose.isEnabled = true;
-            faceConfiguration.expressions.properties.isEnabled = true;
-        })
-          
+            
+       
+        
         
 //hand module        
         .then(function (result) {
@@ -1124,6 +1120,9 @@ accordance with the terms of that agreement
         $.getScript('https://rawgit.com/intel-realsense-extension-for-scratch/resources/master/intel/realsense-vs1.4.js')
             .done(function(script, textStatus) {
              
+            
+            
+            
                 dependencyAllCreated();
                   
             })
@@ -1663,6 +1662,9 @@ accordance with the terms of that agreement
 
     
     ext.hasUserSaid = function (word) {
+      //  if(impl.hasUserSaid !== undefined)
+        //    return impl.hasUserSaid();
+        
         //make sure the extension is ready for use
         if (rsd.Status.status < 2) return false;
 
