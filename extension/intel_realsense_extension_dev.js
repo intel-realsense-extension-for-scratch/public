@@ -825,9 +825,13 @@ accordance with the terms of that agreement
             faceConfiguration.detection.maxTrackedFaces = 1;
             faceConfiguration.trackingMode = intel.realsense.face.TrackingModeType.FACE_MODE_COLOR_PLUS_DEPTH;
             
+            faceConfiguration.landmarks.isEnabled = true;
+            faceConfiguration.landmarks.maxTrackedFaces = 1;
+            faceConfiguration.pose.isEnabled = true;
+            faceConfiguration.expressions.properties.isEnabled = true;
+            
             return faceConfiguration.applyChanges();
         })
-        
         
         
         
@@ -876,18 +880,7 @@ accordance with the terms of that agreement
             return sense.init();
         })
         
-              
-//face module        
-        .then(function (result) {
-            faceConfiguration.landmarks.isEnabled = true;
-            faceConfiguration.landmarks.maxTrackedFaces = 1;
-            faceConfiguration.pose.isEnabled = true;
-            faceConfiguration.expressions.properties.isEnabled = true;
             
-            //apply face
-            return faceConfiguration.applyChanges();
-        })
-          
        
         
         
