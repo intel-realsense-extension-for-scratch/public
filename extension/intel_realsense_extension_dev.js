@@ -65,12 +65,13 @@ accordance with the terms of that agreement
     
 
     
+     
     //stage mapping
     const RS_FACE_X_MAX_RIGHT = 0;    
-    const RS_FACE_X_MAX_LEFT = 600;  
-    const RS_FACE_Y_MAX_UP = 100;  //was 250    
-    const RS_FACE_Y_MAX_DOWN = -650; //was 0
-    
+    const RS_FACE_X_MAX_LEFT = 600;    
+    const RS_FACE_Y_MAX_UP = 500;      
+    const RS_FACE_Y_MAX_DOWN = 0;       
+       
     const RS_FACE_ROTATION_MIN = -30;
     const RS_FACE_ROTATION_MAX = 30;
     
@@ -464,6 +465,8 @@ accordance with the terms of that agreement
 //face expression block
                 if (face.expressions !== null && face.expressions.expressions != null) {
                     // console.log('Expressions: ' + JSON.stringify(face.expressions.expressions));
+                    
+                    console.debug('EXPRESSION: '+face.expressions.expressions.length);
                     
                     for (var fe=0; fe<face.expressions.expressions.length; fe++){
                         var f_expr = face.expressions.expressions[fe];
