@@ -885,7 +885,7 @@ accordance with the terms of that agreement
             faceConfiguration.expressions.properties.isEnabled = true;
             
             //apply face
-            return faceConfig.applyChanges();
+            return faceConfiguration.applyChanges();
         })
           
        
