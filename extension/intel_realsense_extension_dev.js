@@ -20,20 +20,36 @@ accordance with the terms of that agreement
 
 (function (ext) {
     
-   
+//find the version we want to give the user
+    var resultExtensionUrl= 'http://intel-realsense-extension-for-scratch.github.io/public/extension/';
     
-  $.getScript('http://intel-realsense-extension-for-scratch.github.io/public/extension/development/realsense-extension-api-v2.5.js')
-        .done(function(script, textStatus) {
-
-
-            loadingAPIFinished();
-
-        })
-        .fail(function(jqxhr, settings, exception) {
-            console.log('Load realsense fail');
-        });
-
+    var urlParams = new URLSearchParams(window.location.search);
     
+    if ( urlParams.has('version') )
+    {
+        resultExtensionUrl += 'development/realsense-extension-api-v' + urlParams.get('version') + '.js';
+    }
+    else 
+    {
+        //give public version
+        resultExtensionUrl += 'realsense-extension-api-v2.0.js';
+    }
+        
+        
+    
+    
+    
+    $.getScript(resultExtensionUrl)
+    .done(function(script, textStatus) {
+
+        loadingAPIFinished();
+
+    })
+    .fail(function(jqxhr, settings, exception) {
+        console.log('Load realsense fail');
+    });
+
+
     
     
     var loadingAPIFinished = function() {
@@ -81,12 +97,16 @@ accordance with the terms of that agreement
     // works in scratchX not in scratch. added an event to the window.beforeupload in order for this to really restart the sensor
     ext._shutdown = function () {
         console.warn("Scratch _shutdown called");
-        onClearSensor();
+        if(impl.onClearSensor !== undefined)
+            return impl.onClearSensor();
     };
 
 
     ext._getStatus = function () {
-        return rsd.Status;
+        if(impl.onClearSensor !== undefined)
+            return impl.rsd.Status;
+        
+        return 2;
     };
    
     
@@ -111,7 +131,7 @@ accordance with the terms of that agreement
         if(impl.isFaceExist !== undefined)
             return impl.isFaceExist();
         
-        return false;
+        return 0;
     };
     
 
@@ -130,7 +150,7 @@ accordance with the terms of that agreement
         if(impl.isFaceExist !== undefined)
             return impl.isFaceExist();
         
-        return false;
+        return 0;
     };
     
     //hand rotation
@@ -138,7 +158,7 @@ accordance with the terms of that agreement
         if(impl.isFaceExist !== undefined)
             return impl.isFaceExist();
         
-        return false;
+        return 0;
     };
     
     
@@ -156,7 +176,7 @@ accordance with the terms of that agreement
         if(impl.getFaceJointPosition !== undefined)
             return impl.getFaceJointPosition(head_position, joint_name);
         
-        return false;
+        return 0;
     };
     
     
@@ -175,7 +195,7 @@ accordance with the terms of that agreement
         if(impl.getHeadRotation !== undefined)
             return impl.getHeadRotation(rotation_type);
         
-        return false;   
+        return 0;   
     };
     
     
@@ -188,7 +208,7 @@ accordance with the terms of that agreement
         if(impl.getRecognizedSpeech !== undefined)
             return impl.getRecognizedSpeech();
         
-        return false;
+        return "";
     };
 
     
