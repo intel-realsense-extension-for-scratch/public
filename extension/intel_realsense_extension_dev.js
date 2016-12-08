@@ -22,10 +22,8 @@ accordance with the terms of that agreement
     
    
     
-  $.getScript('https://rawgit.com/intel-realsense-extension-for-scratch/public/development/realsense-extension-api-v2.5.js')
+  $.getScript('https://rawgit.com/intel-realsense-extension-for-scratch/public/gh-pages/extension/development/realsense-extension-api-v2.5.js')
         .done(function(script, textStatus) {
-
-
 
 
             loadingAPIFinished();
