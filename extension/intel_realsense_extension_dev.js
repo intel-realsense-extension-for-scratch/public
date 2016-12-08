@@ -104,33 +104,33 @@ accordance with the terms of that agreement
 
 
     ext._getStatus = function () {
-        if(impl.onClearSensor !== undefined)
+        if(impl.status !== undefined)
             return impl.status;
         
-        return 2;
+        return 0;
     };
    
     
     // Scratch blocks events
     ext.isBlobExist = function () {
-        if(impl.isFaceExist !== undefined)
-            return impl.isFaceExist();
+        if(impl.isBlobExist !== undefined)
+            return impl.isBlobExist();
         
         return false;
     };
     
     
     ext.isHandExist = function (hand_side) {
-        if(impl.isFaceExist !== undefined)
-            return impl.isFaceExist();
+        if(impl.isHandExist !== undefined)
+            return impl.isHandExist();
         
         return false;
     };
     
     
     ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {       
-        if(impl.isFaceExist !== undefined)
-            return impl.isFaceExist();
+        if(impl.getHandJointPosition !== undefined)
+            return impl.getHandJointPosition(hand_position, hand_side, joint_name);
         
         return 0;
     };
@@ -138,8 +138,8 @@ accordance with the terms of that agreement
 
     
     ext.getHandGesture = function(hand_side, gesture_name) {
-       if(impl.isFaceExist !== undefined)
-            return impl.isFaceExist();
+       if(impl.getHandGesture !== undefined)
+            return impl.getHandGesture(hand_side, gesture_name);
         
         return false;
     }
@@ -148,16 +148,16 @@ accordance with the terms of that agreement
     
     //foldedness values: closed 0 - spread 100
     ext.getHandJointFoldedness = function (hand_side, finger_name) {
-        if(impl.isFaceExist !== undefined)
-            return impl.isFaceExist();
+        if(impl.getHandJointFoldedness !== undefined)
+            return impl.getHandJointFoldedness(hand_side, finger_name);
         
         return 0;
     };
     
     //hand rotation
     ext.getHandRotation = function(rotation_type, hand_side) {
-        if(impl.isFaceExist !== undefined)
-            return impl.isFaceExist();
+        if(impl.getHandRotation !== undefined)
+            return impl.getHandRotation(rotation_type, hand_side);
         
         return 0;
     };

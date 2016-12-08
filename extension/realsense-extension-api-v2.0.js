@@ -1098,7 +1098,7 @@ accordance with the terms of that agreement
 
    
     
-    var ValueMapper = function(value, source_min, source_max, dest_min, dest_max) {
+    function ValueMapper (value, source_min, source_max, dest_min, dest_max) {
        
         // Figure out range scales
         var sourceScale = source_max - source_min;
@@ -1171,7 +1171,7 @@ accordance with the terms of that agreement
             */
         }
         
-        , hasUserSaidAnything : function(e) {
+        , hasUserSaidAnything : function() {
             //make sure the extension is ready for use
             if (rsd.Status.status < 2) return false;
 
@@ -1188,7 +1188,7 @@ accordance with the terms of that agreement
         }
         
         
-        , getRecognizedSpeech: function(e) {
+        , getRecognizedSpeech: function() {
             //make sure the extension is ready for use
             if (rsd.Status.status < 2) return "";
 
@@ -1206,8 +1206,8 @@ accordance with the terms of that agreement
         }
         
         , onClearSensor: _onClearSensor
-        , onConnect: _onConnect
-        , onStatus: _onStatus
+       // , onConnect: _onConnect
+        //, onStatus: _onStatus
         , status: rsd.Status
         
     };
