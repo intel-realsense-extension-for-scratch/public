@@ -252,7 +252,7 @@ accordance with the terms of that agreement
     
     
     
-    var onConnect = function (sender, connected) {
+    var _onConnect = function (sender, connected) {
         
         if (connected == true) {
             console.log('Connect with device instance: ' + sender.instance);
@@ -285,7 +285,7 @@ accordance with the terms of that agreement
     };
     
     
-    var onStatus = function (sender, sts) {
+    var _onStatus = function (sender, sts) {
         // console.log([sender, sts]);
         if (sts < 0) {
             console.warn('Error ' + sts + ' on module ' + sender);
@@ -814,8 +814,8 @@ accordance with the terms of that agreement
         .then(function (result) {
             handModule = result;
             
-            sense.onDeviceConnected = onConnect;
-            sense.onStatusChanged = onStatus;
+            sense.onDeviceConnected = _onConnect;
+            sense.onStatusChanged = _onStatus;
             
             faceModule.onFrameProcessed = onFaceHandData;
             handModule.onFrameProcessed = onFaceHandData;
