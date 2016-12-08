@@ -43,6 +43,7 @@ accordance with the terms of that agreement
     .done(function(script, textStatus) {
 
         loadingAPIFinished(script, textStatus);
+        impl = window.RealSenseExtImpl;
 
     })
     .fail(function(jqxhr, settings, exception) {

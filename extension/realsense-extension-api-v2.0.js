@@ -1590,7 +1590,7 @@ accordance with the terms of that agreement
     */
     
     
-    return {
+    window.RealSenseExtImpl = {
        
         hasUserSaid : function (word) {
         
@@ -1672,6 +1672,6 @@ accordance with the terms of that agreement
         , onStatus: function(e) { }
         , ScratchStatus: function () { }
         , rsd: new RealSenseData()
-}
+    };
 })
 (jQuery);
