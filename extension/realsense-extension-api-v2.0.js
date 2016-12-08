@@ -8,7 +8,7 @@ accordance with the terms of that agreement
 
 
 
-// realsense-extension-api-v2.5.js
+// realsense-extension-api-v2.0.js
 // Shachar Oz , Omer Goshen
 // 2015
 // Intel RealSense Extension for Scratch 
@@ -314,12 +314,12 @@ accordance with the terms of that agreement
             
             PopAlert();
             
-            onClearSensor();
+            _onClearSensor();
         }
     };
     
     
-    var onClearSensor = function () {
+    var _onClearSensor = function () {
         console.log("reset realsense sensor");
         
         if (speechModule != undefined) {
@@ -914,7 +914,7 @@ accordance with the terms of that agreement
                         
                         /*
                         //clear senseManager and try init again without speech module
-                        onClearSensor();
+                        _onClearSensor();
                         StartRealSense(false);
                         */
                         
@@ -1127,6 +1127,96 @@ accordance with the terms of that agreement
         
         
         
+    
+    window.RealSenseExtImpl = {
+       
+        hasUserSaid : function (word) {
+        
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return false;
+
+            //make sure word is lowercased
+            word = word.toLowerCase();
+
+            //make sure this word exists in the voice commands array
+            if (rsd.SpeechModule.commands.indexOf(word) <= -1) {
+                UpdateVoiceCommandGrammer(word);
+                return false;
+            }
+        
+        
+            //make sure we have anything detected
+            var numberOfWords = rsd.SpeechModule.recognizedWords.length;
+
+            if (numberOfWords == 0) return false;
+
+            var now = +new Date();
+
+            var speechItem = rsd.SpeechModule.recognizedWords[numberOfWords-1];
+
+            return IsWordSimilar(now, speechItem, word);
+
+            /*
+            //going backwards from last recognized word to search for the wanted one
+            for (var i = numberOfWords-1; i>=0; i--){
+                var speechItemArr = rsd.SpeechModule.recognizedWords[i];
+
+                if (IsWordSimilar(now, speechItemArr, word) == true){
+                    return true;
+                    break;
+                }
+            }
+
+            return false;
+            */
+        }
+        
+        , hasUserSaidAnything : function(e) {
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return false;
+
+            if (rsd.SpeechModule.isUserSpoke == true) {
+
+                //make sure to zero the variable after you return true
+                rsd.SpeechModule.isUserSpoke = false;
+                return true;
+            }
+
+            //return false
+            return rsd.SpeechModule.isUserSpoke;
+
+        }
+        
+        
+        , getRecognizedSpeech: function(e) {
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return "";
+
+            var numberOfWords = rsd.SpeechModule.recognizedWords.length;
+
+            if (numberOfWords == 0) return "";
+
+            /*
+            //if word has been said too long ago, dont count it
+            var now = new Date();
+            if (now.time - rsd.SpeechModule.recognizedWords[numberOfWords-1].time > rsd.SpeechModule.tolerance) return "";
+            */
+
+            return rsd.SpeechModule.recognizedWords[numberOfWords-1].text;
+        }
+        
+        , onClearSensor: _onClearSensor
+        , onConnect: _onConnect
+        , onStatus: _onStatus
+        , status: rsd.Status
+        
+    };
+})
+(jQuery);
+
+
+
+
         
          
     
@@ -1589,89 +1679,3 @@ accordance with the terms of that agreement
     
     */
     
-    
-    window.RealSenseExtImpl = {
-       
-        hasUserSaid : function (word) {
-        
-            //make sure the extension is ready for use
-            if (rsd.Status.status < 2) return false;
-
-            //make sure word is lowercased
-            word = word.toLowerCase();
-
-            //make sure this word exists in the voice commands array
-            if (rsd.SpeechModule.commands.indexOf(word) <= -1) {
-                UpdateVoiceCommandGrammer(word);
-                return false;
-            }
-        
-        
-            //make sure we have anything detected
-            var numberOfWords = rsd.SpeechModule.recognizedWords.length;
-
-            if (numberOfWords == 0) return false;
-
-            var now = +new Date();
-
-            var speechItem = rsd.SpeechModule.recognizedWords[numberOfWords-1];
-
-            return IsWordSimilar(now, speechItem, word);
-
-            /*
-            //going backwards from last recognized word to search for the wanted one
-            for (var i = numberOfWords-1; i>=0; i--){
-                var speechItemArr = rsd.SpeechModule.recognizedWords[i];
-
-                if (IsWordSimilar(now, speechItemArr, word) == true){
-                    return true;
-                    break;
-                }
-            }
-
-            return false;
-            */
-        }
-        
-        , hasUserSaidAnything : function(e) {
-            //make sure the extension is ready for use
-            if (rsd.Status.status < 2) return false;
-
-            if (rsd.SpeechModule.isUserSpoke == true) {
-
-                //make sure to zero the variable after you return true
-                rsd.SpeechModule.isUserSpoke = false;
-                return true;
-            }
-
-            //return false
-            return rsd.SpeechModule.isUserSpoke;
-
-        }
-        
-        
-        , getRecognizedSpeech: function(e) {
-            //make sure the extension is ready for use
-            if (rsd.Status.status < 2) return "";
-
-            var numberOfWords = rsd.SpeechModule.recognizedWords.length;
-
-            if (numberOfWords == 0) return "";
-
-            /*
-            //if word has been said too long ago, dont count it
-            var now = new Date();
-            if (now.time - rsd.SpeechModule.recognizedWords[numberOfWords-1].time > rsd.SpeechModule.tolerance) return "";
-            */
-
-            return rsd.SpeechModule.recognizedWords[numberOfWords-1].text;
-        }
-        
-        , onClearSensor: function(e) { }
-        , onConnect: function(e) { }
-        , onStatus: function(e) { }
-        , ScratchStatus: function () { }
-        , rsd: new RealSenseData()
-    };
-})
-(jQuery);

@@ -105,7 +105,7 @@ accordance with the terms of that agreement
 
     ext._getStatus = function () {
         if(impl.onClearSensor !== undefined)
-            return impl.rsd.Status;
+            return impl.status;
         
         return 2;
     };
