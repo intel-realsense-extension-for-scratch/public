@@ -1672,4 +1672,5 @@ accordance with the terms of that agreement
             return rsd.SpeechModule.recognizedWords[numberOfWords-1].text;
         }
     }
-})(jQuery);
+})
+({});

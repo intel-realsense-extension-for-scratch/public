@@ -14,7 +14,7 @@ accordance with the terms of that agreement
 // Intel RealSense Extension for Scratch 
 // version 2.0
 
-
+// http://scratchx.org/?url=http://intel-realsense-extension-for-scratch.github.io/public/extension/intel_realsense_extension_dev.js&version=2.5
 
 "use strict";
 
@@ -36,13 +36,13 @@ accordance with the terms of that agreement
     }
         
         
-    
+    var impl;
     
     
     $.getScript(resultExtensionUrl)
     .done(function(script, textStatus) {
 
-        loadingAPIFinished();
+        loadingAPIFinished(script, textStatus);
 
     })
     .fail(function(jqxhr, settings, exception) {
@@ -52,8 +52,8 @@ accordance with the terms of that agreement
 
     
     
-    var loadingAPIFinished = function() {
-        
+    var loadingAPIFinished = function(script, textStatus) {
+         console.log('loadingAPIFinished '+ script +' '+ textStatus);
     };
     
     
