@@ -1673,4 +1673,4 @@ accordance with the terms of that agreement
         }
     }
 })
-({});
+(jQuery);
