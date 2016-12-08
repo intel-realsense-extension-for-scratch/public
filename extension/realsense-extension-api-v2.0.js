@@ -1212,7 +1212,7 @@ accordance with the terms of that agreement
         , onClearSensor: _onClearSensor
        // , onConnect: _onConnect
         //, onStatus: _onStatus
-        , scratchStatus: rsd.Status
+        , scratchStatus: function() { return rsd.Status; }
         
     };
 })

@@ -68,10 +68,9 @@ accordance with the terms of that agreement
     
     
     var onStatus = function (sender, sts) {
-        if(impl.onStatus !== undefined)
+        if(impl && impl.onStatus)
             return impl.onStatus(sender, sts);
-        
-        return false;
+        return 0;
     };
     
     
@@ -104,8 +103,11 @@ accordance with the terms of that agreement
 
 
     ext._getStatus = function () {
+        
+        
+        
         if(impl.scratchStatus !== undefined)
-            return impl.scratchStatus;
+            return impl.scratchStatus();
         
         return 0;
     };
