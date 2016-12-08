@@ -1670,7 +1670,8 @@ accordance with the terms of that agreement
         , onClearSensor: function(e) { }
         , onConnect: function(e) { }
         , onStatus: function(e) { }
-
-    }
+        , ScratchStatus = function () { }
+        , rsd = new RealSenseData()
+}
 })
 (jQuery);
