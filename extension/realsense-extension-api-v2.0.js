@@ -346,11 +346,6 @@ accordance with the terms of that agreement
     };
     
     
-    //shutdown realsense when refresh window 
-    $(window).bind("beforeunload", function (e) {
-        onClearSensor();
-    });
-    
     
     /**********************************************************************************************************/
     /*************************************FACE RECOGNITION*****************************************************/
@@ -1671,6 +1666,11 @@ accordance with the terms of that agreement
 
             return rsd.SpeechModule.recognizedWords[numberOfWords-1].text;
         }
+        
+        , onClearSensor: function(e) { }
+        , onConnect: function(e) { }
+        , onStatus: function(e) { }
+
     }
 })
 (jQuery);
