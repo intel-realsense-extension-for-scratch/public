@@ -1208,7 +1208,7 @@ accordance with the terms of that agreement
         , onClearSensor: _onClearSensor
        // , onConnect: _onConnect
         //, onStatus: _onStatus
-        , status: rsd.Status
+        , scratchStatus: rsd.Status
         
     };
 })

@@ -104,8 +104,8 @@ accordance with the terms of that agreement
 
 
     ext._getStatus = function () {
-        if(impl.status !== undefined)
-            return impl.status;
+        if(impl.scratchStatus !== undefined)
+            return impl.scratchStatus.status;
         
         return 0;
     };
