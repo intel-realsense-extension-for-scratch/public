@@ -19,7 +19,7 @@ accordance with the terms of that agreement
 
 
 
-
+(function($){
     var rs = null;
     var sense; 
     var faceModule, blobModule, handModule, speechModule;
@@ -1672,3 +1672,4 @@ accordance with the terms of that agreement
             return rsd.SpeechModule.recognizedWords[numberOfWords-1].text;
         }
     }
+})(jQuery);
