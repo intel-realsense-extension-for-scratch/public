@@ -286,7 +286,11 @@ accordance with the terms of that agreement
     
     
     var _onStatus = function (sender, sts) {
-        // console.log([sender, sts]);
+        
+        
+        console.log("_onStatus "+[sender, sts]);
+        
+        
         if (sts < 0) {
             console.warn('Error ' + sts + ' on module ' + sender);
             
