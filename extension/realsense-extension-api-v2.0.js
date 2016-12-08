@@ -1134,7 +1134,15 @@ accordance with the terms of that agreement
     
     window.RealSenseExtImpl = {
        
-        hasUserSaid : function (word) {
+        
+        isFaceExist: function () {
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return false;
+
+            return rsd.FaceModule.isExist;
+        }
+
+        , hasUserSaid : function (word) {
         
             //make sure the extension is ready for use
             if (rsd.Status.status < 2) return false;
