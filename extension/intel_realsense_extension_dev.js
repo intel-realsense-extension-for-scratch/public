@@ -20,7 +20,24 @@ accordance with the terms of that agreement
 
 (function (ext) {
     
-//find the version we want to give the user
+    
+    //modal alert window
+    $.ajax({
+        url: 'http://intel-realsense-extension-for-scratch.github.io/public/extension/dialog.html',
+        method: 'GET',
+        // async: false,
+        success: function(data) {
+            $('body').append(data);
+        }
+    });
+    //
+    
+    
+    
+    
+    
+    
+    //find the version we want to give the user
     var resultExtensionUrl= 'http://intel-realsense-extension-for-scratch.github.io/public/extension/';
     
     var urlParams = new URLSearchParams(window.location.search);
@@ -47,7 +64,7 @@ accordance with the terms of that agreement
 
     })
     .fail(function(jqxhr, settings, exception) {
-        console.log('Load realsense fail');
+        console.log('Loading controller failed');
     });
 
 
@@ -110,6 +127,8 @@ accordance with the terms of that agreement
     };
    
     
+    
+    
     // Scratch blocks events
     ext.isBlobExist = function () {
         if(impl.isBlobExist !== undefined)
@@ -118,14 +137,12 @@ accordance with the terms of that agreement
         return false;
     };
     
-    
     ext.isHandExist = function (hand_side) {
         if(impl.isHandExist !== undefined)
             return impl.isHandExist();
         
         return false;
     };
-    
     
     ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {       
         if(impl.getHandJointPosition !== undefined)
@@ -134,8 +151,6 @@ accordance with the terms of that agreement
         return 0;
     };
     
-
-    
     ext.getHandGesture = function(hand_side, gesture_name) {
        if(impl.getHandGesture !== undefined)
             return impl.getHandGesture(hand_side, gesture_name);
@@ -143,9 +158,6 @@ accordance with the terms of that agreement
         return false;
     }
     
-    
-    
-    //foldedness values: closed 0 - spread 100
     ext.getHandJointFoldedness = function (hand_side, finger_name) {
         if(impl.getHandJointFoldedness !== undefined)
             return impl.getHandJointFoldedness(hand_side, finger_name);
@@ -153,16 +165,12 @@ accordance with the terms of that agreement
         return 0;
     };
     
-    //hand rotation
     ext.getHandRotation = function(rotation_type, hand_side) {
         if(impl.getHandRotation !== undefined)
             return impl.getHandRotation(rotation_type, hand_side);
         
         return 0;
     };
-    
-    
-    
     
     ext.isFaceExist = function () {
         if(impl.isFaceExist !== undefined)
@@ -171,14 +179,12 @@ accordance with the terms of that agreement
         return false;
     };
     
-     
     ext.getFaceJointPosition = function (head_position, joint_name) {
         if(impl.getFaceJointPosition !== undefined)
             return impl.getFaceJointPosition(head_position, joint_name);
         
         return 0;
     };
-    
     
     ext.isFacialExpressionOccured = function (facial_expression) {
         if(impl.isFacialExpressionOccured !== undefined)
@@ -188,21 +194,12 @@ accordance with the terms of that agreement
         
     };
     
-    
-    
-    
     ext.getHeadRotation = function(rotation_type) {
         if(impl.getHeadRotation !== undefined)
             return impl.getHeadRotation(rotation_type);
         
         return 0;   
     };
-    
-    
-    
-    
-    
-    
     
     ext.getRecognizedSpeech = function() {
         if(impl.getRecognizedSpeech !== undefined)
@@ -211,14 +208,12 @@ accordance with the terms of that agreement
         return "";
     };
 
-    
     ext.hasUserSaid = function (word) {
         if(impl.hasUserSaid !== undefined)
             return impl.hasUserSaid(word);
         
         return false;
     };
-    
     
     ext.hasUserSaidAnything = function() {
         if(impl.hasUserSaidAnything !== undefined)
