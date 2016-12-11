@@ -51,7 +51,7 @@ accordance with the terms of that agreement
 
     
     
-      
+     
     var HandModule = function () {
         // private
         //
@@ -132,10 +132,6 @@ accordance with the terms of that agreement
     };
     
     
-  
-    
-    
-    
     var FaceModule = function () {
         // private
         //
@@ -183,8 +179,6 @@ accordance with the terms of that agreement
         }
     };
           
-    
-    
     
     var BlobModule = function () {
         // private
@@ -350,12 +344,32 @@ accordance with the terms of that agreement
     };
     
     
-    
-    /**********************************************************************************************************/
-    /*************************************FACE RECOGNITION*****************************************************/
-    /**********************************************************************************************************/
+    function IsWordSimilar(timenow, speechWord, wordSaid) {
+        //if reached time stamp difference larger than wished for, break and exit search
+        if (timenow - speechWord.time > rsd.SpeechModule.tolerance * 1000){
+            return false;
+        }
 
-  
+        if (speechWord.text == wordSaid) {
+            
+            //console.warn("speechWord.isIdentified: "+speechWord.isIdentified);
+            
+            //this would allow a one time identification only
+            if (speechWord.isIdentified == false){
+                
+                speechWord.isIdentified = true;
+                return true;
+            }
+        }
+        
+        return false;
+    };
+   
+    
+    /**************************************************************/
+    /***********FACE RECOGNITION************************************/
+  /*******************************************************************/
+
     var onFaceHandData = function (sender, data) {
         if (sender == faceModule)
             onFaceData(sender, data);
@@ -450,18 +464,14 @@ accordance with the terms of that agreement
     };
     
 
-
-   
-
-
-    /**********************************************************************************************************/
-    /*************************************END FACE RECOGNITION*************************************************/
-    /**********************************************************************************************************/
+    /**************************************************************/
+    /**************************END FACE RECOGNITION*****************/
+  /**************************************************************/
  
     
-     /**********************************************************************************************************/
-    /*************************************HAND RECOGNITION*****************************************************/
-    /**********************************************************************************************************/
+     /**************************************************************/
+    /**********************HAND RECOGNITION*********************/
+  /**************************************************************/
 
     /* RealSense Hands Viewer event being called continuously, once enabling Hands module */
     var onHandData = function (module, handData) {
@@ -581,7 +591,7 @@ accordance with the terms of that agreement
     
   
     /* add one gesture data object to a selected array (that differentiates between left or right hand) */
-    var AddGestureObjectToArray = function(dataObj, arr) {
+    function AddGestureObjectToArray (dataObj, arr) {
         for (var i = 0; i<arr.length; i++) {
         
             if (dataObj.name == arr[i].name) {
@@ -599,12 +609,12 @@ accordance with the terms of that agreement
         
     };
     
-     /**********************************************************************************************************/
-    /*************************************BLOB RECOGNITION*************************************************/
-    /**********************************************************************************************************/
+    
+    
+     /**************************************************************/
+    /*****************BLOB RECOGNITION************************/
+    /**************************************************************/
  
-    
-    
     
     var onBlobData = function (module, blobData) {
         
@@ -618,15 +628,14 @@ accordance with the terms of that agreement
     
     
      
-     /**********************************************************************************************************/
-    /*************************************END BLOB RECOGNITION*************************************************/
-    /**********************************************************************************************************/
+     /**************************************************************/
+    /*****************END BLOB RECOGNITION********************/
+    /**************************************************************/
  
     
      
-     /**********************************************************************************************************/
-    /*************************************VOICE  RECOGNITION*************************************************/
-    /**********************************************************************************************************/
+/**************************************************************/    /*******************VOICE  RECOGNITION**********************/
+    /***************************************************/
  
     
     
@@ -719,15 +728,15 @@ accordance with the terms of that agreement
 
 
          
-     /**********************************************************************************************************/
-    /*************************************END VOICE RECOGNITION*************************************************/
-    /**********************************************************************************************************/
+     /**************************************************************/
+    /*****************END VOICE RECOGNITION***********************/
+    /**************************************************************/
  
 
     
     
     /* Start RealSense- enable 4 modules: hands, face, blob & speech */
-    var StartRealSense = function(useSpeech){
+    function StartRealSense (useSpeech){
         var rs = intel.realsense;
                     
         rs.SenseManager.createInstance()
@@ -943,7 +952,7 @@ accordance with the terms of that agreement
     
     
     // check platform compatibility
-    var ValidatePlatformState = function (){
+    function ValidatePlatformState (){
         var rs = intel.realsense;
         console.log("ValidatePlatformState");
           
@@ -1027,7 +1036,7 @@ accordance with the terms of that agreement
         
     };
     
-    var PopAlert = function() {
+    function PopAlert () {
         
         if (rsd.Status.status < 2) {
             
@@ -1040,7 +1049,7 @@ accordance with the terms of that agreement
        
     };
     
-    var dependencyAllCreated = function () {
+    function dependencyAllCreated () {
     
         //console.log("check if all loaded");
         rs = intel.realsense;
@@ -1118,9 +1127,9 @@ accordance with the terms of that agreement
     
         
         
-    /**********************************************************************************************************/
-    /************************************END WEB API*********************************************************/
-    /**********************************************************************************************************/
+    /***********************************************/
+    /****************END WEB API**********************/
+    /***********************************************/
  
         
         
@@ -1131,10 +1140,9 @@ accordance with the terms of that agreement
         
         
         
-    
-    window.RealSenseExtImpl = {
+    //create a shared variable between the app and the Engine
+    window.RealSenseExtensionAPIController = {
        
-        
         isFaceExist: function () {
             //make sure the extension is ready for use
             if (rsd.Status.status < 2) return false;
@@ -1142,6 +1150,119 @@ accordance with the terms of that agreement
             return rsd.FaceModule.isExist;
         }
 
+        , getFaceJointPosition: function (head_position, joint_name) {
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return -1000;
+
+            var result = {};
+
+            var requestedJointIndex = -1;
+
+            if (joint_name !== parseInt(joint_name, 10)) {
+
+                //joint_name is string variable from the menu
+                for(var key in rsd.FaceModule.landmarkDictionary){
+
+                    if (key == joint_name){
+                        requestedJointIndex = rsd.FaceModule.landmarkDictionary[key];
+                        break;
+
+                    }
+                }
+
+            } else {
+
+                //joint_name is integer variable
+                requestedJointIndex = joint_name;
+            }
+
+            if (requestedJointIndex < 0) {
+                //couldnt find requested joint 
+                return -1000;
+            }
+
+            for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
+                if (rsd.FaceModule.joints[i].originalJointIndex === requestedJointIndex) {
+                    result = rsd.FaceModule.joints[i];
+                    break;
+                }
+            }
+
+            if (result == {}) {
+                //couldnt find requested joint 
+                return -1000;
+            }
+
+
+
+            //return the right value
+            if (head_position === "X Position") {
+                return ValueMapper(result.position.X, RS_FACE_X_MAX_LEFT, RS_FACE_X_MAX_RIGHT, SCRATCH_X_MAX_LEFT, SCRATCH_X_MAX_RIGHT);
+
+            } else {
+                if (head_position === "Y Position") {
+                    return ValueMapper(result.position.Y, RS_FACE_Y_MAX_DOWN, RS_FACE_Y_MAX_UP, SCRATCH_Y_MAX_DOWN, SCRATCH_Y_MAX_UP);
+
+                } else {
+                    return result.position.Z;
+
+                }
+            }
+
+            return -1000;
+        }
+
+        , isFacialExpressionOccured: function (facial_expression) {
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return false;
+
+            var requestedExpressionIndex = -1;
+
+            for (var key in rsd.FaceModule.expressionsDictionary){
+
+                if (key == facial_expression){
+                    requestedExpressionIndex = rsd.FaceModule.expressionsDictionary[key];
+                    break;
+
+                }
+            }
+
+            if (requestedExpressionIndex == -1) {
+                //couldnt find requested expression
+                return false;
+
+            }
+
+            for (var fe = 0; fe < rsd.FaceModule.expressionsOccuredLastFrame.length; fe++){
+
+                if (rsd.FaceModule.expressionsOccuredLastFrame[fe] == requestedExpressionIndex){                
+                    return true;
+                    break;
+                }
+            }
+            return false;
+
+        }
+
+         , getHeadRotation: function(rotation_type) {
+        //make sure the extension is ready for use
+        if (rsd.Status.status < 2) return 0;
+
+        if (rotation_type === "Yaw"){
+            return ValueMapper(rsd.FaceModule.headRotation.Yaw, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
+           
+        } else {
+            if (rotation_type === "Pitch"){
+                return ValueMapper(rsd.FaceModule.headRotation.Pitch, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
+           
+            } else {
+                return ValueMapper(rsd.FaceModule.headRotation.Roll, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
+            
+            }
+        }
+        return 0;    
+    }
+    
         , hasUserSaid : function (word) {
         
             //make sure the extension is ready for use
@@ -1183,7 +1304,7 @@ accordance with the terms of that agreement
             */
         }
         
-        , hasUserSaidAnything : function() {
+        , hasUserSaidAnything: function() {
             //make sure the extension is ready for use
             if (rsd.Status.status < 2) return false;
 
@@ -1198,7 +1319,6 @@ accordance with the terms of that agreement
             return rsd.SpeechModule.isUserSpoke;
 
         }
-        
         
         , getRecognizedSpeech: function() {
             //make sure the extension is ready for use
@@ -1217,477 +1337,303 @@ accordance with the terms of that agreement
             return rsd.SpeechModule.recognizedWords[numberOfWords-1].text;
         }
         
+        , isBlobExist: function () {
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return false;
+
+            return rsd.BlobModule.isExist;
+        }
+    
+        , isHandExist: function (hand_side) {
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return false;
+
+            if (hand_side == 'Left Hand'){
+                return rsd.HandModule.isLeftExist;
+
+            }else if (hand_side == 'Right Hand'){
+                return rsd.HandModule.isRightExist;
+
+            } else {
+                return (rsd.HandModule.isRightExist || rsd.HandModule.isLeftExist);
+
+            }
+
+            return false;
+        }
+    
+        , getHandJointPosition: function (hand_position, hand_side, joint_name) {       
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return -1000;
+
+            //if no rellevant hands exist, return false
+            if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
+                || (hand_side == 'Right Hand' && rsd.HandModule.isRightExist == false) 
+                || (hand_side == 'Any Hand' && rsd.HandModule.isRightExist == false && rsd.HandModule.isLeftExist == false) ){
+                //console.warn("exit 1");
+                return -1000;   
+            }
+
+
+            //get array of requested hand
+            var jointArray = [];
+
+            if (hand_side == 'Any Hand'){
+                if (rsd.HandModule.isLeftExist == true){
+                    hand_side = 'Left Hand';
+
+                } else if (rsd.HandModule.isRightExist == true){
+                    hand_side = 'Right Hand';
+
+                } else {
+                    //no hand available
+                    return -1000;
+                }
+            }
+
+            jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
+                           'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
+
+            //
+
+
+            if (jointArray.length == 0){
+                console.warn("exit 30");
+                return -1000;
+            }
+
+
+            //get the requested joint index
+            var requestedJointIndex = -1;
+
+            if (joint_name !== parseInt(joint_name, 10)) {
+
+                //joint_name is string variable from the menu
+                for(var key in rsd.HandModule.jointDictionary){
+                    if (key == joint_name){
+                        requestedJointIndex = rsd.HandModule.jointDictionary[key];
+                        break; 
+                    }
+                }
+
+            } else {
+
+                //joint_name is integer variable
+                requestedJointIndex = joint_name;
+            }
+
+            if (requestedJointIndex < 0) {
+                //couldnt find requested joint 
+                return -1000;
+
+            }
+
+            //get requested joint data object
+            var result = {};
+
+            for (var i = 0; i < jointArray.length; i++) {
+                if (jointArray[i].originalJointIndex === requestedJointIndex) {
+                    result = jointArray[i];
+                    break;
+                }
+            }
+
+
+
+            //get the request value
+            if (result.position != undefined) {
+
+                if (hand_position === "X Position") {
+                    return ValueMapper(result.position.X, RS_HAND_X_MAX_LEFT, RS_HAND_X_MAX_RIGHT, SCRATCH_X_MAX_LEFT, SCRATCH_X_MAX_RIGHT);
+
+                } else {
+                    if (hand_position === "Y Position") {
+                        return ValueMapper(result.position.Y, RS_HAND_Y_MAX_DOWN, RS_HAND_Y_MAX_UP, SCRATCH_Y_MAX_DOWN, SCRATCH_Y_MAX_UP);
+
+                    } else {
+                       return result.position.Z;
+
+                    }
+                }
+            } else {
+                //console.warn("exit 31");   
+            }
+
+            //console.warn("exit 3 "+requestedJointIndex+" "+ +result.position);
+            return -1000;
+        }
+    
+        , getHandGesture: function(hand_side, gesture_name) {
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return false;
+
+            var gesturesArray = [];
+
+            //get array of requested hand
+            if (hand_side == 'Any Hand'){
+                gesturesArray = rsd.HandModule.rightHandGestures.concat(rsd.HandModule.leftHandGestures);
+
+            } else {
+                gesturesArray = { 'Left Hand'  : rsd.HandModule.leftHandGestures, 
+                                  'Right Hand' : rsd.HandModule.rightHandGestures}[hand_side];
+            }
+
+
+            //if no gestures, break now
+            if (gesturesArray.length == 0) return false;
+
+            //if no rellevant hands exist, return false
+            if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
+                || (hand_side == 'Right Hand' && rsd.HandModule.isRightExist == false) 
+                || (hand_side == 'Any Hand' && rsd.HandModule.isRightExist == false && rsd.HandModule.isLeftExist == false) ){
+                return false;   
+            }
+
+
+
+            //map display name to SDK's
+            var requestedGestureSdkName = "";
+
+            for (var key in rsd.HandModule.gestureDictionary){
+
+                if (key == gesture_name){
+                    requestedGestureSdkName = rsd.HandModule.gestureDictionary[key];
+                    break;
+
+                }
+            }
+
+            if (requestedGestureSdkName == "") {
+                //couldnt find requested gesture
+                return false;
+            }
+
+            for (var g = 0; g<gesturesArray.length; g++){
+                if (gesturesArray[g].name == requestedGestureSdkName) {
+
+                    //return true if gesture started or in progress
+                    if (gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_START)
+                    {
+                        //we need to continue the cycle of testing since there is an option that we have 2 gestures with the same name in the AnyHand array
+                        return true;   
+                    }
+                }
+            }
+
+            //if reach here, no gesture occurs
+            return false;
+        }
+
+        , getHandJointFoldedness: function (hand_side, finger_name) {
+          //foldedness values: closed 0 - spread 100
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return -1;
+
+            var jointArray = [];
+
+            if (hand_side == 'Any Hand'){
+                if (rsd.HandModule.isLeftExist == true){
+                    hand_side='Left Hand';
+
+                } else if (rsd.HandModule.isRightExist == true){
+                    hand_side='Right Hand';
+
+                } else {
+                    //no hand available
+                    return -1;   
+
+                }
+            } 
+
+            jointArray = {'Left Hand': rsd.HandModule.leftHandJointsFoldness, 
+                          'Right Hand': rsd.HandModule.rightHandJointsFoldness}[hand_side];
+
+
+            var requestedJointIndex = -1;
+            for(var key in rsd.HandModule.majorJointDictionary){
+
+                if (key == finger_name){
+                    requestedJointIndex = rsd.HandModule.majorJointDictionary[key];
+                    break;
+
+                }
+            }
+
+            if (requestedJointIndex == -1) {
+                //couldnt find requested joint 
+                return -1;
+
+            }
+
+            for (var f=0; f<jointArray.length; f++){
+                if (jointArray[f].originalJointIndex == requestedJointIndex){
+                    return jointArray[f].foldedness;
+                }
+            }
+
+            return -1;
+        }
+
+        , getHandRotation: function(rotation_type, hand_side) {
+            //hand rotation
+            //make sure the extension is ready for use
+            if (rsd.Status.status < 2) return -1000;
+
+            var jointArray = [];
+
+            if (hand_side == 'Any Hand'){
+                if (rsd.HandModule.isLeftExist == true){
+                    hand_side='Left Hand';
+
+                } else if (rsd.HandModule.isRightExist == true){
+                    hand_side='Right Hand';
+
+                } else {
+                    //no hand available
+                    return -1;   
+
+                }
+            } 
+
+            jointArray = {  'Left Hand' : rsd.HandModule.leftHandJoints, 
+                            'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
+
+
+
+            var result = {};
+
+            for (var i = 0; i < jointArray.length; i++) {
+                if (jointArray[i].originalJointIndex == rsd.HandModule.jointDictionary.Wrist) {
+                    result = jointArray[i];
+                    break;
+                }
+            }
+
+
+
+            if (result.rotation != undefined) {
+                //return the right value
+                if (rotation_type === 'Yaw') {
+                    return result.rotation.X;
+
+                } else {
+                    if (rotation_type === 'Pitch') {
+                        return result.rotation.Y;
+
+                    } else {
+                       return result.rotation.Z;
+
+                    }
+                }
+            }
+
+            return -1000;
+        }
+
         , onClearSensor: _onClearSensor
-       // , onConnect: _onConnect
-        //, onStatus: _onStatus
         , scratchStatus: function() { return rsd.Status; }
         
     };
 })
 (jQuery);
 
-
-
-
-        
-         
-    
-    /*
-    // Scratch blocks events
-    ext.isBlobExist = function () {
-        //make sure the extension is ready for use
-        if (rsd.Status.status < 2) return false;
-        
-        return rsd.BlobModule.isExist;
-    };
-    
-    
-    ext.isHandExist = function (hand_side) {
-        //make sure the extension is ready for use
-        if (rsd.Status.status < 2) return false;
-
-        if (hand_side == 'Left Hand'){
-            return rsd.HandModule.isLeftExist;
-        
-        }else if (hand_side == 'Right Hand'){
-            return rsd.HandModule.isRightExist;
-        
-        } else {
-            return (rsd.HandModule.isRightExist || rsd.HandModule.isLeftExist);
-        
-        }
-        
-        return false;
-    };
-    
-    
-    ext.getHandJointPosition = function (hand_position, hand_side, joint_name) {       
-        //make sure the extension is ready for use
-        if (rsd.Status.status < 2) return -1000;
-        
-        //if no rellevant hands exist, return false
-        if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
-            || (hand_side == 'Right Hand' && rsd.HandModule.isRightExist == false) 
-            || (hand_side == 'Any Hand' && rsd.HandModule.isRightExist == false && rsd.HandModule.isLeftExist == false) ){
-            //console.warn("exit 1");
-            return -1000;   
-        }
-        
-        
-        //get array of requested hand
-        var jointArray = [];
-        
-        if (hand_side == 'Any Hand'){
-            if (rsd.HandModule.isLeftExist == true){
-                hand_side = 'Left Hand';
-            
-            } else if (rsd.HandModule.isRightExist == true){
-                hand_side = 'Right Hand';
-            
-            } else {
-                //no hand available
-                return -1000;
-            }
-        }
-    
-        jointArray = { 'Left Hand' : rsd.HandModule.leftHandJoints, 
-                       'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
-        
-        //
-        
-        
-        if (jointArray.length == 0){
-            console.warn("exit 30");
-            return -1000;
-        }
-        
-        
-        //get the requested joint index
-        var requestedJointIndex = -1;
-        
-        if (joint_name !== parseInt(joint_name, 10)) {
-        
-            //joint_name is string variable from the menu
-            for(var key in rsd.HandModule.jointDictionary){
-                if (key == joint_name){
-                    requestedJointIndex = rsd.HandModule.jointDictionary[key];
-                    break; 
-                }
-            }
-            
-        } else {
-            
-            //joint_name is integer variable
-            requestedJointIndex = joint_name;
-        }
-        
-        if (requestedJointIndex < 0) {
-            //couldnt find requested joint 
-            return -1000;
-            
-        }
-        
-        //get requested joint data object
-        var result = {};
-        
-        for (var i = 0; i < jointArray.length; i++) {
-            if (jointArray[i].originalJointIndex === requestedJointIndex) {
-                result = jointArray[i];
-                break;
-            }
-        }
-
-        
-        
-        //get the request value
-        if (result.position != undefined) {
-                   
-            if (hand_position === "X Position") {
-                return ValueMapper(result.position.X, RS_HAND_X_MAX_LEFT, RS_HAND_X_MAX_RIGHT, SCRATCH_X_MAX_LEFT, SCRATCH_X_MAX_RIGHT);
-               
-            } else {
-                if (hand_position === "Y Position") {
-                    return ValueMapper(result.position.Y, RS_HAND_Y_MAX_DOWN, RS_HAND_Y_MAX_UP, SCRATCH_Y_MAX_DOWN, SCRATCH_Y_MAX_UP);
-                
-                } else {
-                   return result.position.Z;
-                
-                }
-            }
-        } else {
-            //console.warn("exit 31");   
-        }
-        
-        //console.warn("exit 3 "+requestedJointIndex+" "+ +result.position);
-        return -1000;
-    };
-    
-
-    
-    ext.getHandGesture = function(hand_side, gesture_name) {
-        //make sure the extension is ready for use
-        if (rsd.Status.status < 2) return false;
-
-        var gesturesArray = [];
-        
-        //get array of requested hand
-        if (hand_side == 'Any Hand'){
-            gesturesArray = rsd.HandModule.rightHandGestures.concat(rsd.HandModule.leftHandGestures);
-            
-        } else {
-            gesturesArray = { 'Left Hand'  : rsd.HandModule.leftHandGestures, 
-                              'Right Hand' : rsd.HandModule.rightHandGestures}[hand_side];
-        }
-        
-        
-        //if no gestures, break now
-        if (gesturesArray.length == 0) return false;
-        
-        //if no rellevant hands exist, return false
-        if (   (hand_side == 'Left Hand' && rsd.HandModule.isLeftExist == false)
-            || (hand_side == 'Right Hand' && rsd.HandModule.isRightExist == false) 
-            || (hand_side == 'Any Hand' && rsd.HandModule.isRightExist == false && rsd.HandModule.isLeftExist == false) ){
-            return false;   
-        }
-        
-        
-        
-        //map display name to SDK's
-        var requestedGestureSdkName = "";
-        
-        for (var key in rsd.HandModule.gestureDictionary){
-
-            if (key == gesture_name){
-                requestedGestureSdkName = rsd.HandModule.gestureDictionary[key];
-                break;
-
-            }
-        }
-            
-        if (requestedGestureSdkName == "") {
-            //couldnt find requested gesture
-            return false;
-        }
-               
-        for (var g = 0; g<gesturesArray.length; g++){
-            if (gesturesArray[g].name == requestedGestureSdkName) {
-                
-                //return true if gesture started or in progress
-                if (gesturesArray[g].state == intel.realsense.hand.GestureStateType.GESTURE_STATE_START)
-                {
-                    //we need to continue the cycle of testing since there is an option that we have 2 gestures with the same name in the AnyHand array
-                    return true;   
-                }
-            }
-        }
-        
-        //if reach here, no gesture occurs
-        return false;
-    }
-    
-    
-    
-    //foldedness values: closed 0 - spread 100
-    ext.getHandJointFoldedness = function (hand_side, finger_name) {
-        //make sure the extension is ready for use
-        if (rsd.Status.status < 2) return -1;
-
-        var jointArray = [];
-       
-        if (hand_side == 'Any Hand'){
-            if (rsd.HandModule.isLeftExist == true){
-                hand_side='Left Hand';
-            
-            } else if (rsd.HandModule.isRightExist == true){
-                hand_side='Right Hand';
-            
-            } else {
-                //no hand available
-                return -1;   
-            
-            }
-        } 
-        
-        jointArray = {'Left Hand': rsd.HandModule.leftHandJointsFoldness, 
-                      'Right Hand': rsd.HandModule.rightHandJointsFoldness}[hand_side];
-          
-        
-        var requestedJointIndex = -1;
-        for(var key in rsd.HandModule.majorJointDictionary){
-               
-            if (key == finger_name){
-                requestedJointIndex = rsd.HandModule.majorJointDictionary[key];
-                break;
-
-            }
-        }
-            
-        if (requestedJointIndex == -1) {
-            //couldnt find requested joint 
-            return -1;
-
-        }
-        
-        for (var f=0; f<jointArray.length; f++){
-            if (jointArray[f].originalJointIndex == requestedJointIndex){
-                return jointArray[f].foldedness;
-            }
-        }
-        
-        return -1;
-    };
-    
-    //hand rotation
-    ext.getHandRotation = function(rotation_type, hand_side) {
-        //make sure the extension is ready for use
-        if (rsd.Status.status < 2) return -1000;
-
-        var jointArray = [];
-        
-        if (hand_side == 'Any Hand'){
-            if (rsd.HandModule.isLeftExist == true){
-                hand_side='Left Hand';
-            
-            } else if (rsd.HandModule.isRightExist == true){
-                hand_side='Right Hand';
-            
-            } else {
-                //no hand available
-                return -1;   
-            
-            }
-        } 
-        
-        jointArray = {  'Left Hand' : rsd.HandModule.leftHandJoints, 
-                        'Right Hand': rsd.HandModule.rightHandJoints }[hand_side];
-       
-        
-        
-        var result = {};
-        
-        for (var i = 0; i < jointArray.length; i++) {
-            if (jointArray[i].originalJointIndex == rsd.HandModule.jointDictionary.Wrist) {
-                result = jointArray[i];
-                break;
-            }
-        }
-        
-        
-        
-        if (result.rotation != undefined) {
-            //return the right value
-            if (rotation_type === 'Yaw') {
-                return result.rotation.X;
-               
-            } else {
-                if (rotation_type === 'Pitch') {
-                    return result.rotation.Y;
-                    
-                } else {
-                   return result.rotation.Z;
-                
-                }
-            }
-        }
-        
-        return -1000;
-    };
-    
-    
-    
-    
-    ext.isFaceExist = function () {
-        //make sure the extension is ready for use
-        if (rsd.Status.status < 2) return false;
-
-        return rsd.FaceModule.isExist;
-    };
-    
-     
-    ext.getFaceJointPosition = function (head_position, joint_name) {
-        //make sure the extension is ready for use
-        if (rsd.Status.status < 2) return -1000;
-
-        var result = {};
-        
-        var requestedJointIndex = -1;
-        
-        if (joint_name !== parseInt(joint_name, 10)) {
-        
-            //joint_name is string variable from the menu
-            for(var key in rsd.FaceModule.landmarkDictionary){
-               
-                if (key == joint_name){
-                    requestedJointIndex = rsd.FaceModule.landmarkDictionary[key];
-                    break;
-                    
-                }
-            }
-            
-        } else {
-            
-            //joint_name is integer variable
-            requestedJointIndex = joint_name;
-        }
-        
-        if (requestedJointIndex < 0) {
-            //couldnt find requested joint 
-            return -1000;
-        }
-        
-        for (var i = 0; i < rsd.FaceModule.joints.length; i++) {
-            if (rsd.FaceModule.joints[i].originalJointIndex === requestedJointIndex) {
-                result = rsd.FaceModule.joints[i];
-                break;
-            }
-        }
-        
-        if (result == {}) {
-            //couldnt find requested joint 
-            return -1000;
-        }
-        
-        
-        
-        //return the right value
-        if (head_position === "X Position") {
-            return ValueMapper(result.position.X, RS_FACE_X_MAX_LEFT, RS_FACE_X_MAX_RIGHT, SCRATCH_X_MAX_LEFT, SCRATCH_X_MAX_RIGHT);
-        
-        } else {
-            if (head_position === "Y Position") {
-                return ValueMapper(result.position.Y, RS_FACE_Y_MAX_DOWN, RS_FACE_Y_MAX_UP, SCRATCH_Y_MAX_DOWN, SCRATCH_Y_MAX_UP);
-           
-            } else {
-                return result.position.Z;
-        
-            }
-        }
-        
-        return -1000;
-    };
-    
-    
-    ext.isFacialExpressionOccured = function (facial_expression) {
-        //make sure the extension is ready for use
-        if (rsd.Status.status < 2) return false;
-
-        var requestedExpressionIndex = -1;
-        
-        for (var key in rsd.FaceModule.expressionsDictionary){
-
-            if (key == facial_expression){
-                requestedExpressionIndex = rsd.FaceModule.expressionsDictionary[key];
-                break;
-
-            }
-        }
-        
-        if (requestedExpressionIndex == -1) {
-            //couldnt find requested expression
-            return false;
-
-        }
-        
-        for (var fe = 0; fe < rsd.FaceModule.expressionsOccuredLastFrame.length; fe++){
-            
-            if (rsd.FaceModule.expressionsOccuredLastFrame[fe] == requestedExpressionIndex){                
-                return true;
-                break;
-            }
-        }
-        return false;
-        
-    };
-    
-    
-    
-    
-    ext.getHeadRotation = function(rotation_type) {
-        //make sure the extension is ready for use
-        if (rsd.Status.status < 2) return 0;
-
-        if (rotation_type === "Yaw"){
-            return ValueMapper(rsd.FaceModule.headRotation.Yaw, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
-           
-        } else {
-            if (rotation_type === "Pitch"){
-                return ValueMapper(rsd.FaceModule.headRotation.Pitch, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
-           
-            } else {
-                return ValueMapper(rsd.FaceModule.headRotation.Roll, RS_FACE_ROTATION_MIN, RS_FACE_ROTATION_MAX, 0, 180);
-            
-            }
-        }
-        return 0;    
-    };
-    
-    
-    
-    
-    
-    
-    function IsWordSimilar(timenow, speechWord, wordSaid) {
-        //if reached time stamp difference larger than wished for, break and exit search
-        if (timenow - speechWord.time > rsd.SpeechModule.tolerance * 1000){
-            return false;
-        }
-
-        if (speechWord.text == wordSaid) {
-            
-            //console.warn("speechWord.isIdentified: "+speechWord.isIdentified);
-            
-            //this would allow a one time identification only
-            if (speechWord.isIdentified == false){
-                
-                speechWord.isIdentified = true;
-                return true;
-            }
-        }
-        
-        return false;
-    };
-    
-    
-    
-    */
-    
