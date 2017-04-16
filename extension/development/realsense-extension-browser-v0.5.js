@@ -37,6 +37,30 @@
     
     //init dictionaries
     var FaceModule = function() {
+        
+        faceLandmarkDictionary = {   
+                     "Left eye"         : 77
+                    , "Right eye"       : 76
+                    , "Left eye brow"   : 7
+                    , "Right eye brow"  : 2
+                    , "Chin"            : 61
+                    , "Upper lip"       : 36
+                    , "Bottom lip"      : 42
+                    , "Nose"            : 29
+                };
+        expressionsDictionary = {
+                    "Brow lifted right"     : 'EXPRESSION_BROW_RAISER_LEFT'
+                    , "Brow lifted left"    : 'EXPRESSION_BROW_RAISER_LEFT'
+                    , "Brow lowered left"   : 'EXPRESSION_BROW_LOWERER_LEFT'
+                    , "Brow lowered right"  : 'EXPRESSION_BROW_LOWERER_RIGHT'
+                    , "Smile"               : 'EXPRESSION_SMILE'
+                    , "Kiss"                : 'EXPRESSION_KISS'
+                    , "Mouth open"          : 'EXPRESSION_MOUTH_OPEN'
+                    , "Wink left"           : 'EXPRESSION_EYES_CLOSED_LEFT'
+                    , "Wink right"          : 'EXPRESSION_EYES_CLOSED_RIGHT'
+                    , "Tongue out"          : 'EXPRESSION_TONGUE_OUT'
+                };
+        /*
         return {
             init: function() {
                 this.expressionsDictionary = {
@@ -63,7 +87,7 @@
                     , "Nose"            : 29
                 };
             }
-        }
+        }*/
     };
     var HandModule = function() {
         return {
@@ -111,7 +135,7 @@
     
     
         
-    //var faceModule = new FaceModule();
+    var faceModule = new FaceModule();
     var handModule = new HandModule();
     window["faceModule"] = new FaceModule();
     
