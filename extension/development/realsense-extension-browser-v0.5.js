@@ -1,5 +1,40 @@
 (function (ext) {
     
+    //scratch stage mapping
+    const RS_FACE_X_MAX_RIGHT = 0;    
+    const RS_FACE_X_MAX_LEFT = 600;    
+    const RS_FACE_Y_MAX_UP = 500;      
+    const RS_FACE_Y_MAX_DOWN = 0;       
+       
+    const RS_FACE_ROTATION_MIN = -30;
+    const RS_FACE_ROTATION_MAX = 30;
+    
+    const RS_HAND_X_MAX_RIGHT = 0;
+    const RS_HAND_X_MAX_LEFT = 600;
+    const RS_HAND_Y_MAX_UP = 600;
+    const RS_HAND_Y_MAX_DOWN = 0;
+
+    const SCRATCH_X_MAX_RIGHT = 240;    
+    const SCRATCH_X_MAX_LEFT = -240;   
+    const SCRATCH_Y_MAX_UP = -180; 
+    const SCRATCH_Y_MAX_DOWN = 180;
+    
+
+    function ValueMapper (value, source_min, source_max, dest_min, dest_max) {
+       
+        // Figure out range scales
+        var sourceScale = source_max - source_min;
+        var destScale = dest_max - dest_min;
+
+        // Convert the source range into a 0-1 range (float)
+        var normalizedSource = (value - source_min) / sourceScale;
+
+        //Convert the 0-1 range into a value in the destination range.
+        return dest_min + (normalizedSource * destScale);
+       
+   };
+    
+    
     //init dictionaries
     var FaceModule = function() {
         return {
@@ -44,7 +79,7 @@
                     "Index jointC" : 7,		/// Index finger joint 2
                     "Index jointB": 8,		/// Index finger joint 3
                     "Index tip"  : 9,		/// Index finger joint 4 (fingertip)
-                     "Middle base" : 10,	/// Middle finger joint 1 (base)
+                    "Middle base" : 10,	/// Middle finger joint 1 (base)
                     "Middle jointC" : 11,	/// Middle finger joint 2
                     "Middle jointB" : 12,	/// Middle finger joint 3
                     "Middle tip": 13,	/// Middle finger joint 4 (fingertip)
@@ -97,7 +132,7 @@
         if ((new Date).getTime() - lst_update < 500)
             return { status: 2, msg: 'Ready!' };
         else
-            return { status: 1, msg: 'Helper not responsive' };
+            return { status: 1, msg: 'Please start the desktop helper app' };
     };
 
     ext.tOut = null;
@@ -129,7 +164,7 @@
             if (ext.shouldContinue) setTimeout(a, 100);
         });
     };
-    a();
+    //a();
 
     ext.face_visible = function () {
         return window["face"] ? true : false;
@@ -137,6 +172,12 @@
 
     ext.face_position_landmark = function (axis, landmarkIndex) {
         if (!window["face"]) return 0;
+        
+        console.error('requested face landmark: '+landmarkIndex);
+        console.error('is int or string: ' + parseInt(landmarkIndex, 10));
+        console.error('faceModule: ' + faceModule);
+        console.error('faceModule dict: ' + faceModule.faceLandmarkDictionary);
+        console.error('faceModule dict[0]: ' + faceModule.faceLandmarkDictionary[0]);
         
         var requestedJointIndex = -1;
         //check if landmarkIndex is a number of a string
