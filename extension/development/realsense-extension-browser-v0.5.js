@@ -36,31 +36,9 @@
     
     
     //init dictionaries
+    /*
     var FaceModule = function() {
         
-        faceLandmarkDictionary = {   
-                     "Left eye"         : 77
-                    , "Right eye"       : 76
-                    , "Left eye brow"   : 7
-                    , "Right eye brow"  : 2
-                    , "Chin"            : 61
-                    , "Upper lip"       : 36
-                    , "Bottom lip"      : 42
-                    , "Nose"            : 29
-                };
-        expressionsDictionary = {
-                    "Brow lifted right"     : 'EXPRESSION_BROW_RAISER_LEFT'
-                    , "Brow lifted left"    : 'EXPRESSION_BROW_RAISER_LEFT'
-                    , "Brow lowered left"   : 'EXPRESSION_BROW_LOWERER_LEFT'
-                    , "Brow lowered right"  : 'EXPRESSION_BROW_LOWERER_RIGHT'
-                    , "Smile"               : 'EXPRESSION_SMILE'
-                    , "Kiss"                : 'EXPRESSION_KISS'
-                    , "Mouth open"          : 'EXPRESSION_MOUTH_OPEN'
-                    , "Wink left"           : 'EXPRESSION_EYES_CLOSED_LEFT'
-                    , "Wink right"          : 'EXPRESSION_EYES_CLOSED_RIGHT'
-                    , "Tongue out"          : 'EXPRESSION_TONGUE_OUT'
-                };
-        /*
         return {
             init: function() {
                 this.expressionsDictionary = {
@@ -87,7 +65,7 @@
                     , "Nose"            : 29
                 };
             }
-        }*/
+        }
     };
     var HandModule = function() {
         return {
@@ -132,7 +110,7 @@
             }
         }
     };
-    
+    */
     
         
     window["faceLandmarkDictionary"] = {   
@@ -146,7 +124,7 @@
             , "Nose"            : 29
         };
             
-    var faceExpressionsDictionary = {
+    window["faceExpressionsDictionary"] = {
             "Brow lifted right"     : 'EXPRESSION_BROW_RAISER_LEFT'
             , "Brow lifted left"    : 'EXPRESSION_BROW_RAISER_LEFT'
             , "Brow lowered left"   : 'EXPRESSION_BROW_LOWERER_LEFT'
@@ -159,8 +137,43 @@
             , "Tongue out"          : 'EXPRESSION_TONGUE_OUT'
         };
        
-    var handModule = new HandModule();
+    window["handJointDictionary"] = {
+            "Wrist" : 0,		    /// The center of the wrist
+            "Center": 1,		/// The center of the palm
+            "Thumb base" : 2,	/// Thumb finger joint 1 (base)
+            "Thumb jointC" : 3,		/// Thumb finger joint 2
+            "Thumb jointB": 4,		/// Thumb finger joint 3
+            "Thumb tip" : 5,		/// Thumb finger joint 4 (fingertip)
+            "Index base": 6,	/// Index finger joint 1 (base)
+            "Index jointC" : 7,		/// Index finger joint 2
+            "Index jointB": 8,		/// Index finger joint 3
+            "Index tip"  : 9,		/// Index finger joint 4 (fingertip)
+            "Middle base" : 10,	/// Middle finger joint 1 (base)
+            "Middle jointC" : 11,	/// Middle finger joint 2
+            "Middle jointB" : 12,	/// Middle finger joint 3
+            "Middle tip": 13,	/// Middle finger joint 4 (fingertip)
+            "Ring base": 14,	/// Ring finger joint 1 (base)
+            "Ring jointC" : 15,		/// Ring finger joint 2
+            "Ring jointB": 16,		/// Ring finger joint 3
+            "Ring tip": 17,		/// Ring finger joint 4 (fingertip)
+            "Pinky base": 18,	/// Pinky finger joint 1 (base)
+            "Pinky jointC": 19,	/// Pinky finger joint 2
+            "Pinky jointB" : 20,	/// Pinky finger joint 3
+            "Pinky tip" : 21  	/// Pinky finger joint 4 (fingertip)
+        };
     
+    window["handGestureDictionary"] = {
+            "Spread fingers": 'spreadfingers',
+            "V sign": 'v_sign',
+            "Full pinch": 'full_pinch',
+            "Two fingers pinch open": 'two_finger_pinch_open',
+            "Swipe": 'swipe', 
+            "Tap": 'tap', 
+            "Fist": 'fist', 
+            "Thumb up": 'thumb_up', 
+            "Thumb down": 'thumb_down', 
+            "Wave": 'wave' 
+        };    
     //*************************************************
     
     
@@ -219,12 +232,6 @@
     ext.face_position_landmark = function (axis, landmarkIndex) {
         if (!window["face"]) return 0;
         
-        //console.error('requested face landmark: '+landmarkIndex);
-        //console.error('is int or string: ' + parseInt(landmarkIndex, 10));
-        //console.error('faceModule: ' + faceModule);
-        console.error('faceModule dict: ' + window["faceLandmarkDictionary"]);
-        console.error('faceModule dict[0]: ' + window["faceLandmarkDictionary"]['Nose']);
-        
         var requestedJointIndex = -1;
         //check if landmarkIndex is a number of a string
         if (landmarkIndex !== parseInt(landmarkIndex, 10)) {
@@ -257,9 +264,9 @@
         if (!window["face"]) return 0;
         
         var exp = "";
-        for (var key in faceModule.expressionsDictionary){
+        for (var key in window["faceExpressionsDictionary"]){
             if (key == expression){
-                exp = faceModule.expressionsDictionary[key];
+                exp = window["faceExpressionsDictionary"][key];
                 break;
             }
         }
@@ -288,9 +295,9 @@
         var requestedJointIndex = -1;
         if (joint_name !== parseInt(joint_name, 10)) {
             //joint_name is string variable from the menu
-            for(var key in handModule.jointDictionary){
+            for(var key in window["handJointDictionary"]){
                 if (key == joint_name){
-                    requestedJointIndex = handModule.jointDictionary[key];
+                    requestedJointIndex = window["handJointDictionary"][key];
                     break; 
                 }
             }
@@ -314,9 +321,9 @@
     ext.hand_gesture = function (side, gesture_name) {
         
         var gest = ''; 
-        for(var key in handModule.gestureDictionary){
+        for(var key in window["handGestureDictionary"]){
             if (key == gesture_name){
-                gest = handModule.gestureDictionary[key];
+                gest = window["handGestureDictionary"][key];
                 break; 
             }
         }
