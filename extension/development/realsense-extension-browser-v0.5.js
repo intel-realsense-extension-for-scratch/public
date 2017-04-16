@@ -135,9 +135,31 @@
     
     
         
-    var faceModule = new FaceModule();
+    var faceModule = {
+            faceLandmarkDictionary = {   
+                     "Left eye"         : 77
+                    , "Right eye"       : 76
+                    , "Left eye brow"   : 7
+                    , "Right eye brow"  : 2
+                    , "Chin"            : 61
+                    , "Upper lip"       : 36
+                    , "Bottom lip"      : 42
+                    , "Nose"            : 29
+                }
+            , expressionsDictionary = {
+                    "Brow lifted right"     : 'EXPRESSION_BROW_RAISER_LEFT'
+                    , "Brow lifted left"    : 'EXPRESSION_BROW_RAISER_LEFT'
+                    , "Brow lowered left"   : 'EXPRESSION_BROW_LOWERER_LEFT'
+                    , "Brow lowered right"  : 'EXPRESSION_BROW_LOWERER_RIGHT'
+                    , "Smile"               : 'EXPRESSION_SMILE'
+                    , "Kiss"                : 'EXPRESSION_KISS'
+                    , "Mouth open"          : 'EXPRESSION_MOUTH_OPEN'
+                    , "Wink left"           : 'EXPRESSION_EYES_CLOSED_LEFT'
+                    , "Wink right"          : 'EXPRESSION_EYES_CLOSED_RIGHT'
+                    , "Tongue out"          : 'EXPRESSION_TONGUE_OUT'
+                }
+        };
     var handModule = new HandModule();
-    window["faceModule"] = new FaceModule();
     
     //*************************************************
     
@@ -199,9 +221,9 @@
         
         //console.error('requested face landmark: '+landmarkIndex);
         //console.error('is int or string: ' + parseInt(landmarkIndex, 10));
-        console.error('faceModule: ' + window["faceModule"]);
-        console.error('faceModule dict: ' + window["faceModule"].faceLandmarkDictionary);
-        console.error('faceModule dict[0]: ' + window["faceModule"].faceLandmarkDictionary[0]);
+        console.error('faceModule: ' + faceModule);
+        console.error('faceModule dict: ' + faceModule.faceLandmarkDictionary);
+        console.error('faceModule dict[0]: ' + faceModule.faceLandmarkDictionary[0]);
         
         var requestedJointIndex = -1;
         //check if landmarkIndex is a number of a string
