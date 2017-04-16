@@ -183,9 +183,9 @@
                 else
                     window["face"] = e["faces"][0];
             }
-            if (ext.shouldContinue) setTimeout(a, 100);
+            if (ext.shouldContinue) setTimeout(extenstionSetup, 100);
         }).error(function () {
-            if (ext.shouldContinue) setTimeout(a, 100);
+            if (ext.shouldContinue) setTimeout(extenstionSetup, 100);
         });
     };
     extenstionSetup();
