@@ -164,7 +164,7 @@
             if (ext.shouldContinue) setTimeout(a, 100);
         });
     };
-    //a();
+    a();
 
     ext.face_visible = function () {
         return window["face"] ? true : false;
