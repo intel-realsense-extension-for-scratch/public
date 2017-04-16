@@ -280,7 +280,7 @@
         else return !!left_hand;
     }
 
-    ext.hand_position = function (side, axis) {
+    ext.hand_position = function (axis, side) {
         var handObj;
         if (side == "Any Hand") handObj = right_hand || left_hand;
         else if (side == "Right Hand") handObj = right_hand;
