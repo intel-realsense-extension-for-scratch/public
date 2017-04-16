@@ -135,7 +135,7 @@
     
     
         
-    var faceLandmarkDictionary = {   
+    window["faceLandmarkDictionary"] = {   
              "Left eye"         : 77
             , "Right eye"       : 76
             , "Left eye brow"   : 7
@@ -221,17 +221,17 @@
         
         //console.error('requested face landmark: '+landmarkIndex);
         //console.error('is int or string: ' + parseInt(landmarkIndex, 10));
-        console.error('faceModule: ' + faceModule);
-        console.error('faceModule dict: ' + faceLandmarkDictionary);
-        console.error('faceModule dict[0]: ' + faceLandmarkDictionary[0]);
+        //console.error('faceModule: ' + faceModule);
+        console.error('faceModule dict: ' + window["faceLandmarkDictionary"]);
+        console.error('faceModule dict[0]: ' + window["faceLandmarkDictionary"]['Nose']);
         
         var requestedJointIndex = -1;
         //check if landmarkIndex is a number of a string
         if (landmarkIndex !== parseInt(landmarkIndex, 10)) {
             //joint_name is string variable from the menu
-            for(var key in faceLandmarkDictionary){
+            for(var key in window["faceLandmarkDictionary"]){
                 if (key == landmarkIndex){
-                    requestedJointIndex = faceLandmarkDictionary[key];
+                    requestedJointIndex = window["faceLandmarkDictionary"][key];
                     break;
                 }
             }
