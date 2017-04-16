@@ -111,9 +111,9 @@
     
     
         
-    var faceModule = new FaceModule();
+    //var faceModule = new FaceModule();
     var handModule = new HandModule();
-    
+    window["faceModule"] = new FaceModule();
     
     //*************************************************
     
@@ -138,7 +138,7 @@
     ext.tOut = null;
 
     window["pxcm"] = {};
-    var a = function () {
+    var extenstionSetup = function () {
         $.getJSON("http://localhost:25456/", function (e) {
             console.log("got pxcm");
             lst_update = (new Date).getTime();
@@ -164,7 +164,7 @@
             if (ext.shouldContinue) setTimeout(a, 100);
         });
     };
-    a();
+    extenstionSetup();
 
     ext.face_visible = function () {
         return window["face"] ? true : false;
@@ -173,19 +173,19 @@
     ext.face_position_landmark = function (axis, landmarkIndex) {
         if (!window["face"]) return 0;
         
-        console.error('requested face landmark: '+landmarkIndex);
-        console.error('is int or string: ' + parseInt(landmarkIndex, 10));
-        console.error('faceModule: ' + faceModule);
-        console.error('faceModule dict: ' + faceModule.faceLandmarkDictionary);
-        console.error('faceModule dict[0]: ' + faceModule.faceLandmarkDictionary[0]);
+        //console.error('requested face landmark: '+landmarkIndex);
+        //console.error('is int or string: ' + parseInt(landmarkIndex, 10));
+        console.error('faceModule: ' + window["faceModule"]);
+        console.error('faceModule dict: ' + window["faceModule"].faceLandmarkDictionary);
+        console.error('faceModule dict[0]: ' + window["faceModule"].faceLandmarkDictionary[0]);
         
         var requestedJointIndex = -1;
         //check if landmarkIndex is a number of a string
         if (landmarkIndex !== parseInt(landmarkIndex, 10)) {
             //joint_name is string variable from the menu
-            for(var key in faceModule.faceLandmarkDictionary){
+            for(var key in window["faceModule"].faceLandmarkDictionary){
                 if (key == landmarkIndex){
-                    requestedJointIndex = faceModule.faceLandmarkDictionary[key];
+                    requestedJointIndex = window["faceModule"].faceLandmarkDictionary[key];
                     break;
                 }
             }
